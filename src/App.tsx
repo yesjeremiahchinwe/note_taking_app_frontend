@@ -1,13 +1,17 @@
-import './App.css'
-import { Button } from './components/ui/button'
+import { Route, Routes } from 'react-router-dom'
+import Layout from '@/components/Layout'
+import Home from '@/components/Home'
+import Login from '@/pages/Login'
 
 function App() {
 
   return (
-    <div>
-      <Button>Click Me</Button>
-      <h1 className='text-[80px] text-red-300'>My Name</h1>
-    </div>
+    <Routes>
+      <Route element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path='/logn' element={<Login />} />
+      </Route>
+    </Routes>
   )
 }
 

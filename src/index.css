@@ -54,11 +54,20 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%}
 }
+
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-w-[320px] min-h-screen w-full;
+  }
+}
+
+
+/* ------- Utility Classes - enhacing a more maintainable code base ---------- */
+@layer utilities {
+  .layout {
+    @apply flex items-start justify-between h-full w-full
   }
 }
