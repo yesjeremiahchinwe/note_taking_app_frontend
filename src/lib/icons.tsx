@@ -3,8 +3,8 @@ import { SVGProps } from "react"
 export const IconArchive = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -28,8 +28,8 @@ export const IconArchive = (props: SVGProps<SVGSVGElement>) => (
 export const IconArrowLeft = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -45,8 +45,8 @@ export const IconArrowLeft = (props: SVGProps<SVGSVGElement>) => (
 export const IconCheckmark = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -62,8 +62,8 @@ export const IconCheckmark = (props: SVGProps<SVGSVGElement>) => (
 export const IconChevronRight = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -79,8 +79,8 @@ export const IconChevronRight = (props: SVGProps<SVGSVGElement>) => (
 export const IconClock = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -102,8 +102,8 @@ export const IconClock = (props: SVGProps<SVGSVGElement>) => (
 export const IconCross = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -120,8 +120,8 @@ export const IconCross = (props: SVGProps<SVGSVGElement>) => (
 export const IconDelete = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -138,8 +138,8 @@ export const IconDelete = (props: SVGProps<SVGSVGElement>) => (
 export const IconFontMonospace = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -153,8 +153,8 @@ export const IconFontMonospace = (props: SVGProps<SVGSVGElement>) => (
 export const IconFontSansSerif = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -168,8 +168,8 @@ export const IconFontSansSerif = (props: SVGProps<SVGSVGElement>) => (
 export const IconFontSerif = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -183,8 +183,8 @@ export const IconFontSerif = (props: SVGProps<SVGSVGElement>) => (
 export const IconFont = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -206,8 +206,8 @@ export const IconFont = (props: SVGProps<SVGSVGElement>) => (
 export const IconGoogle = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -223,8 +223,8 @@ export const IconGoogle = (props: SVGProps<SVGSVGElement>) => (
 export const IconHidePassword = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -248,8 +248,8 @@ export const IconHidePassword = (props: SVGProps<SVGSVGElement>) => (
 export const IconHome = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -277,8 +277,8 @@ export const IconHome = (props: SVGProps<SVGSVGElement>) => (
 export const IconInfo = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -295,8 +295,8 @@ export const IconInfo = (props: SVGProps<SVGSVGElement>) => (
 export const IconLock = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -328,8 +328,8 @@ export const IconLock = (props: SVGProps<SVGSVGElement>) => (
 export const IconLogout = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -346,8 +346,8 @@ export const IconLogout = (props: SVGProps<SVGSVGElement>) => (
 export const IconMenu = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -363,8 +363,8 @@ export const IconMenu = (props: SVGProps<SVGSVGElement>) => (
 export const IconMoon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -376,25 +376,19 @@ export const IconMoon = (props: SVGProps<SVGSVGElement>) => (
 )
 
 export const IconPlus = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
-    fill="none"
-    {...props}
-  >
-    <path
-      fill="#000"
-      d="M12 5a.75.75 0 0 1 .75.75V11H18a.75.75 0 0 1 0 1.5h-5.25v5.25a.75.75 0 0 1-1.5 0V12.5H6A.75.75 0 0 1 6 11h5.25V5.75A.75.75 0 0 1 12 5Z"
-    />
-  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" {...props}>
+  <path
+    fill="#000"
+    d="M12 5a.75.75 0 0 1 .75.75V11H18a.75.75 0 0 1 0 1.5h-5.25v5.25a.75.75 0 0 1-1.5 0V12.5H6A.75.75 0 0 1 6 11h5.25V5.75A.75.75 0 0 1 12 5Z"
+  />
+</svg>
 )
 
 export const IconRestore = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -416,8 +410,8 @@ export const IconRestore = (props: SVGProps<SVGSVGElement>) => (
 export const IconSearch = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -439,8 +433,8 @@ export const IconSearch = (props: SVGProps<SVGSVGElement>) => (
 export const IconSettings = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -456,8 +450,8 @@ export const IconSettings = (props: SVGProps<SVGSVGElement>) => (
 export const IconShowPaswword = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -479,8 +473,8 @@ export const IconShowPaswword = (props: SVGProps<SVGSVGElement>) => (
 export const IconStatus = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -496,8 +490,8 @@ export const IconStatus = (props: SVGProps<SVGSVGElement>) => (
 export const IconSun = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -522,8 +516,8 @@ export const IconSun = (props: SVGProps<SVGSVGElement>) => (
 export const IconSystemTheme = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -537,8 +531,8 @@ export const IconSystemTheme = (props: SVGProps<SVGSVGElement>) => (
 export const IconTag = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={24}
+    height={24}
     fill="none"
     {...props}
   >
@@ -564,8 +558,8 @@ export const IconTag = (props: SVGProps<SVGSVGElement>) => (
 export const LogoSVG = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width={95}
+    height={28}
     fill="none"
     {...props}
   >

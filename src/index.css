@@ -68,6 +68,10 @@
 /* ------- Utility Classes - enhacing a more maintainable code base ---------- */
 @layer utilities {
   .layout {
-    @apply flex items-start justify-between h-full w-full
+    @apply flex items-start h-full w-full
+  }
+
+  .nav-link {
+    @apply flex items-center gap-3 py-3 px-3 font-medium text-lg leading-4 tracking-[-0.2px] text-[#0E121B]
   }
 }
