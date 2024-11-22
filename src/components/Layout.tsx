@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
-// import Footer from "./Footer";
+import Footer from "./Footer";
 
 const Layout = () => (
   <div className="layout">
@@ -10,7 +10,7 @@ const Layout = () => (
       <Outlet />
     </div>
 
-    {/* <Footer /> */}
+    <Footer />
   </div>
 );
 

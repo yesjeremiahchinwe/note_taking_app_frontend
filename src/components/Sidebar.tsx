@@ -1,24 +1,31 @@
 import { tags } from "@/lib/constants"
 import { IconArchive, IconHome, LogoSVG, IconChevronRight, IconTag } from "@/lib/icons"
-import { NavLink, useSearchParams } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 const Sidebar = () => {
-    const [searchParams, setSearchParams] = useSearchParams()
+    // const [searchParams, setSearchParams] = useSearchParams()
 
     // Get a query paramete
-    const myParam = searchParams.get("myParam")
+    // const myParam = searchParams.get("myParam")
 
     // Set a query parameter
-    setSearchParams({ myParam: "myValue"})
+    // setSearchParams({ myParam: "myValue"})
 
     // Remove a query parameter
-    setSearchParams((params) => {
-        params.delete("myParam")
-        return params
-    })
+    // setSearchParams((params) => {
+    //     params.delete("myParam")
+    //     return params
+    // })
 
     return (
-        <aside className="basis-[25%] min-h-screen flex flex-col border-r-[1px] border-[#E0E4EA]">
+        <>
+        <section className="w-full min-h-[80px] fixed top-0 bg-[#E0E4EA] lg:bg-transparent">
+        <div className="min-h-[81px] pt-6 px-[1.85rem]">
+            <LogoSVG />
+            </div>
+        </section>
+
+        <aside className="md:basis-[35%] xl:basis-[25%] min-h-screen hidden lg:flex flex-col border-r-[1px] border-[#E0E4EA]">
             <div className="min-h-[81px] pt-6 px-[1.85rem]">
             <LogoSVG />
             </div>
@@ -40,7 +47,7 @@ const Sidebar = () => {
                 <ul className="flex flex-col gap-6 my-5">
                     {tags.map((tag, index) => (
                         <li key={index}>
-                            <NavLink to={{pathname: "/", search: "?myParam=myValue"}} className="flex items-center gap-3 text-[#2B303B] font-medium text-base tracking-[-0.2px]">
+                            <NavLink to="/" className="flex items-center gap-3 text-[#2B303B] font-medium text-base tracking-[-0.2px]">
                             <IconTag /> <span>{tag}</span>
                             </NavLink>
                         </li>
@@ -48,6 +55,7 @@ const Sidebar = () => {
                 </ul>
             </section>
         </aside>
+        </>
     )
 }
 

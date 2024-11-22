@@ -1,5 +1,5 @@
 
-export interface Notes {
+export interface Note {
     title: string,
     tags: string[],
     content: string,

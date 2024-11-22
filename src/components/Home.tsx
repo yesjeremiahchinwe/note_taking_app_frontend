@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import AllNotes from "./AllNotes";
 import Header from "./Header";
 import RightSidebar from "./RightSidebar";
@@ -10,7 +11,9 @@ const Home = () => {
       <article className="flex min-h-screen items-start justify-between px-[2rem]">
        <AllNotes />
 
-        <section className="py-5">Tags Last Edited Save Note Cancel</section>
+        <section className="py-5">
+          <Outlet />
+        </section>
 
         <RightSidebar />
       </article>

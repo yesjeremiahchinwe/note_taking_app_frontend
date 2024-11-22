@@ -12,7 +12,7 @@ const Header = () => {
   );
 
   return (
-    <header className="flex w-full min-h-[91px] px-[2rem] border-b-[1px] border-[#E0E4EA] items-center justify-between flex-1">
+    <header className="hidden lg:flex w-full min-h-[91px] px-[2rem] border-b-[1px] border-[#E0E4EA] items-center justify-between flex-1">
       <h1 className="font-bold text-2xl leading-7 text-[#0E121B] basis-[40%]">
         All Notes
       </h1>
