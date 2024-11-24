@@ -6,3 +6,11 @@ export interface Note {
     lastEdited: string,
     isArchived: boolean
 }
+
+export interface MobileNavLink {
+    text: string,
+    path: string,
+    isActive: boolean,
+    Icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
+
+}

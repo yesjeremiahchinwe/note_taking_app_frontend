@@ -1,30 +1,68 @@
-import { notes } from "@/lib/constants"
-import { Button } from "./ui/button"
-import { Link } from "react-router-dom"
+import { notes } from "@/lib/constants";
+import { Button } from "./ui/button";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Note } from "@/lib/types";
 
 const AllNotes = () => {
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams()
 
-    return (
-        <section className="hidden lg:block basis-[25%] pr-4 py-5 h-screen border-r-[1px] border-[#E0E4EA]">
-        <Button className="py-6 rounded-lg bg-[#335CFF] hover:bg-[#335CFF] hover:scale-105 duration-500 w-full mb-5" size="lg">&#x2b; <span>Create New Note</span></Button>
+  // Get 'archived' query parameter
+  const archivedQueryParam = searchParams.get("archived")
+  const fetchNotes: Note[] = archivedQueryParam === "1" ? notes.filter(note => note.isArchived) : notes
 
-        {notes.map(note => (
-            <article key={note.title} className="bg-[#F3F5F8] mb-2 rounded-md p-3">
-                    <h2 className="text-xl font-semibold tracking-[-0.3px] text-[#0E121B]">
-                        <Link to={`/${note.title.toLowerCase().split(" ").join("-")}`}>{note.title}</Link>
-                    </h2>
+  return (
+    <section className={`${location.pathname ===  "/" ? "block" : "hidden lg:block"} custom_scroll_bar basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen overflow-auto lg:border-r-[1px] border-[#E0E4EA] w-full`}>
+      <div className="max-w-[96%] mx-auto">
+        <Button
+          className="hidden lg:flex py-6 rounded-lg bg-[#335CFF] hover:bg-[#335CFF] hover:scale-[1.02] duration-500 w-full mb-5"
+          size="lg"
+        >
+          &#x2b; <span>Create New Note</span>
+        </Button>
+      </div>
 
-                    <div className="flex items-center gap-[8px] mt-3">
-                        {note.tags.map((tag: string[], index: number) => (
-                            <p key={index} className="py-[2px] px-[zz6px] text-sm rounded-md bg-[#E0E4EA]">{tag}</p>
-                        ))}
-                    </div>
+      <h2 className="block lg:hidden px-1 pb-5 font-bold text-2xl tracking-[-0.5px]">All Notes</h2>
 
-                    <small className="text-[#2B303B] mt-4 font-medium text-xs tracking-[-0.2px]">{note.lastEdited.split("T")[0]}</small>
-            </article>
-        ))}
-      </section>
-    )
-}
+      {fetchNotes.map((note: Note, index: number) => {
+        const formatNoteTitle = note.title.toLowerCase().split(" ").join("-");
 
-export default AllNotes
+        return (
+          <article
+            key={note.title}
+            className={`${index === 0 ? "border-t-0" : "border-t-[1px] border-[#E0E4EA]"} ${
+              location.pathname.includes(formatNoteTitle)
+                ? "lg:bg-[#F3F5F8] border-t-0"
+                : location.pathname === "/" && index === 0
+                ? "lg:bg-[#F3F5F8]"
+                : "bg-transparent lg:border-t-[1px] border-[#E0E4EA]"
+            } mb-2 rounded-md p-3`}
+          >
+            <h2 className="text-xl font-semibold tracking-[-0.3px] text-[#0E121B]">
+              <Link to={archivedQueryParam === "1" ? `/?archived-1/${formatNoteTitle}` : `${formatNoteTitle}`}>
+                {note.title}
+              </Link>
+            </h2>
+
+            <div className="flex flex-wrap items-center gap-[8px] mt-3">
+              {note.tags.map((tag: string, index: number) => (
+                <p
+                  key={index}
+                  className="py-[2px] px-[6px] text-sm rounded-md bg-[#E0E4EA]"
+                >
+                  {tag}
+                </p>
+              ))}
+            </div>
+
+            <small className="text-[#2B303B] block mt-4 font-medium text-xs tracking-[-0.2px]">
+              {note.lastEdited.split("T")[0]}
+            </small>
+          </article>
+        );
+      })}
+    </section>
+  );
+};
+
+export default AllNotes;

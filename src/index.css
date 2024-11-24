@@ -64,11 +64,36 @@
   }
 }
 
+.custom_scroll_bar::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+}
+
+@media screen and (min-width: 1024px) {
+  .custom_scroll_bar::-webkit-scrollbar {
+    width: 8px;
+    display: block;
+  }
+  
+  .custom_scroll_bar::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 7px;
+  }
+  
+  .custom_scroll_bar::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 8px;
+  }
+  
+  .custom_scroll_bar::-webkit-scrollbar-thumb:hover {
+    background-color: #ccced3;
+  }
+}
 
 /* ------- Utility Classes - enhacing a more maintainable code base ---------- */
 @layer utilities {
   .layout {
-    @apply flex items-start h-full w-full
+    @apply flex flex-col lg:flex-row items-start h-full w-full
   }
 
   .nav-link {
