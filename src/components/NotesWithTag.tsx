@@ -6,10 +6,9 @@ import { Note } from "@/lib/types";
 const NotesWithTag = () => {
   const location = useLocation();
   const { tag: selectedTag } = useParams()
+  const formatTag = selectedTag && selectedTag?.slice(0, 1).toLowerCase() + selectedTag?.slice(1,)
 
-  const fetchNotes: Note[] = notes.filter(note => note.tags.filter((tag) => tag.toLowerCase().includes(selectedTag as string)))
-
-  console.log(fetchNotes)
+  const fetchNotes: Note[] = notes.filter(note => note.tags.includes(formatTag as string))
 
   return (
     <section className={`${location.pathname === "/archived" ? "block" : "hidden lg:block"} custom_scroll_bar basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen overflow-auto lg:border-r-[1px] border-[#E0E4EA] w-full`}>

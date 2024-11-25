@@ -4,6 +4,7 @@ import { lazy, Suspense } from "react";
 import Layout from "@/components/Layout";
 import Home from "@/components/Home";
 import { notes } from "./lib/constants";
+import ColorThemeDetails from "./components/ColorThemeDetails";
 
 const SettingsPage = lazy(() => import("@/pages/SettingsPage"))
 const LoginPage = lazy(() => import("@/pages/LoginPage"))
@@ -38,7 +39,12 @@ function App() {
         </Route>
 
         {/* <Route path="archived" element={<ArchivedNotesPage />} /> */}
-        <Route path="settings" element={<SettingsPage />} />
+        <Route path="settings" element={<SettingsPage />}>
+        <Route index element={<ColorThemeDetails />} />
+        <Route path="/settings/color-theme" element={<ColorThemeDetails />} />
+        <Route path="/settings/font-theme" element={<ColorThemeDetails />} />
+        <Route path="/settings/change-password" element={<ColorThemeDetails />} />
+        </Route>
         <Route path="search" element={<SearchPage />} />
         
       </Route>

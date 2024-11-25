@@ -10,6 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation()
+  const isHomePath = location.pathname.includes("/") && !location.pathname.includes("/archived") && !location.pathname.includes("/settings") && !location.pathname.includes("/tags")
 
   return (
     <>
@@ -31,7 +32,7 @@ const Sidebar = () => {
         <nav className="border-b-[1px] border-[#E0E4EA] pb-3 pt-2 mx-5">
           <ul>
             <li>
-              <Link className={`nav-link bg-[#F3F5F8] rounded-[8px] mb-1 ${location.pathname.includes("/") && !location.pathname.includes("/archived") ? "bg-[#F3F5F8]" : "bg-transparent"}`} to="/">
+              <Link className={`nav-link bg-[#F3F5F8] rounded-[8px] mb-1 ${isHomePath ? "bg-[#F3F5F8]" : "bg-transparent"}`} to="/">
                 <IconHome color="#0E121B" /> <span className="">All Notes</span>{" "}
                 <IconChevronRight className={`ml-auto ${location.pathname.includes("/") && location.pathname !== "/archived" ? 'flex' : 'hidden'}`} />
               </Link>

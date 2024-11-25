@@ -13,6 +13,8 @@ const Header = () => {
       ? "Archived Notes"
       : location.pathname.includes("tags")
       ? "Notes Tagged: "
+      : location.pathname === "/settings"
+      ? "Settings"
       : "All Notes";
 
   return (
