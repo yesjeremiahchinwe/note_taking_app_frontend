@@ -1,13 +1,18 @@
 import { notes } from "@/lib/constants";
 import { Button } from "./ui/button";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Note } from "@/lib/types";
 
-const AllNotes = () => {
+const NotesWithTag = () => {
   const location = useLocation();
+  const { tag: selectedTag } = useParams()
+
+  const fetchNotes: Note[] = notes.filter(note => note.tags.filter((tag) => tag.toLowerCase().includes(selectedTag as string)))
+
+  console.log(fetchNotes)
 
   return (
-    <section className={`${location.pathname ===  "/" ? "block" : "hidden lg:block"} custom_scroll_bar basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen overflow-auto lg:border-r-[1px] border-[#E0E4EA] w-full`}>
+    <section className={`${location.pathname === "/archived" ? "block" : "hidden lg:block"} custom_scroll_bar basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen overflow-auto lg:border-r-[1px] border-[#E0E4EA] w-full`}>
       <div className="max-w-[96%] mx-auto">
         <Button
           className="hidden lg:flex py-6 rounded-lg bg-[#335CFF] hover:bg-[#335CFF] hover:scale-[1.02] duration-500 w-full mb-5"
@@ -17,9 +22,11 @@ const AllNotes = () => {
         </Button>
       </div>
 
-      <h2 className="block lg:hidden px-1 pb-5 font-bold text-2xl tracking-[-0.5px]">All Notes</h2>
+      <h2 className="block lg:hidden px-1 pb-5 font-bold text-2xl tracking-[-0.5px] text-[#525866]">Notes Tagged: <span className="text-[#0E121B]">{selectedTag?.slice(0, 1).toUpperCase()}{selectedTag?.slice(1,)}</span></h2>
 
-      {notes.map((note: Note, index: number) => {
+      <p className="text-sm text-[#2B303B] mb-4">All notes with with the {`"${selectedTag?.slice(0, 1).toUpperCase()}${selectedTag?.slice(1,)}" tag are shown here`}.</p>
+
+      {fetchNotes.map((note: Note, index: number) => {
         const formatNoteTitle = note.title.toLowerCase().split(" ").join("-");
 
         return (
@@ -28,13 +35,13 @@ const AllNotes = () => {
             className={`${
               location.pathname.includes(formatNoteTitle)
                 ? "lg:bg-[#F3F5F8] border-t-0"
-                : location.pathname === "/" && index === 0
-                ? "lg:bg-[#F3F5F8]"
-                : "bg-transparent lg:border-t-[1px] border-[#E0E4EA]"
+                : location.pathname === "/archived" && index === 0
+                ? "lg:bg-[#F3F5F8] border-t-0"
+                : "bg-transparent border-t-[1px] border-[#E0E4EA]"
             } mb-2 rounded-md p-3`}
           >
             <h2 className="text-xl font-semibold tracking-[-0.3px] text-[#0E121B]">
-              <Link to={`/${formatNoteTitle}`}>
+              <Link to={`/archived/${formatNoteTitle}`}>
                 {note.title}
               </Link>
             </h2>
@@ -60,4 +67,4 @@ const AllNotes = () => {
   );
 };
 
-export default AllNotes;
+export default NotesWithTag;

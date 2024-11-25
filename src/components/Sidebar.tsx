@@ -6,22 +6,10 @@ import {
   IconChevronRight,
   IconTag,
 } from "@/lib/icons";
-import { Link, NavLink, useSearchParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  // Get a query parameter
-  const archivedQueryParam = searchParams.get("archived")
-
-  // Set a query parameter
-  // setSearchParams({ myParam: "myValue"})
-
-  // Remove a query parameter
-  // setSearchParams((params) => {
-  //     params.delete("myParam")
-  //     return params
-  // })
+  const location = useLocation()
 
   return (
     <>
@@ -43,15 +31,15 @@ const Sidebar = () => {
         <nav className="border-b-[1px] border-[#E0E4EA] pb-3 pt-2 mx-5">
           <ul>
             <li>
-              <Link className={`nav-link bg-[#F3F5F8] rounded-[8px] mb-1 ${location.pathname === "/" && !archivedQueryParam ? "bg-[#F3F5F8]" : "bg-transparent"}`} to="/">
+              <Link className={`nav-link bg-[#F3F5F8] rounded-[8px] mb-1 ${location.pathname.includes("/") && !location.pathname.includes("/archived") ? "bg-[#F3F5F8]" : "bg-transparent"}`} to="/">
                 <IconHome color="#0E121B" /> <span className="">All Notes</span>{" "}
-                <IconChevronRight className="ml-auto" />
+                <IconChevronRight className={`ml-auto ${location.pathname.includes("/") && location.pathname !== "/archived" ? 'flex' : 'hidden'}`} />
               </Link>
             </li>
             <li>
-              <Link className={`nav-link rounded-[8px] ${archivedQueryParam ? "bg-[#F3F5F8]" : "bg-transparent"}`} to="/?archived=1">
-                <IconArchive color="#0E121B" />{" "}
-                <span className="">Archived Notes</span>
+              <Link className={`nav-link rounded-[8px] ${location.pathname.includes("/archived") ? "bg-[#F3F5F8]" : "bg-transparent"}`} to="/archived">
+                <IconArchive color="#0E121B" /> <span className="">Archived Notes</span>
+                <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") ? 'flex' : 'hidden'}`} />
               </Link>
             </li>
           </ul>
@@ -65,12 +53,12 @@ const Sidebar = () => {
           <ul className="flex flex-col gap-6 my-5">
             {tags.map((tag, index) => (
               <li key={index}>
-                <NavLink
-                  to="/"
+                <Link
+                  to={`/tags/${tag.toLowerCase()}`}
                   className="flex items-center gap-3 text-[#2B303B] font-medium text-base tracking-[-0.2px]"
                 >
                   <IconTag color="#0E121B" /> <span>{tag}</span>
-                </NavLink>
+                </Link>
               </li>
             ))}
           </ul>
