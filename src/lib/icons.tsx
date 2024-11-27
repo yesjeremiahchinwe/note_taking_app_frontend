@@ -283,7 +283,7 @@ export const IconInfo = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      stroke="#0E121B"
+      stroke={props.color}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}

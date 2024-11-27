@@ -1,21 +1,9 @@
+import AuthForm from "@/components/AuthForm"
 
-const Login = () => (
-    <section>
-        <h1>Login Page Welcome to Notes
-  Please log in to continue
-
-  Email Address
-  email@example.com
-
-  Password
-  Forgot
-
-  Login
-
-  Or log in with:
-
-  Google No account yet? Sign Up</h1>
-    </section>
+const LoginPage = () => (
+    <main className="bg-[#F3F5F8] flex justify-center items-center min-h-screen w-full px-4">
+        <AuthForm title="Welcome to Note" description="Please log in to continue" isLogin={true} />
+    </main>
 )
 
-export default Login
+export default LoginPage

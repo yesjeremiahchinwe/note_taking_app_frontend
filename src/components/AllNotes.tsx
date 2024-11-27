@@ -1,13 +1,17 @@
 import { notes } from "@/lib/constants";
 import { Button } from "./ui/button";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Note } from "@/lib/types";
 
 const AllNotes = () => {
-  const location = useLocation();
+  const location = useLocation()
+  const { tag } = useParams()
+
+  const formattedTag = tag ? tag.slice(0, 1).toUpperCase() + tag.slice(1,) : "Dev"
+  const allNotes: Note[] = tag ? notes.filter(note => note.tags.includes(formattedTag as string)) : notes
 
   return (
-    <section className={`${location.pathname ===  "/" ? "block" : "hidden lg:block"} custom_scroll_bar basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen overflow-auto lg:border-r-[1px] border-[#E0E4EA] w-full`}>
+    <section className={`${location.pathname === "/"  ? "block" : "hidden lg:block"} custom_scroll_bar basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen overflow-auto lg:border-r-[1px] border-[#E0E4EA] w-full`}>
       <div className="max-w-[96%] mx-auto">
         <Button
           className="hidden lg:flex py-6 rounded-lg bg-[#335CFF] hover:bg-[#335CFF] hover:scale-[1.02] duration-500 w-full mb-5"
@@ -19,7 +23,7 @@ const AllNotes = () => {
 
       <h2 className="block lg:hidden px-1 pb-5 font-bold text-2xl tracking-[-0.5px]">All Notes</h2>
 
-      {notes.map((note: Note, index: number) => {
+      {allNotes.map((note: Note, index: number) => {
         const formatNoteTitle = note.title.toLowerCase().split(" ").join("-");
 
         return (

@@ -57,7 +57,7 @@ const NoteDetails = ({ notes }: { notes: Note[] }) => {
 {/* -------------- Note Body ------------------ */}
       <section
         className={`${
-          location.pathname === "/" ? "hidden lg:block" : location.pathname === "/archived" ? "hidden lg:block" : "block"
+          location.pathname ==="/"  ? "hidden lg:block" : location.pathname === "/archived" ? "hidden lg:block" : "block"
         } pt-4 mx-[20px] lg:px-0 lg:mx-0 lg:pt-0 border-t-[1px] border-[#E0E4EA] lg:border-t-0`}
       >
         <h2 className="text-2xl font-bold text-[#0E121B] tracking-[-0.5px]">{note?.title}</h2>
