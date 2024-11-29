@@ -1,8 +1,11 @@
 import { IconArrowLeft, IconFontMonospace, IconFontSansSerif, IconFontSerif } from "@/lib/icons"
 import { Button } from "../components/ui/button"
 import { Link } from "react-router-dom"
+import useTitle from "@/hooks/useTitle";
 
 const FontThemeSettingsPage = () => {
+    useTitle('Choose Font Theme')
+    
   return (
     <section className={`${
         location.pathname === "/" ? "hidden lg:block" : location.pathname === "/settings" ? "hidden lg:block" : "block"

@@ -1,8 +1,11 @@
 import { IconArrowLeft, IconMoon, IconSun, IconSystemTheme } from "@/lib/icons"
+import useTitle from "@/hooks/useTitle";
 import { Button } from "../components/ui/button"
 import { Link } from "react-router-dom"
 
 const ColorThemeSettingsPage = () => {
+    useTitle("Choose Color Theme")
+
   return (
     <section className={`${
         location.pathname === "/" ? "hidden lg:block" : location.pathname === "/settings" ? "hidden lg:block" : "block"

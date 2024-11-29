@@ -12,14 +12,14 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import useTitle from "@/hooks/useTitle";
 
 const formSchema = z.object({
-  email: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  })
+  email: z.string().email({message: "Please provide a valid email address"}),
 });
 
 const ForgotPasswordPage = () => {
+  useTitle("Forgot Password")
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

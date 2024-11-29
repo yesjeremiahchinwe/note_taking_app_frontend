@@ -1,9 +1,12 @@
 import ArchivedNotes from "@/components/ArchivedNotes"
 import Header from "@/components/Header"
 import RightSidebar from "@/components/RightSidebar"
+import useTitle from "@/hooks/useTitle";
 import { Outlet } from "react-router-dom"
 
 const ArchivedNotesPage = () => {
+  useTitle("Archive Notes")
+
   return (
     <section className="flex flex-col w-full bg-[#F3F5F8] rounded-t-md lg:rounded-t-none">
     <Header />

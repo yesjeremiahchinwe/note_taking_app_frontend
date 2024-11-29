@@ -1,8 +1,11 @@
 import Header from "@/components/Header"
 import SettingsOptions from "@/components/SettingsOptions"
 import { Outlet } from "react-router-dom"
+import useTitle from "@/hooks/useTitle";
 
 const SettingsPage = () => {
+  useTitle("Settings")
+  
   return (
     <section className="flex flex-col min-h-screen w-full bg-[#F3F5F8] rounded-t-md lg:rounded-t-none">
     <Header />

@@ -1,11 +1,12 @@
 import Header from "@/components/Header"
 import NotesWithTag from "@/components/NotesWithTag"
 import RightSidebar from "@/components/RightSidebar"
-import { tags } from "@/lib/constants"
-import { IconTag } from "@/lib/icons"
-import { NavLink, Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom"
+import useTitle from "@/hooks/useTitle";
 
 const TagsPage = () => {
+  useTitle("Tags")
+
   return (
     <section className="flex flex-col w-full bg-[#F3F5F8] rounded-t-md lg:rounded-t-none">
     <Header />

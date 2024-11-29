@@ -20,9 +20,7 @@ import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import { useState } from "react";
 
 const formSchema = z.object({
-  email: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
+  email: z.string().email({message: "Please provide a valid email address"}),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),

@@ -10,6 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation()
+
   const isHomePath = location.pathname.includes("/") && !location.pathname.includes("/archived") && !location.pathname.includes("/settings") && !location.pathname.includes("/tags")
 
   return (
@@ -55,7 +56,7 @@ const Sidebar = () => {
             {tags.map((tag, index) => (
               <li key={index}>
                 <Link
-                  to={`/tags/${tag.toLowerCase()}`}
+                  to={`/?tag=${tag}`}
                   className="flex items-center gap-3 text-[#2B303B] font-medium text-base tracking-[-0.2px]"
                 >
                   <IconTag color="#0E121B" /> <span>{tag}</span>

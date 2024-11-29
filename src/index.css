@@ -55,6 +55,10 @@
     --chart-5: 340 75% 55%}
 }
 
+::-webkit-scrollbar {
+  display: none
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -64,7 +68,7 @@
   }
 }
 
-.custom_scroll_bar::-webkit-scrollbar {
+/* .custom_scroll_bar::-webkit-scrollbar {
   width: 0px;
   display: none;
 }
@@ -88,7 +92,7 @@
   .custom_scroll_bar::-webkit-scrollbar-thumb:hover {
     background-color: #ccced3;
   }
-}
+} */
 
 /* ------- Utility Classes - enhacing a more maintainable code base ---------- */
 @layer utilities {

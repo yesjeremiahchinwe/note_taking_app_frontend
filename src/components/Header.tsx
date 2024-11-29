@@ -1,10 +1,10 @@
 import { IconSearch, IconSettings } from "@/lib/icons";
 import { Input } from "./ui/input";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { ToastDestructive } from "@/components/Toast"
 
 const Header = () => {
   const location = useLocation();
-  const { tag } = useParams()
 
   const headingText =
     location.pathname === "/"
@@ -40,6 +40,8 @@ const Header = () => {
               placeholder="Search by title, content, or tags"
             />
           </div>
+
+          <ToastDestructive />
 
           <Link to="/settings">
             <IconSettings color="#000" />

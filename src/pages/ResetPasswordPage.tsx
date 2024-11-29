@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
+import useTitle from "@/hooks/useTitle";
 
 const formSchema = z.object({
   newPassword: z.string().min(8, {
@@ -26,6 +27,8 @@ const formSchema = z.object({
 });
 
 const ResetPasswordPage = () => {
+  useTitle("Reset Password")
+  
     const [showPassord, setShowPassword] = useState({
         newPassword: false,
         confirmNewPassword: false
@@ -70,9 +73,9 @@ const ResetPasswordPage = () => {
                 className={`${fieldState.error ? "border-[#FB3748]" : "border-[#CACFD8]"}`} {...field} />
               </FormControl>
 
-                <EyeIcon onClick={() => setShowPassword((prev) => ({...prev, newPassord: !prev.newPassword}))} color="#525866" size={18} className={`absolute top-[39px] right-4 cursor-pointer ${!showPassord.newPassword ? "block" : "hidden"}`} />
+                <EyeIcon onClick={() => setShowPassword((prev) => ({...prev, newPassword: !prev.newPassword}))} color="#525866" size={18} className={`absolute top-[39px] right-4 cursor-pointer ${!showPassord.newPassword ? "block" : "hidden"}`} />
               
-                <EyeOffIcon onClick={() => setShowPassword((prev) => ({...prev, newPassord: !prev.newPassword}))} color="#525866" size={18} className={`absolute top-[39px] right-4 cursor-pointer ${showPassord.newPassword ? "block" : "hidden"}`} />
+                <EyeOffIcon onClick={() => setShowPassword((prev) => ({...prev, newPassword: !prev.newPassword}))} color="#525866" size={18} className={`absolute top-[39px] right-4 cursor-pointer ${showPassord.newPassword ? "block" : "hidden"}`} />
 
               <FormDescription className="text-[#525866] flex items-center gap-1">
               <InfoIcon color="#525866" size={16} /> <span>At least 8 characters</span>

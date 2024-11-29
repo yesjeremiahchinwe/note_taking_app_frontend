@@ -10,6 +10,7 @@ import {
     FormMessage,
   } from "@/components/ui/form"
   import { Input } from "@/components/ui/input"
+  import useTitle from "@/hooks/useTitle";
 import { Link } from "react-router-dom"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -30,6 +31,7 @@ const formSchema = z.object({
 })
 
 const ChangePasswordSettingsPage = () => {
+useTitle('Change Pasword')
     const [showPassord, setShowPassword] = useState({
       oldPassword: false,
       newPassword: false,

@@ -48,7 +48,7 @@ function App() {
 
           <Route path="tags" element={<TagsPage />}>
             <Route index element={<NoteDetailsPage notes={notes} />} />
-            <Route path=":tag" element={<NoteDetailsPage notes={notes} />} />
+            {/* <Route path=":tag" element={<NoteDetailsPage notes={notes} />} /> */}
           </Route>
 
           <Route path="settings" element={<SettingsPage />}>
