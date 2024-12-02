@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react"
 import { useState } from "react"
+import { useUpdateUserPasswordMutation } from "@/store/users/usersApiSlice";
  
 const formSchema = z.object({
   oldPassword: z.string().min(8, {
@@ -37,6 +38,8 @@ useTitle('Change Pasword')
       newPassword: false,
       confirmNewPassword: false
     })
+    const [errMsg, setErrMsg] = useState<string>("")
+    const [updateUserPassword, { isLoading }] = useUpdateUserPasswordMutation()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -47,9 +50,22 @@ useTitle('Change Pasword')
         },
       })
      
-      function onSubmit(values: z.infer<typeof formSchema>) {
+      const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values)
-      }
+        try {
+          await updateUserPassword({ oldPassword: values.oldPassword, newPassword: values.newPassword, confirmNewPassword: values.confirmNewPassword})
+        } catch (err: any) {
+          if (!err.status) {
+            setErrMsg('No Server Response');
+        } else if (err.status === 400) {
+            setErrMsg('Invalid Credentials');
+        } else if (err.status === 401) {
+            setErrMsg('Unauthorized');
+        } else {
+            setErrMsg(err.data?.message);
+        }
+        }
+       }
 
   return (
     <section className={`${
@@ -58,6 +74,8 @@ useTitle('Change Pasword')
         <Link to="/settings" className="flex lg:hidden items-center gap-1 pt-3"><IconArrowLeft /> <span>Settings</span></Link>
 
         <h2 className="text-[#0E121B] pt-5 lg:pt-0 font-bold lg:font-semibold text-2xl lg:text-base  tracking-[-0.5px] lg:tracking-[-0.3px]">Change Password</h2>
+
+        {errMsg && <p className="text-[#FB3748]">{errMsg}</p>}
 
         <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-5">
@@ -119,7 +137,7 @@ useTitle('Change Pasword')
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-[#335CFF] rounded-lg flex items-center justify-center hover:bg-[#3255e2] ml-auto my-6 py-3 px-4">Apply Changes</Button>
+        <Button type="submit" disabled={isLoading} className="bg-[#335CFF] rounded-lg flex items-center justify-center hover:bg-[#3255e2] ml-auto my-6 py-3 px-4">{isLoading ? "Saving..." : "Apply Changes"}</Button>
       </form>
     </Form>
     </section>

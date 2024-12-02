@@ -83,32 +83,32 @@ export const MobileNavLinks = () => {
     const mobileLinks: MobileNavLink[] = [
         {
             text: 'Home',
-            path: '/notes',
-            isActive: location.pathname === "/notes",
+            path: '/',
+            isActive: location.pathname === "/",
             Icon: IconHome
         },
         {
             text: 'Search',
-            path: '/notes/search',
-            isActive: location.pathname === "/notes/search",
+            path: '/search',
+            isActive: location.pathname === "/search",
             Icon: IconSearch
         },
         {
             text: 'Archived',
-            path: '/notes/archived',
-            isActive: location.pathname === "/notes/archived",
+            path: '/archived',
+            isActive: location.pathname === "/archived",
             Icon: IconArchive
         },
         {
             text: 'Tags',
-            path: '/notes/tags',
-            isActive: location.pathname === "/notes/tags",
+            path: '/tags',
+            isActive: location.pathname === "/tags",
             Icon: IconTag
         },
         {
             text: 'Settings',
-            path: '/notes/settings',
-            isActive: location.pathname === "/notes/settings",
+            path: '/settings',
+            isActive: location.pathname === "/settings",
             Icon: IconSettings
         },
     ]

@@ -5,6 +5,9 @@ export interface Note {
     content: string,
     lastEdited: string,
     isArchived: boolean
+    _id: string
+    id: string
+    userId: string
 }
 
 export interface MobileNavLink {

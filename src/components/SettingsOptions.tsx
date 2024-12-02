@@ -1,4 +1,5 @@
 import { IconChevronRight, IconFont, IconLock, IconLogout, IconSun } from "@/lib/icons";
+import { Button } from "@/components/ui/button"
 import { Link, useLocation } from "react-router-dom";
 
 const SettingsOptions = () => {
@@ -39,9 +40,9 @@ const SettingsOptions = () => {
               </Link>
               </div>
 
-              <Link to={`/settings/logout`} className="text-xl flex items-center gap-3 py-3 px-2 rounded-lg font-semibold tracking-[-0.3px] text-[#0E121B]">
+              <div role="button" aria-role="button" className="text-xl flex items-center gap-3 py-3 px-2 rounded-lg font-semibold tracking-[-0.3px] text-[#0E121B] bg-transparent hover:bg-transparent">
               <IconLogout /> <span className="text-[#0E121B] font-medium text-sm tracking-[-0.2px]">Logout</span>
-              </Link>
+              </div>
           </article>
     </section>
   );

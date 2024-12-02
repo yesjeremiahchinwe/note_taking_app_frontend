@@ -1,56 +1,78 @@
-import { notes } from "@/lib/constants";
 import { Button } from "./ui/button";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Link, Navigate, redirect, useLocation, useNavigate, useNavigation, useSearchParams } from "react-router-dom";
 import { Note } from "@/lib/types";
+import { notes } from "@/lib/constants";
+import CustomButton from "@/components/CustomButton"
+import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
+import { useToast } from "@/hooks/use-toast"
+
 
 const AllNotes = () => {
   const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
 
   const tagQueryParam = searchParams.get("tag")
   const noteQueryParam = searchParams.get("note")
-  // const noteQueryParam = searchParams.get("note")
-  
-  // const noteParam = searchParams.get("note")
 
-  // const allNotes: Note[] = tag ? notes.filter(note => note.tags.includes(tag as string)) : notes
+  const { toast } = useToast()
 
-  // const findNote: Note = tag ? allNotes.find(note => note.title.toLowerCase().split(" ").join("-").includes(noteParam as string)) as Note : allNotes[0]
-
-  // const note = findNote?.title.toLowerCase().split(" ").join("-") ?? ""
+//   const {
+//     data: notes,
+// } = useGetNotesQuery('notesList', {
+//     pollingInterval: 15000,
+//     refetchOnFocus: true,
+//     refetchOnMountOrArgChange: true
+// })
 
   const allNotes: Note[] = tagQueryParam 
-    ? notes.filter(note => note.tags.includes(tagQueryParam as string)) 
+    ? notes.filter((note: Note) => note.tags.includes(tagQueryParam as string))
+    : location.pathname === "/tags"
+    ? notes 
     : notes
 
   return (
-    <section className={`${location.pathname === "/"  ? "block" : "hidden lg:block"} custom_scroll_bar basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen overflow-auto lg:border-r-[1px] border-[#E0E4EA] w-full`}>
+    <section className={`${location.pathname === "/" && noteQueryParam === null ? "block" : "hidden lg:block"} custom_scroll_bar basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen overflow-auto lg:border-r-[1px] border-[#E0E4EA] w-full`}>
       <div className="max-w-[96%] mx-auto">
-        <Button
-          className="hidden lg:flex py-6 rounded-lg bg-[#335CFF] hover:bg-[#3357e9] w-full mb-5"
-          size="lg"
+        <CustomButton
+        className="hidden lg:flex mb-5"
+        size="lg"
+        // onClick={() => navigate("/new")}
+        onClick={() => toast({
+          title: "Scheduled: Catch Up",
+          description: "Friday, February 10, 2023 at 5:57 PM"
+        })}
+        buttonText="Create New Note"
+        icon="/images/icon-plus.svg"
         >
-          &#x2b; <span>Create New Note</span>
-        </Button>
+        </CustomButton>
       </div>
 
-      <h2 className="block lg:hidden px-1 pb-5 font-bold text-2xl tracking-[-0.5px]">All Notes</h2>
+      <h2 className="block lg:hidden px-1 pb-5 font-bold text-2xl tracking-[-0.5px]">{tagQueryParam !== null ? <span className="text-[#87898a]">Notes Tagged: <span className="text-[#0E121B]">{tagQueryParam}</span></span> : "All Notes"}</h2>
 
-      {allNotes.map((note: Note, index: number) => {
+      {tagQueryParam !== null && (
+          <p className="text-sm text-[#2B303B] mb-4">All notes with with the "{tagQueryParam}" tag are shown here.</p>
+      )}
+
+      {allNotes.length !== 0 ? allNotes.map((note: Note, index: number) => {
         const formatNoteTitle = note.title.toLowerCase().split(" ").join("-");
 
         return (
           <article
             key={note.title}
-            className={`bg-transparent ${
+            className={`bg-transparent mb-2 rounded-md p-3 ${index === allNotes.length - 1 ? "border-b-0" : "border-b-[1px] border-[#E0E4EA]"} ${
               location.pathname.includes(formatNoteTitle)
-                ? "lg:bg-[#F3F5F8] border-t-0"
+                ? "lg:bg-[#F3F5F8] lg:border-b-0"
                 : noteQueryParam === formatNoteTitle
-                ? "lg:bg-[#F3F5F8] border-t-0"
+                ? "lg:bg-[#F3F5F8] lg:border-b-0"
+                : location.pathname.includes("/") && index === allNotes.length -1
+                ? "lg:border-b-0"
                 : location.pathname === "/" && index === 0 && noteQueryParam === null
-                ? "lg:bg-[#F3F5F8] border-t-0"
-                : "bg-transparent lg:border-t-[1px] border-[#E0E4EA]"
-            } mb-2 rounded-md p-3`}
+                ? "lg:bg-[#F3F5F8] lg:border-b-0"
+                : location.pathname === "/tags" && index === 0
+                ? "lg:bg-[#F3F5F8] lg:border-b-0"
+                : "bg-transparent lg:border-b-[1px] border-[#E0E4EA]"
+            }`}
           >
             <h2 className="text-xl font-semibold tracking-[-0.3px] text-[#0E121B]">
               {tagQueryParam ? (
@@ -79,8 +101,12 @@ const AllNotes = () => {
               {note.lastEdited.split("T")[0]}
             </small>
           </article>
-        );
-      })}
+        )
+      }) : (
+        <p className="flex items-center justify-center mt-6 pt-6 text-sm text-[#2B303B]">No Note found</p>
+      )}
+
+    
     </section>
   );
 };

@@ -6,10 +6,13 @@ import {
   IconChevronRight,
   IconTag,
 } from "@/lib/icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation()
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const tagQueryParam = searchParams.get("tag");
 
   const isHomePath = location.pathname.includes("/") && !location.pathname.includes("/archived") && !location.pathname.includes("/settings") && !location.pathname.includes("/tags")
 
@@ -52,15 +55,28 @@ const Sidebar = () => {
             Tags
           </h3>
 
-          <ul className="flex flex-col gap-6 my-5">
+          <ul className="flex flex-col gap-1 my-5">
             {tags.map((tag, index) => (
               <li key={index}>
-                <Link
-                  to={`/?tag=${tag}`}
-                  className="flex items-center gap-3 text-[#2B303B] font-medium text-base tracking-[-0.2px]"
+                {location.pathname.includes("archived") ? (
+                  <Link
+                  to={`/archived/?tag=${tag}`}
+                  className={`flex items-center gap-3 py-3 pl-3 pr-2 rounded-[8px] text-[#2B303B] font-medium text-base tracking-[-0.2px] ${location.pathname.includes("/archived") && tagQueryParam === tag ? "bg-[#F3F5F8]" : "bg-transparent"}`}
                 >
                   <IconTag color="#0E121B" /> <span>{tag}</span>
+                  <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === tag ? 'flex' : 'hidden'}`} />
                 </Link>
+                ) : (
+                  <Link
+                  to={`/?tag=${tag}`}
+                  className={`flex items-center gap-3 py-3 pl-3 pr-2 rounded-[8px] text-[#2B303B] font-medium text-base tracking-[-0.2px] 
+                    ${location.pathname === "/" && tagQueryParam === tag ? "bg-[#F3F5F8]" : "bg-transparent"}`}
+                >
+                  <IconTag color="#0E121B" /> <span>{tag}</span>
+                  <IconChevronRight className={`ml-auto ${location.pathname === "/" && tagQueryParam === tag ? 'flex' : 'hidden'}`} />
+                </Link>
+                )}
+                
               </li>
             ))}
           </ul>

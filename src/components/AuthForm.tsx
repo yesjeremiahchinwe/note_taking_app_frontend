@@ -12,12 +12,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import { useState } from "react";
+import { useLoginMutation } from "@/store/auth/authApiSlice";
+import { useAddNewUserMutation } from "@/store/users/usersApiSlice";
+import { setCredentials } from "@/store/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const formSchema = z.object({
   email: z.string().email({message: "Please provide a valid email address"}),
@@ -28,6 +32,11 @@ const formSchema = z.object({
 
 const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const [showPassord, setShowPassword] = useState<boolean>(false);
+  const [errMsg, setErrMsg] = useState<string>("")
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const [login, {isLoading: isLoadingLogin}] = useLoginMutation()
+  const [addNewUser, { isLoading: isLoadingNewUser}] = useAddNewUserMutation()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,9 +46,32 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
+    try {
+      if (isLogin) {
+        const { accessToken } = await login({ email: values.email, password: values.password }).unwrap()
+        dispatch(setCredentials({ accessToken }))
+        navigate("/")
+      } else {
+        await addNewUser({ email: values.email, password: values.password })
+        navigate("/login")
+      }
+  } catch (err: any) {
+      if (!err.status) {
+          setErrMsg('No Server Response');
+      } else if (err.status === 400) {
+          setErrMsg('Invalid Credentials');
+      } else if (err.status === 401) {
+          setErrMsg('Unauthorized');
+      } else if (err.status === 409) {
+          setErrMsg('Conflict');
+      } else {
+          setErrMsg(err.data?.message);
+      }
   }
+  }
+
 
   return (
     <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-white border border-[#E0E4EA] rounded-[12px] p-[48px]">
@@ -50,6 +82,8 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       <p className="font-normal text-sm tracking-[-0.2px] text-[#525866]">
         {description}
       </p>
+
+      {errMsg && <p className="text-[#FB3748]">{errMsg}</p>}
 
       <Form {...form}>
         <form
@@ -134,9 +168,14 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
           />
           <Button
             type="submit"
+            disabled={isLoadingLogin}
             className="bg-[#335CFF] rounded-lg flex items-center justify-center hover:bg-[#3255e2] mx-auto w-full my-6 py-3 px-4"
           >
-            {isLogin ? "Login" : "Sign up"}
+            {isLoadingLogin || isLoadingNewUser ? (
+              <span className="italic">Loading...</span>
+            ) : (
+            <span>{isLogin ? "Login" : "Sign up"}</span>
+          )}
           </Button>
         </form>
       </Form>
