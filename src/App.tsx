@@ -8,8 +8,6 @@ import HomeLoader from "./components/HomeLoader";
 import RequireAuth from "./components/RequireLogin";
 import Prefetch from "./components/Prefetch";
 import { useGetArchivedNotesQuery, useGetNotesQuery } from "./store/notes/notesApiSlice";
-import { Note } from "./lib/types";
-import { notes } from "@/lib/constants";
 
 const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
@@ -28,26 +26,24 @@ const ChangePasswordSettings = lazy(
 );
 
 function App() {
-//   const {
-//     data: notes,
-// } = useGetNotesQuery('notesList', {
-//     pollingInterval: 15000,
-//     refetchOnFocus: true,
-//     refetchOnMountOrArgChange: true
-// })
+  const {
+    data: notes,
+} = useGetNotesQuery('notesList', {
+    pollingInterval: 15000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true
+})
 
-//   const {
-//     data: archivedNotes,
-// } = useGetArchivedNotesQuery('archivedNotesList', {
-//     pollingInterval: 15000,
-//     refetchOnFocus: true,
-//     refetchOnMountOrArgChange: true
-// })
+  const {
+    data: archivedNotes,
+} = useGetArchivedNotesQuery('archivedNotesList', {
+    pollingInterval: 15000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true
+})
 
-// console.log(notes)
-// console.log(archivedNotes)
-
-const archivedNotes: Note[] = notes.filter(note => note.isArchived)
+console.log(notes)
+console.log(archivedNotes)
 
   return (
     <>
@@ -66,8 +62,8 @@ const archivedNotes: Note[] = notes.filter(note => note.isArchived)
         </Route>
 
         {/* -------------- Home and Main application routes ---------------- */}
+        {/* <Route element={<PersistLogin />}> */}
         <Route path="/" element={<Layout />}>
-          {/* <Route element={<PersistLogin />}> */}
           <Route element={<Prefetch />}>
             <Route element={<Home />}>
               <Route index element={<NoteDetailsPage notes={notes} />} />
@@ -97,9 +93,6 @@ const archivedNotes: Note[] = notes.filter(note => note.isArchived)
             </Route>
           </Route>
 
-          {/* <Route path="tags" element={<TagsPage />} /> */}
-
-          {/* <Route element={<RequireAuth />}> */}
             <Route path="settings" element={<SettingsPage />}>
               <Route index element={<ColorThemeSettings />} />
               <Route path="color-theme" element={<ColorThemeSettings />} />

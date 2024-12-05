@@ -1,9 +1,21 @@
-import { IconChevronRight, IconFont, IconLock, IconLogout, IconSun } from "@/lib/icons";
-import { Button } from "@/components/ui/button"
-import { Link, useLocation } from "react-router-dom";
+import { IconChevronRight, IconFont, IconLock, IconLogout, IconSun } from "@/lib/icons"
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSendLogoutMutation } from "@/store/auth/authApiSlice";
 
 const SettingsOptions = () => {
   const location = useLocation();
+  const navigate = useNavigate()
+
+  const [sendLogout, { isLoading }] = useSendLogoutMutation()
+
+  const logoutOnClick = async () => {
+    try {
+      await sendLogout({})
+      navigate("/")
+    } catch (err: any) {
+      console.log(err?.message)
+    }
+  }
 
   return (
     <section className={`${location.pathname === "/settings" ? "block" : "hidden lg:block"} custom_scroll_bar basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen h-screen overflow-auto lg:border-r-[1px] border-[#E0E4EA] w-full`}>
@@ -40,8 +52,8 @@ const SettingsOptions = () => {
               </Link>
               </div>
 
-              <div role="button" aria-role="button" className="text-xl flex items-center gap-3 py-3 px-2 rounded-lg font-semibold tracking-[-0.3px] text-[#0E121B] bg-transparent hover:bg-transparent">
-              <IconLogout /> <span className="text-[#0E121B] font-medium text-sm tracking-[-0.2px]">Logout</span>
+              <div onClick={() => logoutOnClick()} role="button" aria-role="button" className="text-xl flex items-center gap-3 py-3 px-2 rounded-lg font-semibold tracking-[-0.3px] text-[#0E121B] bg-transparent hover:bg-transparent">
+              <IconLogout /> <span className="text-[#0E121B] font-medium text-sm tracking-[-0.2px]">{isLoading ? "Logging out..." : "Logout"}</span>
               </div>
           </article>
     </section>

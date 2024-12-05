@@ -89,7 +89,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         updateNote: builder.mutation({
             query: initialNote => ({
                 url: '/notes',
-                method: 'PATCH',
+                method: 'PUT',
                 body: {
                     ...initialNote,
                 }
@@ -102,6 +102,19 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         markNoteAsArchived: builder.mutation({
             query: initialNote => ({
                 url: '/notes',
+                method: 'PATCH',
+                body: {
+                    ...initialNote,
+                }
+            }),
+            invalidatesTags: (result, error, arg) => [
+                { type: 'Note', id: arg.id }
+            ]
+        }),
+
+        restoreArchivedNote: builder.mutation({
+            query: initialNote => ({
+                url: '/notes/restore',
                 method: 'PATCH',
                 body: {
                     ...initialNote,
@@ -131,7 +144,8 @@ export const {
     useAddNewNoteMutation,
     useUpdateNoteMutation,
     useMarkNoteAsArchivedMutation,
-    useDeleteNoteMutation,
+    useRestoreArchivedNoteMutation,
+    useDeleteNoteMutation
  } = notesApiSlice
 
 // returns the query result object
@@ -143,7 +157,6 @@ const selectNotesData = createSelector(
     selectNotesResult,
     notesResult => notesResult.data  // normalized state object with ids & entities
 )
-
 
 //getSelectors creates these selectors and we rename them with aliases using destructuring
 export const {

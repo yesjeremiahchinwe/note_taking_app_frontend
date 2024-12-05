@@ -47,7 +47,6 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     try {
       if (isLogin) {
         const { accessToken } = await login({ email: values.email, password: values.password }).unwrap()

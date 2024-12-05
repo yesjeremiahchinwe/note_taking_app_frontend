@@ -33,13 +33,12 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
       <DialogContent>
-
         <div className="flex items-start gap-5 p-6 pr-0 pb-0">
-        <div className="bg-[#F3F5F8] min-w-[50px] h-[45px] flex justify-center items-center rounded-[8px]">
+          <div className="bg-[#F3F5F8] min-w-[50px] h-[45px] flex justify-center items-center rounded-[8px]">
             {isDeleteModal ? <IconDelete /> : <IconArchive color="#2B303B" />}
           </div>
-        
-        <DialogHeader className="pb-2">
+
+          <DialogHeader className="pb-2">
             <DialogTitle className="text-[#0E121B] font-semibold tracking-[-0.3px]">
               {title}
             </DialogTitle>
@@ -47,10 +46,12 @@ export const Modal: React.FC<ModalProps> = ({
             <DialogDescription className="text-sm max-w-[85%] text-[#2B303B] tracking-[-0.2px] font-normal">
               {description}
             </DialogDescription>
-        </DialogHeader>
+          </DialogHeader>
         </div>
 
-        <div className="border-t-[1px] border-[##E0E4EA] p-6 pt-0">{children}</div>
+        <div className="border-t-[1px] border-[##E0E4EA] p-6 pt-0">
+          {children}
+        </div>
       </DialogContent>
     </Dialog>
   );

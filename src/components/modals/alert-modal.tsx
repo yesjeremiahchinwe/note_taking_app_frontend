@@ -1,56 +1,55 @@
-import { useEffect, useState } from "react";
-import { Modal } from "../ui/modal";
-import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { InfoIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
-interface AlertModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onConfirm: () => void;
-    loading: boolean;
+interface ModalProps {
+  title: string;
+  description: string;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-const AlertModal: React.FC<AlertModalProps> = ({
-    isOpen,
-    onClose,
-    onConfirm,
-    loading,
+const AlertModal: React.FC<ModalProps> = ({
+  title,
+  description,
+  isOpen,
+  onClose,
 }) => {
-    const [isMounted, setIsMounted] = useState(false)
+  const onChange = (open: boolean) => {
+    if (!open) {
+      onClose();
+    }
+  };
 
-    useEffect(() => {
-        setIsMounted(true)
-    },[])
+  return (
+    <Dialog open={isOpen} onOpenChange={onChange}>
+      <DialogContent>
+        <div className="flex flex-col items-center p-4 pb-6">
+          <div className="min-w-[50px] h-[95px] flex justify-center items-center rounded-[8px]">
+            <InfoIcon color="#FB3748" size={60} />
+          </div>
 
-    if (!isMounted) {
-        return null
-    };
+          <DialogHeader className="pb-2">
+            <DialogTitle className="text-[#0E121B] text-center font-semibold tracking-[-0.3px] text-[2rem]">
+              {title}
+            </DialogTitle>
 
-    return ( 
-        <Modal
-        title="Delete Note"
-        description="Are you sure you want to permanently delete this note? This action cannot be undone"
-        isOpen={isOpen}
-        onClose={onClose}
-        isDeleteModal={false}
-        >
-            <div className="pt-6 space-x-2 flex items-center justify-end w-full" >
-                <Button
-                    disabled={loading}
-                    variant={"outline"}
-                    onClick={onClose}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    disabled={loading}
-                    variant={"destructive"}
-                    onClick={onConfirm}
-                >
-                    Delete
-                </Button>
-            </div>
-        </Modal>
-     );
-}
- 
+            <DialogDescription className="text-base text-center text-[#2B303B] tracking-[-0.2px] pb-6 font-normal">
+              {description}
+            </DialogDescription>
+
+            <Link to="/login" onClick={() => onClose()} className="inline-block mt-4 w-full rounded-lg py-3 bg-[#335CFF] text-white text-center hover:scale-[1.02] duration-500">Login</Link>
+          </DialogHeader>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default AlertModal;

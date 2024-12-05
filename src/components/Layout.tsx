@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
+import { Toaster } from "./ui/toaster";
 
 const Layout = () => (
   <div className="layout">
@@ -11,6 +12,8 @@ const Layout = () => (
     </div>
 
     <Footer />
+
+    <Toaster />
   </div>
 );
 

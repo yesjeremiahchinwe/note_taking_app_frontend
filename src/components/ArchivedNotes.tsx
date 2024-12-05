@@ -1,18 +1,20 @@
 import { Button } from "./ui/button";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Note } from "@/lib/types";
-import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
+import { useGetArchivedNotesQuery } from "@/store/notes/notesApiSlice";
+import { PlusIcon } from "lucide-react";
 
 const ArchivedNotes = () => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate()
 
   const tagQueryParam = searchParams.get("tag");
   const noteQueryParam = searchParams.get("note");
 
   const {
     data: notes,
-} = useGetNotesQuery('notesList', {
+} = useGetArchivedNotesQuery('archivedNotesList', {
     pollingInterval: 15000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true
@@ -25,6 +27,7 @@ const ArchivedNotes = () => {
     : fetchNotes
 
   return (
+    <>
     <section
       className={`${
         location.pathname === "/archived" ? "block" : "hidden lg:block"
@@ -112,6 +115,13 @@ const ArchivedNotes = () => {
         <p className="flex items-center justify-center mt-6 pt-6 text-sm text-[#2B303B]">No Note found</p>
       )}
     </section>
+
+    {location.pathname === "/" || location.pathname === "/archived" && (
+    <div role="button" onClick={() => navigate("/new")} className="fixed bottom-[15%] rounded-full w-[60px] h-[60px] flex lg:hidden items-center justify-center right-[5%] z-10 bg-[#335CFF]">
+        <PlusIcon color="#FFFFFF" size={30} />
+      </div>
+      )}
+    </>
   );
 };
 
