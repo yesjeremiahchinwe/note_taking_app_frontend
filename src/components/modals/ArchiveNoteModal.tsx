@@ -48,7 +48,7 @@ const ArchiveNoteModal: React.FC<ArchiveNoteModalProps> = ({
                     className="bg-[#335CFF] hover:bg-[#3053df]"
                     onClick={onConfirm}
                 >
-                    Archive Note
+                    {loading ? "Archiving..." : "Archive Note"}
                 </Button>
             </div>
         </Modal>

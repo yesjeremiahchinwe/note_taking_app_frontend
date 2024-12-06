@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "../components/ui/button";
 import { IconClock, IconStatus, IconTag } from "@/lib/icons";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Note } from "@/lib/types";
 import useTitle from "@/hooks/useTitle";
 import { FormEvent, useEffect, useState } from "react";
@@ -14,33 +14,22 @@ import AlertModal from "./modals/alert-modal";
 
 interface NoteFormProps {
   isNewNote?: boolean;
-  notes: Note[];
+  note: Note;
 }
 
-const NoteForm = ({ isNewNote, notes }: NoteFormProps) => {
+const NoteForm = ({ isNewNote, note }: NoteFormProps) => {
   const [addNewNote, { isLoading, isSuccess }] = useAddNewNoteMutation();
   const [updateNote, { isLoading: isLoadingUpdate }] = useUpdateNoteMutation();
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { email } = useAuth()
-  const { title } = useParams();
-  const noteQueryParam = searchParams.get("note");
-  const tagQueryParam = searchParams.get("tag");
+  const { userId } = useAuth()
 
-  const note = title
-    ? (notes.find(
-        (note) => note.title.toLowerCase().split(" ").join("-") === title
-      ) as Note)
-    : noteQueryParam
-    ? (notes.find(
-        (note) =>
-          note.title.toLowerCase().split(" ").join("-") === noteQueryParam
-      ) as Note)
-    : tagQueryParam
-    ? notes.filter((note) => note.tags.includes(tagQueryParam as string))[0]
-    : tagQueryParam && location.pathname.includes("archived")
-    ? notes.filter((note) => note.tags.includes(tagQueryParam as string))[0]
-    : notes[0];
+  if (!note) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <p className="max-sm:w-[85%] max-lg:w-[70%] w-[60%] mx-auto">You currently do not have any note. Click the create New Note button to get started.</p>
+      </div>
+    )
+  }
 
   const [isOpen, setIsOpen] = useState(false);
   const [noteTitle, setNoteTitle] = useState(note?.title || "");
@@ -76,7 +65,7 @@ const NoteForm = ({ isNewNote, notes }: NoteFormProps) => {
         content: noteContent,
       };
 
-      if (email) {
+      if (userId) {
         if (location.pathname === "/new") {
           await addNewNote({ ...values });
           if (isSuccess) {
@@ -106,14 +95,6 @@ const NoteForm = ({ isNewNote, notes }: NoteFormProps) => {
       }
     }
   };
-
-  if (notes.length === 0) {
-    return (
-      <div className="flex items-center justify-center h-screen w-full">
-        <p className="max-sm:w-[85%] max-lg:w-[70%] w-[60%] mx-auto">You currently do not have any note. Click the create New Note button to get started.</p>
-      </div>
-    )
-  }
 
   return (
     <>
@@ -216,10 +197,6 @@ const NoteForm = ({ isNewNote, notes }: NoteFormProps) => {
             className="bg-[#335CFF] hover:bg-[#3357e9] shadow-none border-none"
           >
             {isLoading || isLoadingUpdate ? "Saving..." : "Save Note"}
-          </Button>
-
-          <Button className="bg-[#F3F5F8] hover:bg-[#e0e1e4] text-[#2B303B] shadow-none border-none">
-            Cancel
           </Button>
         </div>
       </form>

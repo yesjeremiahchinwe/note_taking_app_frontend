@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 type StateType = {
-    auth: { token: string | null, userId: string | null }
+    auth: { token: string | null }
 }
 
 const authSlice = createSlice({
@@ -15,20 +15,13 @@ const authSlice = createSlice({
 
         logOut: (state, action) => {
             state.token = null
-        },
-
-        setUserId: (state, action) => {
-            const { userId } = action.payload
-            state.userId = userId
         }
     }
 })
 
 
-export const { setCredentials, logOut, setUserId } = authSlice.actions
+export const { setCredentials, logOut } = authSlice.actions
 
 export default authSlice.reducer
 
 export const selectCurrentToken = (state: StateType) => state.auth.token
-
-export const selectUserId = (state: StateType) => state.auth.userId

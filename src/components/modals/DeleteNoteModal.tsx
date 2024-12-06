@@ -47,7 +47,7 @@ const DeleteModal: React.FC<DeleteNoteModalProps> = ({
                     className="bg-[#FB3748] hover:bg-[#e23241]"
                     onClick={onConfirm}
                 >
-                    Delete Note
+                    {loading ? "Deleting..." : "Delete Note"}
                 </Button>
             </div>
         </Modal>

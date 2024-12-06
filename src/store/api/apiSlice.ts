@@ -1,15 +1,16 @@
 import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { setCredentials } from "../auth/authSlice"
-
+import { RootState } from "../store"
 
 const baseQuery = fetchBaseQuery({
     baseUrl: "http://localhost:3500",
-    credentials: "include",
+    // credentials: "include",
     prepareHeaders: (headers, { getState }) => {
-        //@ts-ignore
-        const token = getState().auth.token
-        console.log(token)
-        if (token) return headers.set("authorization", `Bearer ${token}`)
+        const token = (getState() as RootState).auth.token
+
+        if (token) {
+         headers.set("authorization", `Bearer ${token}`)
+        }
 
         return headers
     }
@@ -22,7 +23,6 @@ const baseQueryWithReauth = async (args: FetchArgs, api: BaseQueryApi, extraOpti
     // console.log(extraOptions) //custom like {shout: true}
 
     let result = await baseQuery(args, api, extraOptions)
-    console.log(result)
 
     // If you want, handle other status codes, too
     if (result?.error?.status === 403) {

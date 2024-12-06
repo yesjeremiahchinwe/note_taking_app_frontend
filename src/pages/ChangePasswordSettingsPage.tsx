@@ -18,21 +18,23 @@ import { z } from "zod"
 import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react"
 import { useState } from "react"
 import { useUpdateUserPasswordMutation } from "@/store/users/usersApiSlice";
+import { toast } from "@/hooks/use-toast";
  
 const formSchema = z.object({
-  oldPassword: z.string().min(8, {
+  oldPassword: z.string().trim().min(8, {
     message: "Password must be at least 8 characters.",
   }),
-  newPassword: z.string().min(8, {
+  newPassword: z.string().trim().min(8, {
     message: "Password must be at least 8 characters.",
   }),
-  confirmNewPassword: z.string().min(8, {
+  confirmNewPassword: z.string().trim().min(8, {
     message: "Password must be at least 8 characters.",
   }),
 })
 
 const ChangePasswordSettingsPage = () => {
 useTitle('Change Pasword')
+
     const [showPassord, setShowPassword] = useState({
       oldPassword: false,
       newPassword: false,
@@ -51,9 +53,11 @@ useTitle('Change Pasword')
       })
      
       const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log(values)
         try {
           await updateUserPassword({ oldPassword: values.oldPassword, newPassword: values.newPassword, confirmNewPassword: values.confirmNewPassword})
+          toast({
+            title: "Password updated successfully!",
+          });
         } catch (err: any) {
           if (!err.status) {
             setErrMsg('No Server Response');

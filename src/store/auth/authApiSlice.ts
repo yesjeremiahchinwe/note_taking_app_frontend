@@ -1,6 +1,5 @@
 import { apiSlice } from "../api/apiSlice"
-import { logOut, setCredentials, setUserId } from "./authSlice"
-import { jwtDecode, JwtPayload } from 'jwt-decode'
+import { logOut, setCredentials } from "./authSlice"
 
 export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -13,13 +12,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
-                    const { data } = await queryFulfilled
-                    const { accessToken } = data
-                    const decoded: JwtPayload = jwtDecode(accessToken)
-                    //@ts-ignore
-                    const { email, userId } = decoded.UserInfo
-
-                    dispatch(setUserId({ userId }))
+                    await queryFulfilled
                 } catch (err) {
                     console.log(err)
                 }

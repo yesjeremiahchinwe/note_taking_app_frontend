@@ -32,6 +32,8 @@ const AllNotes = () => {
     ? notes
     : notes;
 
+  if (!notes?.length) return <p>No notes found!</p>
+
   return (
     <>
       <section
@@ -68,7 +70,7 @@ const AllNotes = () => {
         )}
 
         {allNotes?.length !== 0 ? (
-          allNotes.map((note: Note, index: number) => {
+          allNotes?.map((note: Note, index: number) => {
             const formatNoteTitle = note.title
               .toLowerCase()
               .split(" ")

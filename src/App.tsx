@@ -3,11 +3,14 @@ import { lazy, Suspense } from "react";
 
 import Layout from "@/components/Layout";
 import Home from "@/components/Home";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 import HomeLoader from "./components/HomeLoader";
 import RequireAuth from "./components/RequireLogin";
 import Prefetch from "./components/Prefetch";
-import { useGetArchivedNotesQuery, useGetNotesQuery } from "./store/notes/notesApiSlice";
+import {
+  useGetArchivedNotesQuery,
+  useGetNotesQuery,
+} from "./store/notes/notesApiSlice";
 
 const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
@@ -26,89 +29,73 @@ const ChangePasswordSettings = lazy(
 );
 
 function App() {
-  const {
-    data: notes,
-} = useGetNotesQuery('notesList', {
-    pollingInterval: 15000,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true
-})
-
-  const {
-    data: archivedNotes,
-} = useGetArchivedNotesQuery('archivedNotesList', {
-    pollingInterval: 15000,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true
-})
-
-console.log(notes)
-console.log(archivedNotes)
 
   return (
     <>
-    <Suspense fallback={<HomeLoader />}>
-      <Routes>
-        {/* ------------ Authentication routes ---------------- */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/create" element={<SignUpPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Suspense fallback={<HomeLoader />}>
+        <Routes>
+          {/* ------------ Authentication routes ---------------- */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/create" element={<SignUpPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-        <Route element={<RequireAuth />}>
-          <Route
-            path="/:userId/reset-password"
-            element={<ResetPasswordPage />}
-          />
-        </Route>
+          <Route element={<RequireAuth />}>
+            <Route
+              path="/:userId/reset-password"
+              element={<ResetPasswordPage />}
+            />
+          </Route>
 
-        {/* -------------- Home and Main application routes ---------------- */}
-        {/* <Route element={<PersistLogin />}> */}
-        <Route path="/" element={<Layout />}>
-          <Route element={<Prefetch />}>
-            <Route element={<Home />}>
-              <Route index element={<NoteDetailsPage notes={notes} />} />
-              <Route
-                path=":title"
-                element={<NoteDetailsPage notes={notes} />}
-              />
-              <Route
-                path="new"
-                element={<NoteDetailsPage notes={notes} />}
-              />
-            </Route>
+          {/* -------------- Home and Main application routes ---------------- */}
+          <Route element={<RequireAuth />}>
+            <Route path="/" element={<Layout />}>
+              <Route element={<Prefetch />}>
+                <Route element={<Home />}>
+                  <Route index element={<NoteDetailsPage />} />
+                  <Route
+                    path=":title"
+                    element={<NoteDetailsPage />}
+                  />
+                  <Route
+                    path="new"
+                    element={<NoteDetailsPage />}
+                  />
+                </Route>
 
-            <Route path="archived" element={<ArchivedNotesPage />}>
-              <Route
-                index
-                element={<NoteDetailsPage notes={archivedNotes} />}
-              />
-              <Route
-                path=":title"
-                element={<NoteDetailsPage notes={archivedNotes} />}
-              />
-            </Route>
+                <Route path="archived" element={<ArchivedNotesPage />}>
+                  <Route
+                    index
+                    element={<NoteDetailsPage />}
+                  />
+                  <Route
+                    path=":title"
+                    element={<NoteDetailsPage />}
+                  />
+                </Route>
 
-            <Route path="tags" element={<TagsPage />}>
-              <Route index element={<NoteDetailsPage notes={notes} />} />
+                <Route path="tags" element={<TagsPage />}>
+                  <Route index element={<NoteDetailsPage />} />
+                </Route>
+              </Route>
+
+              <Route path="settings" element={<SettingsPage />}>
+                <Route index element={<ColorThemeSettings />} />
+                <Route path="color-theme" element={<ColorThemeSettings />} />
+                <Route path="font-theme" element={<FontThemeSettings />} />
+                <Route
+                  path="change-password"
+                  element={<ChangePasswordSettings />}
+                />
+              </Route>
+
+              <Route path="search" element={<SearchPage />} />
             </Route>
           </Route>
 
-            <Route path="settings" element={<SettingsPage />}>
-              <Route index element={<ColorThemeSettings />} />
-              <Route path="color-theme" element={<ColorThemeSettings />} />
-              <Route path="font-theme" element={<FontThemeSettings />} />
-              <Route
-                path="change-password"
-                element={<ChangePasswordSettings />}
-              />
-            </Route>
-
-            <Route path="search" element={<SearchPage />} />
-          </Route>
-        {/* </Route> */}
-      </Routes>
-    </Suspense>
-    <Toaster />
+          <Route path="*" element={<h1>Not Found!</h1>} />
+        </Routes>
+      </Suspense>
+      <Toaster />
     </>
   );
 }

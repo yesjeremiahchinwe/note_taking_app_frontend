@@ -22,6 +22,7 @@ import { useLoginMutation } from "@/store/auth/authApiSlice";
 import { useAddNewUserMutation } from "@/store/users/usersApiSlice";
 import { setCredentials } from "@/store/auth/authSlice";
 import { useDispatch } from "react-redux";
+import { toast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   email: z.string().email({message: "Please provide a valid email address"}),
@@ -51,9 +52,17 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       if (isLogin) {
         const { accessToken } = await login({ email: values.email, password: values.password }).unwrap()
         dispatch(setCredentials({ accessToken }))
+        toast({
+          title: 'Login successfully!',
+          description: `You are currently logged in as ${values.email}`
+        })
         navigate("/")
       } else {
         await addNewUser({ email: values.email, password: values.password })
+        toast({
+          title: 'Account created successfully!',
+          description: `You signed up for an account using the email ${values.email}`
+        })
         navigate("/login")
       }
   } catch (err: any) {

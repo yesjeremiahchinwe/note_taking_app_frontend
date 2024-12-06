@@ -2,8 +2,12 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import { Toaster } from "./ui/toaster";
+import useTitle from "@/hooks/useTitle";
 
-const Layout = () => (
+const Layout = () => {
+  useTitle("Home Page")
+
+  return (
   <div className="layout">
     <Sidebar />
 
@@ -15,6 +19,7 @@ const Layout = () => (
 
     <Toaster />
   </div>
-);
+)
+}
 
 export default Layout;

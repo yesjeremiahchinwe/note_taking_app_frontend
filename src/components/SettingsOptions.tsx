@@ -52,7 +52,7 @@ const SettingsOptions = () => {
               </Link>
               </div>
 
-              <div onClick={() => logoutOnClick()} role="button" aria-role="button" className="text-xl flex items-center gap-3 py-3 px-2 rounded-lg font-semibold tracking-[-0.3px] text-[#0E121B] bg-transparent hover:bg-transparent">
+              <div onClick={() => logoutOnClick()} role="button" className="text-xl flex items-center gap-3 py-3 px-2 rounded-lg font-semibold tracking-[-0.3px] text-[#0E121B] bg-transparent hover:bg-transparent">
               <IconLogout /> <span className="text-[#0E121B] font-medium text-sm tracking-[-0.2px]">{isLoading ? "Logging out..." : "Logout"}</span>
               </div>
           </article>
