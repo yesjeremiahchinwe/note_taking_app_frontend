@@ -56,7 +56,7 @@
 }
 
 ::-webkit-scrollbar {
-  display: none
+  display: none,
 }
 
 @layer base {
@@ -64,14 +64,14 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground min-w-[320px] min-h-screen w-full;
+    @apply bg-white dark:bg-darkText text-darkText dark:text-white min-w-[320px] min-h-screen w-full;
   }
 }
 
 
 @layer utilities {
   .layout {
-    @apply flex flex-col lg:flex-row items-start h-full w-full
+    @apply flex flex-col lg:flex-row items-start h-full w-full bg-white dark:bg-darkText text-darkText dark:text-white
   }
 
   .nav-link {

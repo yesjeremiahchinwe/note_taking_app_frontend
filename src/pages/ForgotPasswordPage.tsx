@@ -13,9 +13,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import useTitle from "@/hooks/useTitle";
+import { useForgotPasswordMutation } from "@/store/auth/authApiSlice";
+import { toast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  email: z.string().email({message: "Please provide a valid email address"}),
+  email: z.string().trim().email({message: "Please provide a valid email address"}),
 });
 
 const ForgotPasswordPage = () => {
@@ -23,12 +25,24 @@ const ForgotPasswordPage = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      email: ""
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation()
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await forgotPassword({ email: values.email })
+      toast({
+        title: "Sent successfully!",
+        description: `A password reset link has been sent to your email ${values.email}`
+      })
+    } catch (err: any) {
+      toast({
+        title: `Oops! ${err?.message || err?.data?.message}`,
+      })
+    }
   }
 
     return (
@@ -71,10 +85,11 @@ const ForgotPasswordPage = () => {
             )}
           />
           <Button
+            disabled={isLoading}
             type="submit"
             className="bg-[#335CFF] rounded-lg flex items-center justify-center hover:bg-[#3255e2] mx-auto w-full my-6 py-3 px-4"
           >
-            Send Reset Link
+            {isLoading ? "Loading..." : "Send Reset Link"}
           </Button>
         </form>
       </Form>

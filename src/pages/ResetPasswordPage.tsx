@@ -16,12 +16,15 @@ import { z } from "zod";
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import useTitle from "@/hooks/useTitle";
+import { useResetPasswordMutation } from "@/store/auth/authApiSlice";
+import { useParams } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  newPassword: z.string().min(8, {
+  newPassword: z.string().trim().min(8, {
     message: "Password must be at least 8 characters.",
   }),
-  confirmNewPassword: z.string().min(8, {
+  confirmNewPassword: z.string().trim().min(8, {
     message: "Password must be at least 8 characters.",
   }),
 });
@@ -33,6 +36,7 @@ const ResetPasswordPage = () => {
         newPassword: false,
         confirmNewPassword: false
     })
+    const { userId } = useParams()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,8 +46,20 @@ const ResetPasswordPage = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const [resetPassword, {isLoading}] = useResetPasswordMutation()
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await resetPassword({ userId, newPassword: values.newPassword, confirmNewPassword: values.confirmNewPassword })
+      toast({
+        title: "Password reset successfully!",
+        description: `You've successfully reset your password.`
+      })
+    } catch (err: any) {
+      toast({
+        title: `Oops! ${err?.message || err?.data?.message}`,
+      })
+    }
   }
 
     return (
@@ -104,10 +120,11 @@ const ResetPasswordPage = () => {
           )}
         />
           <Button
+          disabled={isLoading}
             type="submit"
             className="bg-[#335CFF] rounded-lg flex items-center justify-center hover:bg-[#3255e2] mx-auto w-full my-6 py-3 px-4"
           >
-            Reset Password
+            {isLoading ? "Loading..." : "Reset Password"}
           </Button>
         </form>
       </Form>

@@ -4,13 +4,15 @@ import { IconClock, IconStatus, IconTag } from "@/lib/icons";
 import { useNavigate } from "react-router-dom";
 import { Note } from "@/lib/types";
 import useTitle from "@/hooks/useTitle";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import Editor from "react-simple-wysiwyg";
 import useAuth from "@/hooks/useAuth";
 import {
   useAddNewNoteMutation,
   useUpdateNoteMutation,
 } from "@/store/notes/notesApiSlice";
 import AlertModal from "./modals/alert-modal";
+import { toast } from "@/hooks/use-toast";
 
 interface NoteFormProps {
   isNewNote?: boolean;
@@ -21,21 +23,14 @@ const NoteForm = ({ isNewNote, note }: NoteFormProps) => {
   const [addNewNote, { isLoading, isSuccess }] = useAddNewNoteMutation();
   const [updateNote, { isLoading: isLoadingUpdate }] = useUpdateNoteMutation();
   const navigate = useNavigate();
-  const { userId } = useAuth()
-
-  if (!note) {
-    return (
-      <div className="flex items-center justify-center h-screen w-full">
-        <p className="max-sm:w-[85%] max-lg:w-[70%] w-[60%] mx-auto">You currently do not have any note. Click the create New Note button to get started.</p>
-      </div>
-    )
-  }
+  const { userId } = useAuth();
 
   const [isOpen, setIsOpen] = useState(false);
   const [noteTitle, setNoteTitle] = useState(note?.title || "");
-  const [noteTags, setNoteTags] = useState(note?.tags?.join(", ") || "");
+  const [noteTags, setNoteTags] = useState(note?.tags || "");
   const [noteContent, setNoteContent] = useState(note?.content || "");
   const [errMsg, setErrMsg] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (isNewNote) {
@@ -46,9 +41,15 @@ const NoteForm = ({ isNewNote, note }: NoteFormProps) => {
   }, [location.pathname]);
 
   useEffect(() => {
+    if (isNewNote) {
+      inputRef?.current?.focus()
+    }
+  }, [isNewNote])
+
+  useEffect(() => {
     if (note && !isNewNote) {
       setNoteTitle(note?.title || "");
-      setNoteTags(note?.tags?.join(", ") || "");
+      setNoteTags(note?.tags || "");
       setNoteContent(note?.content || "");
     }
   }, [note, location.pathname]);
@@ -68,14 +69,21 @@ const NoteForm = ({ isNewNote, note }: NoteFormProps) => {
       if (userId) {
         if (location.pathname === "/new") {
           await addNewNote({ ...values });
+          toast({
+            title: "Note created successfully!",
+          });
+          navigate("/");
+
           if (isSuccess) {
             setNoteTitle("");
             setNoteTags("");
             setNoteContent("");
-            navigate("/");
           }
         } else {
           await updateNote({ ...values, id: note._id });
+          toast({
+            title: "Note updated successfully!",
+          });
           navigate("/");
         }
       } else {
@@ -96,10 +104,12 @@ const NoteForm = ({ isNewNote, note }: NoteFormProps) => {
     }
   };
 
+  if (!note) return null;
+
   return (
     <>
       <form className="w-full lg:px-2" onSubmit={onSubmit}>
-        {errMsg && <small className="text-red-500">{errMsg}</small>}
+        {errMsg && <small className="text-lightRed">{errMsg}</small>}
         <div>
           <label
             htmlFor="title"
@@ -109,10 +119,12 @@ const NoteForm = ({ isNewNote, note }: NoteFormProps) => {
           </label>
           <Input
             type="text"
+            ref={isNewNote ? inputRef : null}
             className={`h-[50px] text-[1.75rem] md:text-[1.7rem] font-bold placeholder:text-[#0E121B] text-[#0E121B] tracking-[-0.5px] ml-[-0.65rem] border-none shadow-none`}
             value={noteTitle}
             placeholder="Enter note title..."
             onChange={(e) => setNoteTitle(e.target.value)}
+            disabled={location.pathname.includes("archived")}
           />
         </div>
 
@@ -155,6 +167,7 @@ const NoteForm = ({ isNewNote, note }: NoteFormProps) => {
               value={noteTags}
               placeholder="Add tags separated by commas (e.g. Work, Planning)"
               onChange={(e) => setNoteTags(e.target.value)}
+              disabled={location.pathname.includes("archived")}
             />
 
             {location.pathname.includes("archived") && (
@@ -163,41 +176,46 @@ const NoteForm = ({ isNewNote, note }: NoteFormProps) => {
               </p>
             )}
 
-            <p className="text-[#2B303B] font-normal text-sm tracking-[-0.2px]">
-              {isNewNote ? "Not yet saved" : note?.lastEdited.split("T")[0]}
+            <p className="text-[#2B303B] font-normal text-sm tracking-[-0.2px] pt-1">
+              {isNewNote ? "Not yet saved" : note?.updatedAt?.split("T")[0]}
             </p>
           </div>
         </article>
 
-        <div className="py-4">
-          <label
-            htmlFor="title"
-            className="text-[#0E121B] font-medium text-sm tracking-[-0.2px] sr-only"
-          >
-            Note Content
-          </label>
-          <Input
-            type="text"
-            className={`h-[50px] md:text-[1.75rem] font-bold text-[#0E121B] tracking-[-0.5px]`}
-            value={noteContent}
-            onChange={(e) => setNoteContent(e.target.value)}
-          />
-        </div>
+        <div className="flex flex-col justify-between h-full">
+          <div className="py-4 flex-1">
+            <label
+              htmlFor="title"
+              className="text-[#0E121B] font-medium text-sm tracking-[-0.2px] sr-only"
+            >
+              Note Content
+            </label>
 
-        <div className="flex items-center gap-3 border-t-[1px] border-[#E0E4EA] py-4">
-          <Button
-            disabled={
-              !noteTitle ||
-              !noteTags ||
-              !noteContent ||
-              isLoading ||
-              isLoadingUpdate
-            }
-            type="submit"
-            className="bg-[#335CFF] hover:bg-[#3357e9] shadow-none border-none"
-          >
-            {isLoading || isLoadingUpdate ? "Saving..." : "Save Note"}
-          </Button>
+            <Editor
+              className="h-full text-[#0E121B] tracking-[-0.5px] border-none"
+              value={noteContent}
+              onChange={(e) => setNoteContent(e.target.value)}
+              disabled={location.pathname.includes("archived")}
+            />
+          </div>
+
+          {!location.pathname.includes("archived") && (
+            <div className="flex items-center gap-3 border-t-[1px] border-[#E0E4EA] py-4">
+              <Button
+                disabled={
+                  !noteTitle ||
+                  !noteTags ||
+                  !noteContent ||
+                  isLoading ||
+                  isLoadingUpdate
+                }
+                type="submit"
+                className="bg-[#335CFF] hover:bg-[#3357e9] shadow-none border-none"
+              >
+                {isLoading || isLoadingUpdate ? "Saving..." : "Save Note"}
+              </Button>
+            </div>
+          )}
         </div>
       </form>
 

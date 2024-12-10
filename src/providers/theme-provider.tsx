@@ -31,7 +31,7 @@ export function ThemeProvider({
   )
 
   useEffect(() => {
-    const root = window.document.documentElement
+    const root = window.document.body
 
     root.classList.remove("light", "dark")
 

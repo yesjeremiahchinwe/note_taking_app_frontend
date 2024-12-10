@@ -3,14 +3,15 @@ import { lazy, Suspense } from "react";
 
 import Layout from "@/components/Layout";
 import Home from "@/components/Home";
+import SearchPage from "@/pages/SearchPage";
 import { Toaster } from "@/components/ui/toaster";
-import HomeLoader from "./components/HomeLoader";
-import RequireAuth from "./components/RequireLogin";
-import Prefetch from "./components/Prefetch";
+import HomeLoader from "@/components/HomeLoader";
+import RequireAuth from "@/components/RequireLogin";
+import Prefetch from "@/components/Prefetch";
 import {
   useGetArchivedNotesQuery,
   useGetNotesQuery,
-} from "./store/notes/notesApiSlice";
+} from "@/store/notes/notesApiSlice";
 
 const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
@@ -19,7 +20,6 @@ const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("@/pages/ResetPasswordPage"));
 
 const NoteDetailsPage = lazy(() => import("@/pages/NoteDetailsPage"));
-const SearchPage = lazy(() => import("@/pages/SearchPage"));
 const TagsPage = lazy(() => import("@/pages/TagsPage"));
 const ArchivedNotesPage = lazy(() => import("@/pages/ArchivedNotesPage"));
 const ColorThemeSettings = lazy(() => import("@/pages/ColorThemeSettingsPage"));
@@ -29,6 +29,23 @@ const ChangePasswordSettings = lazy(
 );
 
 function App() {
+
+  const { data: notes, isLoading: isLoadingGetNotes } = useGetNotesQuery("notesList", {
+    pollingInterval: 15000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
+
+  // console.log(notes)
+
+  const { data: archivedNotes, isLoading: isLoadingArchiveNote } = useGetArchivedNotesQuery(
+    "archivedNotesList",
+    {
+      pollingInterval: 15000,
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   return (
     <>
@@ -51,30 +68,34 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route element={<Prefetch />}>
                 <Route element={<Home />}>
-                  <Route index element={<NoteDetailsPage />} />
+                  <Route index element={<NoteDetailsPage notes={notes} isLoading={isLoadingGetNotes} />} />
                   <Route
                     path=":title"
-                    element={<NoteDetailsPage />}
+                    element={<NoteDetailsPage notes={notes} isLoading={isLoadingGetNotes} />}
                   />
                   <Route
                     path="new"
-                    element={<NoteDetailsPage />}
+                    element={<NoteDetailsPage notes={notes} isLoading={isLoadingGetNotes} />}
                   />
                 </Route>
 
                 <Route path="archived" element={<ArchivedNotesPage />}>
                   <Route
                     index
-                    element={<NoteDetailsPage />}
+                    element={<NoteDetailsPage notes={archivedNotes} isLoading={isLoadingArchiveNote} />}
                   />
                   <Route
                     path=":title"
-                    element={<NoteDetailsPage />}
+                    element={<NoteDetailsPage notes={archivedNotes} isLoading={isLoadingArchiveNote} />}
                   />
                 </Route>
 
                 <Route path="tags" element={<TagsPage />}>
-                  <Route index element={<NoteDetailsPage />} />
+                  <Route index element={<NoteDetailsPage notes={notes} isLoading={isLoadingGetNotes} />} />
+                </Route>
+
+                <Route path="search" element={<SearchPage />}>
+                  <Route index element={<NoteDetailsPage notes={notes} isLoading={isLoadingGetNotes} />} />
                 </Route>
               </Route>
 

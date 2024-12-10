@@ -1,13 +1,12 @@
 
 export interface Note {
     title: string,
-    tags: string[],
+    tags: string,
     content: string,
-    lastEdited: string,
+    updatedAt: string,
     isArchived: boolean
     _id: string
-    id: string
-    userId: string
+    user: string
 }
 
 export interface MobileNavLink {

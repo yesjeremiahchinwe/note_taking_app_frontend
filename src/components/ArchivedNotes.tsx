@@ -20,11 +20,11 @@ const ArchivedNotes = () => {
     refetchOnMountOrArgChange: true
 })
 
-  const fetchNotes: Note[] = notes.filter((note: Note) => note.isArchived);
-
   const allNotes: Note[] = tagQueryParam && location.pathname.includes("archived")
-    ? fetchNotes.filter(note => note.tags.includes(tagQueryParam as string)) 
-    : fetchNotes
+    ? notes.filter((note: Note) => note.tags.includes(tagQueryParam as string)) 
+    : notes
+
+  if (!allNotes?.length) return <p>No Notes Found</p>
 
   return (
     <>
@@ -37,6 +37,7 @@ const ArchivedNotes = () => {
         <Button
           className="hidden lg:flex py-6 rounded-lg bg-[#335CFF] hover:bg-[#335CFF] hover:scale-[1.02] duration-500 w-full mb-5"
           size="lg"
+          onClick={() => navigate("/new")}
         >
           &#x2b; <span>Create New Note</span>
         </Button>
@@ -65,7 +66,7 @@ const ArchivedNotes = () => {
         </p>
       )}
 
-      {allNotes.length !== 0 ? allNotes.map((note: Note, index: number) => {
+      {allNotes?.length !== 0 ? allNotes?.map((note: Note, index: number) => {
         const formatNoteTitle = note.title.toLowerCase().split(" ").join("-");
 
         return (
@@ -96,7 +97,7 @@ const ArchivedNotes = () => {
             </h2>
 
             <div className="flex flex-wrap items-center gap-[8px] mt-3">
-              {note.tags.map((tag: string, index: number) => (
+              {note?.tags?.split(",").map((tag: string, index: number) => (
                 <p
                   key={index}
                   className="py-[2px] px-[6px] text-sm rounded-md bg-[#E0E4EA]"
@@ -107,7 +108,7 @@ const ArchivedNotes = () => {
             </div>
 
             <small className="text-[#2B303B] block mt-4 font-medium text-xs tracking-[-0.2px]">
-              {note.lastEdited.split("T")[0]}
+              {note?.updatedAt?.split("T")[0]}
             </small>
           </article>
         );

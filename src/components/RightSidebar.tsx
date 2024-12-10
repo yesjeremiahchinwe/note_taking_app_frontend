@@ -2,25 +2,29 @@ import iconArchive from "/images/icon-archive.svg";
 import iconDelete from "/images/icon-delete.svg";
 import iconRestore from "/images/icon-restore.svg";
 import { Button } from "./ui/button";
+import { Note } from "@/lib/types"
 import {
   useLocation,
   useParams,
   useSearchParams,
   useNavigate,
 } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteModal from "./modals/DeleteNoteModal";
 import ArchiveNoteModal from "./modals/ArchiveNoteModal";
 import {
   useDeleteNoteMutation,
+  useGetArchivedNotesQuery,
   useGetNotesQuery,
   useMarkNoteAsArchivedMutation,
+  useRestoreArchivedNoteMutation,
 } from "@/store/notes/notesApiSlice";
 import { toast } from "@/hooks/use-toast";
 
 const RightSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isLoaded, setIsLoaded] = useState(false)
   const { title } = useParams();
   const [isOpen, setIsOpen] = useState({
     archiveNote: false,
@@ -29,27 +33,71 @@ const RightSidebar = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const noteQueryParam = searchParams.get("note");
 
+  const {
+    data: notes,
+} = useGetNotesQuery('notesList', {
+    pollingInterval: 15000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true
+})
+
+  const {
+    data: archivedNotes,
+} = useGetArchivedNotesQuery('notesList', {
+    pollingInterval: 15000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true
+})
+
   const noteTitle = (noteQueryParam ?? title) as string;
+
+  const note: Note = notes?.length && location.pathname === "/" 
+    ? notes[0]
+    : archivedNotes?.length && location.pathname == "/archived"
+    ? archivedNotes[0]
+    : archivedNotes?.length && location.pathname.includes("/archived")
+    ? archivedNotes?.find((note: Note) => note?.title.toLowerCase().split(" ").join("-") === noteTitle)
+    : notes?.find((note: Note) => note?.title.toLowerCase().split(" ").join("-") === noteTitle)
 
   const [markNoteAsArchived, { isLoading: isLoadingArchiveNote }] =
     useMarkNoteAsArchivedMutation();
   const [deleteNote, { isLoading: isLoadingDeleteNote }] =
     useDeleteNoteMutation();
-
-  const { note } = useGetNotesQuery("notesList", {
-    selectFromResult: ({ data }) => ({
-      note: data?.entities[noteTitle],
-    }),
-  });
+  const [restoreArchivedNote, { isLoading: isLoadingRestoreNote }] =
+    useRestoreArchivedNoteMutation();
 
   const onDeleteNote = async () => {
     try {
       await deleteNote({ id: note._id });
       setIsOpen((prev) => ({ ...prev, deleteNote: false }));
-      navigate("/");
+      toast({
+        title: "Note deleted successfully!"
+      });
+      if (location.pathname.includes("/archived")) {
+        navigate("/archived")
+      } else {
+      navigate("/")
+      }
     } catch (err: any) {
       toast({
         title: "Oops! Couldn't delete note",
+        description: `Error message: ${err?.message || err?.data?.message}`,
+      });
+    }
+  };
+
+  const onRestoreNote = async () => {
+    try {
+      await restoreArchivedNote({ id: note._id });
+      setIsOpen((prev) => ({ ...prev, archiveNote: false }));
+      toast({
+        title: "Note restored successfully!",
+        description: "Your note is now under your 'All Notes' tab"
+      });
+      navigate("/archived");
+    } catch (err: any) {
+      toast({
+        title: "Oops! Couldn't restore note",
         description: `Error message: ${err?.message || err?.data?.message}`,
       });
     }
@@ -59,6 +107,10 @@ const RightSidebar = () => {
     try {
       await markNoteAsArchived({ id: note._id });
       setIsOpen((prev) => ({ ...prev, archiveNote: false }));
+      toast({
+        title: "Note archived successfully!",
+        description: `You can view note '${note?.title}' under your Archived Notes tab`,
+      });
       navigate("/");
     } catch (err: any) {
       toast({
@@ -68,17 +120,25 @@ const RightSidebar = () => {
     }
   };
 
+  useEffect(() => {
+    setIsLoaded(true)
+  }, [])
+
   return (
     <>
       <section className="hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] border-[#E0E4EA]">
+        {!isLoaded ? null : (
+        <div>
         {location.pathname.includes("archived") ? (
           <Button
             className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-[#CACFD8] mb-3 w-full"
             size="lg"
+            onClick={() => onRestoreNote()}
+            disabled={isLoadingRestoreNote}
           >
             <img src={iconRestore} alt="Archive svg icon" />{" "}
             <span className="ml-1 text-[#0E121B] shadow-none tracking-[-0.2px]">
-              Restore Note
+              {isLoadingRestoreNote ? "Restoring..." : "Restore Note"}
             </span>
           </Button>
         ) : (
@@ -108,6 +168,8 @@ const RightSidebar = () => {
             Delete Note
           </span>
         </Button>
+        </div>
+        )}
       </section>
 
       <DeleteModal

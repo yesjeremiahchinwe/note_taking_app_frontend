@@ -12,7 +12,7 @@ const useAuth = () => {
 
         return { email, userId }
     }
-
+    
     return { email: '', userId: '' }
 }
 

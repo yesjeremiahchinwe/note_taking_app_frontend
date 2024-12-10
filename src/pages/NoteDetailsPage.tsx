@@ -1,6 +1,6 @@
 import { Button } from "../components/ui/button";
 import { Note } from "@/lib/types";
-import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import deleteIcon from "/images/icon-delete.svg";
 import archivedIcon from "/images/icon-archive.svg";
 import { Link } from "react-router-dom";
@@ -9,12 +9,16 @@ import DeleteModal from "@/components/modals/DeleteNoteModal";
 import ArchiveNoteModal from "@/components/modals/ArchiveNoteModal";
 import NoteForm from "@/components/NoteForm";
 import { ChevronLeftIcon } from "lucide-react";
-import { useDeleteNoteMutation, useGetNotesQuery, useMarkNoteAsArchivedMutation } from "@/store/notes/notesApiSlice";
-import { Description } from "@radix-ui/react-toast";
+import { useDeleteNoteMutation, useMarkNoteAsArchivedMutation } from "@/store/notes/notesApiSlice";
 import { toast } from "@/hooks/use-toast";
 import HomeLoader from "@/components/HomeLoader";
 
-const NoteDetails = () => {
+interface NotesProp {
+  notes?: Note[],
+  isLoading?: boolean
+}
+
+const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   const location = useLocation();
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState({
@@ -27,42 +31,25 @@ const NoteDetails = () => {
   const tagQueryParam = searchParams.get("tag");
   const { title } = useParams();
 
-  const { data: notes, isLoading: isLoadingGetNotes } = useGetNotesQuery("notesList", {
-    pollingInterval: 15000,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true,
-  });
-
   const [deleteNote, { isLoading: isLoadingDeleteNote }] = useDeleteNoteMutation()
   const [markNoteAsArchived, { isLoading: isLoadingMarkedNote }] = useMarkNoteAsArchivedMutation()
 
-  // const { data: archivedNotes } = useGetArchivedNotesQuery(
-  //   "archivedNotesList",
-  //   {
-  //     pollingInterval: 15000,
-  //     refetchOnFocus: true,
-  //     refetchOnMountOrArgChange: true,
-  //   }
-  // );
+  if (!notes?.length) return null
 
-  console.log(notes);
-  // console.log(archivedNotes);
- 
-
-  const note = title
-    ? (notes.find(
+  const note: Note = title
+    ? (notes?.find(
         (note: Note) => note.title.toLowerCase().split(" ").join("-") === title
       ) as Note)
     : noteQueryParam
-    ? (notes.find(
+    ? (notes?.find(
         (note: Note) =>
           note.title.toLowerCase().split(" ").join("-") === noteQueryParam
       ) as Note)
     : tagQueryParam
-    ? notes.filter((note: Note) => note.tags.includes(tagQueryParam as string))[0]
+    ? notes?.filter((note: Note) => note.tags.includes(tagQueryParam as string))[0]
     : tagQueryParam && location.pathname.includes("archived")
-    ? notes.filter((note: Note) => note.tags.includes(tagQueryParam as string))[0]
-    : notes[0];
+    ? notes?.filter((note: Note) => note.tags.includes(tagQueryParam as string))[0]
+    : notes[0]
 
   const goBackToPreviousPage = location.pathname.includes("archived")
     ? "/archived"
@@ -72,6 +59,9 @@ const NoteDetails = () => {
     try {
       await deleteNote({ id: note._id })
       setIsOpen((prev) => ({ ...prev, deleteNote: false }))
+      toast({
+        title: "Note deleted successfully!"
+      });
       navigate("/")
     } catch (err: any) {
       toast({
@@ -85,6 +75,9 @@ const NoteDetails = () => {
     try {
       await markNoteAsArchived({ id: note._id })
       setIsOpen((prev) => ({ ...prev, archiveNote: false }))
+      toast({
+        title: "Note archived successfully!"
+      });
       navigate("/")
     } catch (err: any) {
       toast({
@@ -94,7 +87,7 @@ const NoteDetails = () => {
     }
   }
 
-  if (isLoadingGetNotes) {
+  if (isLoading) {
     return <HomeLoader />
   }
 

@@ -10,7 +10,7 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation()
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const tagQueryParam = searchParams.get("tag");
 
@@ -18,25 +18,25 @@ const Sidebar = () => {
 
   return (
     <>
-      <section className="flex lg:hidden w-full min-h-[60px] bg-[#F3F5F8] lg:bg-transparent">
+      <section className="flex lg:hidden w-full min-h-[60px] bg-lightGray text-white lg:bg-transparent">
         <div className="pt-4 px-[1.85rem]">
           <Link to="/">
-            <LogoSVG />
+            <LogoSVG color="#fff" />
           </Link>
         </div>
       </section>
 
-      <aside className="md:basis-[35%] xl:basis-[25%] min-h-screen hidden lg:flex flex-col border-r-[1px] border-[#E0E4EA]">
+      <aside className="md:basis-[35%] xl:basis-[25%] max-h-screen hidden lg:flex flex-col border-r-[1px] border-[#E0E4EA]">
         <div className="min-h-[81px] pt-6 px-[1.85rem]">
           <Link to="/">
-            <LogoSVG />
+            <LogoSVG color="#fff" />
           </Link>
         </div>
 
         <nav className="border-b-[1px] border-[#E0E4EA] pb-3 pt-2 mx-5">
           <ul>
             <li>
-              <Link className={`nav-link bg-[#F3F5F8] rounded-[8px] mb-1 ${isHomePath ? "bg-[#F3F5F8]" : "bg-transparent"}`} to="/">
+              <Link className={`nav-link bg-[#F3F5F8] rounded-[8px] mb-1 ${isHomePath ? "bg-[#F3F5F8] dark:bg-lightGray" : "bg-transparent"}`} to="/">
                 <IconHome color="#0E121B" /> <span className="">All Notes</span>{" "}
                 <IconChevronRight className={`ml-auto ${location.pathname.includes("/") && location.pathname !== "/archived" ? 'flex' : 'hidden'}`} />
               </Link>

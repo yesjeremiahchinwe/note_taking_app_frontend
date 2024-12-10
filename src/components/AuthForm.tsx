@@ -188,11 +188,11 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         </form>
       </Form>
 
-      <div className="border-b-[1px] border-[#E0E4EA] my-5 w-full" />
+      {/* <div className="border-b-[1px] border-[#E0E4EA] my-5 w-full" />
 
       <p className="text-[#525866] font-normal text-sm tracking-[-0.2px] py-2">Or log in with:</p>
 
-      <Button size="lg" className="w-full bg-transparent border border-[#CACFD8] rounded-[12px] text-[#0E121B] font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-[#0E121B] duration-500"><img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" /> Google</Button>
+      <Button size="lg" className="w-full bg-transparent border border-[#CACFD8] rounded-[12px] text-[#0E121B] font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-[#0E121B] duration-500"><img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" /> Google</Button> */}
 
       <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" />
 

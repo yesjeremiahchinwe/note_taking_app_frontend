@@ -40,7 +40,6 @@ useTitle('Change Pasword')
       newPassword: false,
       confirmNewPassword: false
     })
-    const [errMsg, setErrMsg] = useState<string>("")
     const [updateUserPassword, { isLoading }] = useUpdateUserPasswordMutation()
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -57,17 +56,11 @@ useTitle('Change Pasword')
           await updateUserPassword({ oldPassword: values.oldPassword, newPassword: values.newPassword, confirmNewPassword: values.confirmNewPassword})
           toast({
             title: "Password updated successfully!",
-          });
+          })
         } catch (err: any) {
-          if (!err.status) {
-            setErrMsg('No Server Response');
-        } else if (err.status === 400) {
-            setErrMsg('Invalid Credentials');
-        } else if (err.status === 401) {
-            setErrMsg('Unauthorized');
-        } else {
-            setErrMsg(err.data?.message);
-        }
+          toast({
+            title: `Oops! ${err?.message || err?.data?.message}`,
+          })
         }
        }
 
@@ -78,8 +71,6 @@ useTitle('Change Pasword')
         <Link to="/settings" className="flex lg:hidden items-center gap-1 pt-3"><IconArrowLeft /> <span>Settings</span></Link>
 
         <h2 className="text-[#0E121B] pt-5 lg:pt-0 font-bold lg:font-semibold text-2xl lg:text-base  tracking-[-0.5px] lg:tracking-[-0.3px]">Change Password</h2>
-
-        {errMsg && <p className="text-[#FB3748]">{errMsg}</p>}
 
         <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-5">

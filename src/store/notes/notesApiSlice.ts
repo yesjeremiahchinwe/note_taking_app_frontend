@@ -19,13 +19,8 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 }
             }),
 
-            transformResponse: (responseData: any) => {
-                const loadedNotes = responseData.map((note: Note) => {
-                    note.id = note._id
-                    return note
-                })
-
-                return notesAdapter.setAll(initialState, loadedNotes)
+            transformResponse: (responseData: Note[]) => {
+                return responseData?.sort((a, b) => a.updatedAt < b.updatedAt ? 1 : -1)
             },
 
             providesTags: (result: any) => {
@@ -49,13 +44,8 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 }
             }),
 
-            transformResponse: (responseData: any) => {
-                const loadedNotes = responseData.map((note: Note) => {
-                    note.id = note._id
-                    return note
-                })
-
-                return notesAdapter.setAll(initialState, loadedNotes)
+            transformResponse: (responseData: Note[]) => {
+                return responseData?.sort((a, b) => a.updatedAt < b.updatedAt ? 1 : -1)
             },
 
             providesTags: (result: any) => {

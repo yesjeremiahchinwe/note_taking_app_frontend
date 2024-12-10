@@ -1,10 +1,16 @@
 import { IconSearch, IconSettings } from "@/lib/icons";
 import { Input } from "./ui/input";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams, useNavigate } from "react-router-dom";
 
-const Header = () => {
+interface Props {
+  searchQuery: string,
+  setSearchQuery: (searchQuery: string) => void
+}
+
+const Header = ({ searchQuery, setSearchQuery }: Props) => {
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const tagQueryParam = searchParams.get("tag")
 
   const headingText =
@@ -14,7 +20,7 @@ const Header = () => {
       ? "Archived Notes"
       : location.pathname === "/settings"
       ? "Settings"
-      : 'All Notes';
+      : 'All Notes'
 
   return (
     <header>
@@ -28,15 +34,12 @@ const Header = () => {
           <div className="w-full relative">
             <IconSearch color="#000" className="absolute left-4 top-4" />
             <Input
-              // value={filterValue as string}
-              // onChange={(e) => {
-              //   setFilterValue(e.target.value);
-              //   queryParams.set("myParam", filterValue);
-              //   navigate({ search: filterValue.toString() })
-              // }}
-              type="search"
+              type="text"
               className="py-6 pl-[3rem] text-base pr-5"
               placeholder="Search by title, content, or tags"
+              onClick={() => navigate("/search")}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
