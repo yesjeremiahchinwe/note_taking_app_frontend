@@ -38,6 +38,7 @@ const ColorThemeSettingsPage = () => {
     toast({
       title: `You switched to ${data.theme} theme`,
     })
+    window.location.reload()
   }
 
   return (
@@ -51,13 +52,13 @@ const ColorThemeSettingsPage = () => {
       }`}
     >
       <Link to="/settings" className="flex lg:hidden items-center gap-1 pt-3">
-        <IconArrowLeft /> <span>Settings</span>
+        <IconArrowLeft color={(theme === "system" || theme === "dark") ? "#FFF" : "#E0E4EA"}  /> <span>Settings</span>
       </Link>
 
-      <h2 className="text-[#0E121B] pt-5 lg:pt-0 font-bold lg:font-semibold text-2xl lg:text-base  tracking-[-0.5px] lg:tracking-[-0.3px]">
+      <h2 className="text-primaryText pt-5 lg:pt-0 font-bold lg:font-semibold text-2xl lg:text-base  tracking-[-0.5px] lg:tracking-[-0.3px]">
         Color Theme
       </h2>
-      <p className="text-sm text-[#2B303B] font-normal tracking-[-0.2px] pt-1 lg:pt-0 pb-3 lg:pb-0">
+      <p className="text-sm text-lighterGray font-normal tracking-[-0.2px] pt-1 lg:pt-0 pb-3 lg:pb-0">
         Choose your color theme:
       </p>
 
@@ -78,17 +79,17 @@ const ColorThemeSettingsPage = () => {
                     className="flex flex-col gap-4 mt-6 lg:mt-[2rem]"
                   >
                     <FormItem>
-                      <FormLabel htmlFor="light-mode" className={cn("cursor-pointer border-[1px] border-[#E0E4EA] rounded-xl px-5 py-4 flex items-center justify-between gap-4 w-full flex-1", theme === "light" || field.value === "light" ? "bg-[#F3F5F8]" : "bg-white")}>
+                      <FormLabel htmlFor="light-mode" className={cn("cursor-pointer border-[1px] border-grayBorder rounded-xl px-5 py-4 flex items-center justify-between gap-4 w-full flex-1", theme === "light" || field.value === "light" ? "bg-lightGray" : "bg-transparent")}>
                       <div className="flex items-center gap-3">
-                        <div className="w-[40px] h-[40px] rounded-[12px] bg-[#FFFFFF] border-[1px] border-[#E0E4EA] flex items-center justify-center">
-                          <IconSun />
+                        <div className="w-[40px] h-[40px] rounded-[12px] bg-grayBorder border-[1px] border-grayBorder flex items-center justify-center">
+                          <IconSun color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
                         </div>
 
                         <div>
-                          <h5 className="text-[#0E121B] m-0 text-sm font-medium tracking-[-0.2px]">
+                          <h5 className="text-primaryText m-0 text-sm font-medium tracking-[-0.2px]">
                             Light Mode
                           </h5>
-                          <small className="text-[#2B303B] text-sm tracking-[-0.2px]">
+                          <small className="text-lighterGray text-sm tracking-[-0.2px]">
                             Pick a clean and classic light theme
                           </small>
                         </div>
@@ -101,17 +102,17 @@ const ColorThemeSettingsPage = () => {
                     </FormItem>
 
                     <FormItem>
-                      <FormLabel htmlFor="dark-mode" className={cn("cursor-pointer border-[1px] border-[#E0E4EA] rounded-xl px-5 py-4 flex items-center justify-between gap-4 w-full flex-1", theme === "dark" || field.value === "dark" ? "bg-[#F3F5F8]" : "bg-white")}>
+                      <FormLabel htmlFor="dark-mode" className={cn("cursor-pointer border-[1px] border-grayBorder rounded-xl px-5 py-4 flex items-center justify-between gap-4 w-full flex-1", theme === "dark" || field.value === "dark" ? "bg-lightGray" : "bg-transparent")}>
                       <div className="flex items-center gap-3">
-                        <div className="w-[40px] h-[40px] rounded-[12px] bg-[#FFFFFF] border-[1px] border-[#E0E4EA] flex items-center justify-center">
-                          <IconMoon />
+                        <div className="w-[40px] h-[40px] rounded-[12px] bg-grayBorder border-[1px] border-grayBorder flex items-center justify-center">
+                          <IconMoon color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
                         </div>
 
                         <div>
-                          <h5 className="text-[#0E121B] m-0 text-sm font-medium tracking-[-0.2px]">
+                          <h5 className="text-primaryText m-0 text-sm font-medium tracking-[-0.2px]">
                             Dark Mode
                           </h5>
-                          <small className="text-[#2B303B] text-sm tracking-[-0.2px]">
+                          <small className="text-lighterGray text-sm tracking-[-0.2px]">
                           Select a sleek and modern dark theme
                           </small>
                         </div>
@@ -124,24 +125,24 @@ const ColorThemeSettingsPage = () => {
                     </FormItem>
 
                     <FormItem>
-                      <FormLabel htmlFor="system-mode" className={cn("cursor-pointer border-[1px] border-[#E0E4EA] rounded-xl px-5 py-4 flex items-center justify-between gap-4 w-full flex-1", theme === "system" || field.value === "system" ? "bg-[#F3F5F8]" : "bg-white")}>
+                      <FormLabel htmlFor="system-mode" className={cn("cursor-pointer border-[1px] border-grayBorder rounded-xl px-5 py-4 flex items-center justify-between gap-4 w-full flex-1", theme === "system" || field.value === "system" ? "bg-lightGray" : "bg-transparent")}>
                       <div className="flex items-center gap-3">
-                        <div className="w-[40px] h-[40px] rounded-[12px] bg-[#FFFFFF] border-[1px] border-[#E0E4EA] flex items-center justify-center">
-                          <IconSystemTheme />
+                        <div className="w-[40px] h-[40px] rounded-[12px] bg-grayBorder border-[1px] border-grayBorder flex items-center justify-center">
+                          <IconSystemTheme color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
                         </div>
 
                         <div>
-                          <h5 className="text-[#0E121B] m-0 text-sm font-medium tracking-[-0.2px]">
+                          <h5 className="text-primaryText m-0 text-sm font-medium tracking-[-0.2px]">
                             System
                           </h5>
-                          <small className="text-[#2B303B] text-sm tracking-[-0.2px]">
+                          <small className="text-lighterGray text-sm tracking-[-0.2px]">
                           Adapts to your device&apos;s theme
                           </small>
                         </div>
                         </div>
 
                         <FormControl>
-                        <RadioGroupItem className={cn(theme === "system" || field.value === "system" ? "border-[4.5px] border-[#335CFF]" : "border-[#9a9da1]")} id="system-mode" value="system" />
+                        <RadioGroupItem className={cn(theme === "system" || field.value === "system" ? "border-[4.5px] border-skyBlue" : "border-[#9a9da1]")} id="system-mode" value="system" />
                       </FormControl>
                       </FormLabel>
                     </FormItem>
@@ -152,7 +153,7 @@ const ColorThemeSettingsPage = () => {
             )}
           />
         
-        <Button className="bg-[#335CFF] rounded-lg flex items-center justify-center hover:bg-[#3255e2] ml-auto my-6 py-3 px-4">
+        <Button className="bg-skyBlue text-white rounded-lg flex items-center justify-center hover:bg-[#3255e2] ml-auto my-6 py-3 px-4">
         Apply Changes
       </Button>
         </form>

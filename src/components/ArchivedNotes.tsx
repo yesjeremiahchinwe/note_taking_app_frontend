@@ -24,8 +24,6 @@ const ArchivedNotes = () => {
     ? notes.filter((note: Note) => note.tags.includes(tagQueryParam as string)) 
     : notes
 
-  if (!allNotes?.length) return <p>No Notes Found</p>
-
   return (
     <>
     <section

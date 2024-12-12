@@ -38,14 +38,14 @@ const ArchiveNoteModal: React.FC<ArchiveNoteModalProps> = ({
                 <Button
                     disabled={loading}
                     variant={"outline"}
-                    className="bg-[#F3F5F8]"
+                    className="bg-lightGray dark:bg-grayBorder"
                     onClick={onClose}
                 >
                     Cancel
                 </Button>
                 <Button
                     disabled={loading}
-                    className="bg-[#335CFF] hover:bg-[#3053df]"
+                    className="bg-skyBlue text-white hover:bg-[#3053df]"
                     onClick={onConfirm}
                 >
                     {loading ? "Archiving..." : "Archive Note"}

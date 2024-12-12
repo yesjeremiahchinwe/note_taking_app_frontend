@@ -37,14 +37,14 @@ const DeleteModal: React.FC<DeleteNoteModalProps> = ({
                 <Button
                     disabled={loading}
                     variant={"outline"}
-                    className="bg-[#F3F5F8]"
+                    className="bg-lightGray dark:bg-grayBorder"
                     onClick={onClose}
                 >
                     Cancel
                 </Button>
                 <Button
                     disabled={loading}
-                    className="bg-[#FB3748] hover:bg-[#e23241]"
+                    className="bg-[#FB3748] text-white hover:bg-[#e23241]"
                     onClick={onConfirm}
                 >
                     {loading ? "Deleting..." : "Delete Note"}

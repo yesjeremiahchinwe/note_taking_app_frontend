@@ -1,5 +1,4 @@
 import { LogoSVG } from "@/lib/icons";
-import googleLogo from "/images/google-logo.png"
 import { AuthFormProp } from "@/lib/types";
 import { Button } from "../components/ui/button";
 import {
@@ -23,6 +22,7 @@ import { useAddNewUserMutation } from "@/store/users/usersApiSlice";
 import { setCredentials } from "@/store/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "@/hooks/use-toast";
+import { Theme } from "@/providers/theme-provider";
 
 const formSchema = z.object({
   email: z.string().email({message: "Please provide a valid email address"}),
@@ -38,6 +38,9 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const dispatch = useDispatch()
   const [login, {isLoading: isLoadingLogin}] = useLoginMutation()
   const [addNewUser, { isLoading: isLoadingNewUser}] = useAddNewUserMutation()
+  const [theme] = useState<Theme>(
+        () => (localStorage.getItem('notes-theme') as Theme) || 'system'
+      )
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,16 +85,17 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
 
   return (
-    <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-white border border-[#E0E4EA] rounded-[12px] p-[48px]">
-      <LogoSVG />
-      <h1 className="font-bold text-2xl tracking-[-0.5px] text-[#0E121B] mt-5 mb-2">
+    <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] p-[48px]">
+      <LogoSVG color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
+
+      <h1 className="font-bold text-2xl tracking-[-0.5px] text-primaryText mt-5 mb-2">
         {title}
       </h1>
-      <p className="font-normal text-sm tracking-[-0.2px] text-[#525866]">
+      <p className="font-normal text-sm tracking-[-0.2px] text-lighterGray">
         {description}
       </p>
 
-      {errMsg && <p className="text-[#FB3748]">{errMsg}</p>}
+      {errMsg && <p className="text-lightRed">{errMsg}</p>}
 
       <Form {...form}>
         <form
@@ -103,7 +107,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
             name="email"
             render={({ field, fieldState }) => (
               <FormItem>
-                <FormLabel className="text-[#0E121B] font-medium text-sm tracking-[-0.2px]">
+                <FormLabel className="text-primaryText font-medium text-sm tracking-[-0.2px]">
                   Email Address
                 </FormLabel>
                 <FormControl>
@@ -111,12 +115,12 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
                     type="email"
                     placeholder="email@example.com"
                     className={`${
-                      fieldState.error ? "border-[#FB3748]" : "border-[#CACFD8]"
+                      fieldState.error && "border-lightRed"
                     }`}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-lightRed" />
               </FormItem>
             )}
           />
@@ -125,12 +129,12 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
             name="password"
             render={({ field, fieldState }) => (
               <FormItem className="relative">
-                <FormLabel className="text-[#0E121B] font-medium text-sm tracking-[-0.2px] flex items-center justify-between">
+                <FormLabel className="text-primaryText font-medium text-sm tracking-[-0.2px] flex items-center justify-between">
                   Password{" "}
                   {isLogin && (
                   <Link
                     to="/forgot-password"
-                    className="text-[#525866] font-normal text-xs underline"
+                    className="text-lighterGray dark:text-[#99A0AE] font-normal text-xs underline"
                   >
                     Forgot
                   </Link>
@@ -140,7 +144,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
                   <Input
                     type={showPassord ? "text" : "password"}
                     className={`${
-                      fieldState.error ? "border-[#FB3748]" : "border-[#CACFD8]"
+                      fieldState.error && "border-lightRed"
                     }`}
                     {...field}
                   />
@@ -148,36 +152,36 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
                 <EyeIcon
                   onClick={() => setShowPassword((prev) => !prev)}
-                  color="#525866"
+                  color={(theme === "system" || theme === "dark") ? "#CACFD8" : "#525866"}
                   size={18}
-                  className={`absolute top-[39px] right-4 cursor-pointer ${
+                  className={`absolute top-[32px] right-4 cursor-pointer ${
                     !showPassord ? "block" : "hidden"
                   }`}
                 />
 
                 <EyeOffIcon
                   onClick={() => setShowPassword((prev) => !prev)}
-                  color="#525866"
+                  color={(theme === "system" || theme === "dark") ? "#CACFD8" : "#525866"}
                   size={18}
-                  className={`absolute top-[39px] right-4 cursor-pointer ${
+                  className={`absolute top-[32px] right-4 cursor-pointer ${
                     showPassord ? "block" : "hidden"
                   }`}
                 />
 
                 {!isLogin && (
-                    <FormDescription className="text-[#525866] flex items-center gap-1">
-                    <InfoIcon color="#525866" size={16} /> <span>At least 8 characters</span>
+                    <FormDescription className="text-lighterGray dark:text-[#99A0AE] flex items-center gap-1">
+                    <InfoIcon color={(theme === "system" || theme === "dark") ? "#99A0AE" : "#525866"} size={16} /> <span>At least 8 characters</span>
                     </FormDescription>
                 )}
 
-                <FormMessage />
+                <FormMessage className="text-lightRed" />
               </FormItem>
             )}
           />
           <Button
             type="submit"
             disabled={isLoadingLogin}
-            className="bg-[#335CFF] rounded-lg flex items-center justify-center hover:bg-[#3255e2] mx-auto w-full my-6 py-3 px-4"
+            className="bg-skyBlue text-white rounded-lg flex items-center justify-center hover:bg-[#3255e2] mx-auto w-full my-6 py-3 px-4"
           >
             {isLoadingLogin || isLoadingNewUser ? (
               <span className="italic">Loading...</span>
@@ -190,16 +194,16 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
       {/* <div className="border-b-[1px] border-[#E0E4EA] my-5 w-full" />
 
-      <p className="text-[#525866] font-normal text-sm tracking-[-0.2px] py-2">Or log in with:</p>
+      <p className="text-lighterGray font-normal text-sm tracking-[-0.2px] py-2">Or log in with:</p>
 
-      <Button size="lg" className="w-full bg-transparent border border-[#CACFD8] rounded-[12px] text-[#0E121B] font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-[#0E121B] duration-500"><img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" /> Google</Button> */}
+      <Button size="lg" className="w-full bg-transparent borrounded-[12px] text-primaryText font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-[#0E121B] duration-500"><img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" /> Google</Button> */}
 
-      <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" />
+      {/* <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" /> */}
 
       {isLogin ? (
-        <small className="text-[#525866] font-normal text-sm tracking-[-0.2px] pt-3">No account yet? <Link to="/create" className="text-[#0E121B]">Sign Up</Link></small>
+        <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">No account yet? <Link to="/create" className="text-primaryText">Sign Up</Link></small>
       ) : (
-        <small className="text-[#525866] font-normal text-sm tracking-[-0.2px] pt-3">Already have an account? <Link to="/login" className="text-[#0E121B]">Login</Link></small>
+        <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">Already have an account? <Link to="/login" className="text-primaryText">Login</Link></small>
       )}
     </section>
   );

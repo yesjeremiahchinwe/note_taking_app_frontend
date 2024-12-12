@@ -90,7 +90,7 @@
 		--light-gray: 231, 16%, 16%;
 		--lighter-gray: 219, 15%, 82%;
 		--dark-gray: 221, 8%, 48%;
-		--darker-gray: 216, 19%, 90%;
+		--darker-gray: 231, 16%, 16%;
     --primary-text: 0, 0%, 100%;
 		--dark-text: 222, 32%, 8%;
     --tags-bg: 221, 16%, 20%;
@@ -104,7 +104,7 @@
 		--light-gray: "#232530";
 		--lighter-gray: "#CACFD8";
 		--dark-gray: "#717784";
-		--darker-gray: "#E0E4EA";
+		--darker-gray: "#232530";
     --primary-text: "#FFFFFF";
 		--dark-text: "#0E121B";
     --tags-bg: "#2B303B";
@@ -114,6 +114,10 @@
 		--light-red: "#FB3748";
 		--dim-white: "#F0F0F099"; */
   }
+
+  /* body {
+    background-color: hsl(231, 16%, 16%);
+  } */
 }
 
 ::-webkit-scrollbar {

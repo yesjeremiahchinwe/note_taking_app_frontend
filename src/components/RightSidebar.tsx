@@ -128,7 +128,7 @@ const RightSidebar = () => {
 
   return (
     <>
-      <section className="hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] border-grayBorder">
+      <section className="hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] border-darkerGray">
         {!isLoaded ? null : (
         <div>
         {location.pathname.includes("archived") ? (

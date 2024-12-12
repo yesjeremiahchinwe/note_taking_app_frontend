@@ -32,11 +32,11 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
 })
 
 const allNotes: Note[] = notes?.length && tagQueryParam
-? notes.filter((note: Note) => note?.tags?.includes(tagQueryParam as string))
+? notes?.filter((note: Note) => note?.tags?.includes(tagQueryParam as string))
 : location.pathname === "/tags"
 ? notes
 : debouncedSearchTerm
-? notes.filter((note: Note) => (
+? notes?.filter((note: Note) => (
   note?.title?.toLowerCase().includes(debouncedSearchTerm) 
   || note?.tags?.toLowerCase().includes(debouncedSearchTerm) 
   || note?.content?.toLowerCase().includes(debouncedSearchTerm)
@@ -56,7 +56,7 @@ return (
         location.pathname === "/" && noteQueryParam === null
           ? "block"
           : "hidden lg:block"
-      } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 h-screen lg:border-r-[1px] border-lightText w-full`}
+      } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 h-screen lg:border-r-[1px] border-darkerGray w-full`}
     >
       <div className="max-w-[96%] mx-auto">
         <CustomButton
@@ -97,7 +97,7 @@ return (
               className={`bg-transparent mb-2 rounded-md p-3 ${
                 index === allNotes.length - 1
                   ? "border-b-0"
-                  : "border-b-[1px] border-lightText"
+                  : "border-b-[1px] border-darkerGray"
               } ${
                 location.pathname === formatNoteTitle
                   ? "lg:bg-lightGray lg:border-b-0"
@@ -110,7 +110,7 @@ return (
                   ? "lg:bg-lightGray lg:border-b-0"
                   : location.pathname === "/tags" && index === 0
                   ? "lg:bg-lightGray lg:border-b-0"
-                  : "bg-transparent lg:border-b-[1px] border-lightText"
+                  : "bg-transparent lg:border-b-[1px] border-darkerGray"
               }`}
             >
               <h2 className="text-xl font-semibold tracking-[-0.3px] text-primaryText">

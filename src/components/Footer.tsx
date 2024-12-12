@@ -2,7 +2,7 @@ import { MobileNavLinks } from "@/lib/constants";
 import { Link } from "react-router-dom";
 
 const Footer = () => (
-  <footer className="block border-t-[1px] border-[#E0E4EA] bg-white fixed bottom-0 z-10 h-[70px] sm:h-[90px] lg:hidden w-full px-[2rem]">
+  <footer className="block border-t-[1px] border-grayBorder bg-darkerGray fixed bottom-0 z-10 h-[70px] sm:h-[90px] lg:hidden w-full px-[2rem]">
     <nav className="pt-3 sm:pt-4">
       <ul className="flex items-center gap-1 justify-between w-full flex-grow">
         {MobileNavLinks().map(({ text, path, isActive, Icon }) => (
@@ -10,7 +10,7 @@ const Footer = () => (
             <Link
               to={path}
               className={`flex flex-col items-center justify-center gap-1 flex-grow px-3 py-2 rounded-sm ${
-                isActive ? "bg-[#EBF1FF]" : "bg-transparent"
+                isActive ? "bg-[#EBF1FF] dark:bg-darkText" : "bg-transparent"
               }`}
             >
               <Icon color={`${isActive ? "#335CFF" : "#717784"}`} />

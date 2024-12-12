@@ -9,7 +9,7 @@ const SettingsPage = () => {
   const [searchQuery, setSearchQuery] = useState("")
   
   return (
-    <section className="flex flex-col min-h-screen w-full bg-background rounded-t-md lg:rounded-t-none">
+    <section className="flex flex-col min-h-screen w-full rounded-t-md lg:rounded-t-none">
     <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
     <article className="flex rounded-t-[1.25rem] lg:rounded-t-none bg-background flex-col lg:flex-row min-h-screen items-start justify-between lg:pr-[2rem] lg:pl-6 w-full">

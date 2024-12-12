@@ -23,7 +23,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <section className="flex lg:hidden w-full min-h-[60px] bg-lightGray text-white lg:bg-transparent">
+      <section className="flex lg:hidden w-full min-h-[60px] bg-lightGray text-primaryText lg:bg-transparent">
         <div className="pt-4 px-[1.85rem]">
           <Link to="/">
             <LogoSVG color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
@@ -31,25 +31,28 @@ const Sidebar = () => {
         </div>
       </section>
 
-      <aside className="md:basis-[35%] xl:basis-[25%] max-h-screen hidden lg:flex flex-col border-r-[1px] border-lightText">
+      <aside className="md:basis-[35%] xl:basis-[25%] max-h-screen hidden lg:flex flex-col border-r-[1px] border-darkerGray">
         <div className="min-h-[81px] pt-6 px-[1.85rem]">
           <Link to="/">
             <LogoSVG color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
           </Link>
         </div>
 
-        <nav className="border-b-[1px] border-lightText pb-3 pt-2 mx-5">
+        <nav className="border-b-[1px] border-darkerGray pb-3 pt-2 mx-5">
           <ul>
             <li>
               <Link className={`nav-link rounded-[8px] mb-1 ${isHomePath && tagQueryParam === null ? "bg-lightGray" : "bg-transparent"}`} to="/">
                 <IconHome color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span className="">All Notes</span>{" "}
-                <IconChevronRight className={`ml-auto ${location.pathname.includes("/") && location.pathname !== "/archived" && tagQueryParam === null ? 'flex' : 'hidden'}`} />
+
+                <IconChevronRight className={`ml-auto ${location.pathname.includes("/") && location.pathname !== "/archived" && tagQueryParam === null ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
               </Link>
             </li>
+
             <li>
               <Link className={`nav-link rounded-[8px] ${location.pathname.includes("/archived") && tagQueryParam === null ? "bg-lightGray" : "bg-transparent"}`} to="/archived">
                 <IconArchive color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span className="">Archived Notes</span>
-                <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === null ? 'flex' : 'hidden'}`} />
+
+                <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === null ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
               </Link>
             </li>
           </ul>
@@ -69,7 +72,8 @@ const Sidebar = () => {
                   className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] ${location.pathname.includes("/archived") && tagQueryParam === tag ? "bg-lightGray" : "bg-transparent"}`}
                 >
                   <IconTag color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span>{tag}</span>
-                  <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === tag ? 'flex' : 'hidden'}`} />
+
+                  <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === tag ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
                 </Link>
                 ) : (
                   <Link
@@ -78,7 +82,8 @@ const Sidebar = () => {
                     ${location.pathname === "/" && tagQueryParam === tag ? "bg-lightGray" : "bg-transparent"}`}
                 >
                   <IconTag color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span>{tag}</span>
-                  <IconChevronRight className={`ml-auto ${location.pathname === "/" && tagQueryParam === tag ? 'flex' : 'hidden'}`} />
+                  <IconChevronRight className={`ml-auto ${location.pathname === "/" && tagQueryParam === tag ? 'flex' : 'hidden'}`} 
+                  color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
                 </Link>
                 )}
                 
