@@ -12,13 +12,13 @@ import { PlusIcon } from "lucide-react";
 import useDebouncedValue from "@/hooks/useDebouncedValue";
 import { useEffect, useState } from "react";
 
-const AllNotes = ({ searchQuery }: { searchQuery: string }) => {
+const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const [emptyState, setEmptyState] = useState("")
   const navigate = useNavigate();
   const { title } = useParams()
-  const debouncedSearchTerm = useDebouncedValue(searchQuery, 500)?.toLowerCase()
+  const debouncedSearchTerm = useDebouncedValue(searchQuery as string, 500)?.toLowerCase()
 
   const tagQueryParam = searchParams.get("tag");
   const noteQueryParam = searchParams.get("note");
@@ -56,7 +56,7 @@ return (
         location.pathname === "/" && noteQueryParam === null
           ? "block"
           : "hidden lg:block"
-      } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen overflow-auto lg:border-r-[1px] border-[#E0E4EA] w-full`}
+      } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 h-screen lg:border-r-[1px] border-lightText w-full`}
     >
       <div className="max-w-[96%] mx-auto">
         <CustomButton
@@ -69,9 +69,9 @@ return (
 
       <h2 className="block lg:hidden px-1 pb-5 font-bold text-2xl tracking-[-0.5px]">
         {tagQueryParam !== null ? (
-          <span className="text-[#87898a]">
+          <span className="text-lighterGray">
             Notes Tagged:{" "}
-            <span className="text-[#0E121B]">{tagQueryParam}</span>
+            <span className="text-primaryText">{tagQueryParam}</span>
           </span>
         ) : (
           "All Notes"
@@ -79,7 +79,7 @@ return (
       </h2>
 
       {tagQueryParam !== null && (
-        <p className="text-sm text-[#2B303B] mb-4">
+        <p className="text-sm text-lightText mb-4">
           All notes with with the "{tagQueryParam}" tag are shown here.
         </p>
       )}
@@ -97,23 +97,23 @@ return (
               className={`bg-transparent mb-2 rounded-md p-3 ${
                 index === allNotes.length - 1
                   ? "border-b-0"
-                  : "border-b-[1px] border-[#E0E4EA]"
+                  : "border-b-[1px] border-lightText"
               } ${
                 location.pathname === formatNoteTitle
-                  ? "lg:bg-[#F3F5F8] lg:border-b-0"
+                  ? "lg:bg-lightGray lg:border-b-0"
                   : noteQueryParam === formatNoteTitle
-                  ? "lg:bg-[#F3F5F8] lg:border-b-0"
+                  ? "lg:bg-lightGray lg:border-b-0"
                   : note.title.toLowerCase().split(" ").join("-") === title as string
-                  ? "lg:bg-[#F3F5F8] lg:border-b-0"
+                  ? "lg:bg-lightGray lg:border-b-0"
                   : location.pathname === "/" &&
                     index === 0
-                  ? "lg:bg-[#F3F5F8] lg:border-b-0"
+                  ? "lg:bg-lightGray lg:border-b-0"
                   : location.pathname === "/tags" && index === 0
-                  ? "lg:bg-[#F3F5F8] lg:border-b-0"
-                  : "bg-transparent lg:border-b-[1px] border-[#E0E4EA]"
+                  ? "lg:bg-lightGray lg:border-b-0"
+                  : "bg-transparent lg:border-b-[1px] border-lightText"
               }`}
             >
-              <h2 className="text-xl font-semibold tracking-[-0.3px] text-[#0E121B]">
+              <h2 className="text-xl font-semibold tracking-[-0.3px] text-primaryText">
                 {tagQueryParam ? (
                   <Link to={`/?tag=${tagQueryParam}&note=${formatNoteTitle}`}>
                     {note.title}
@@ -127,14 +127,14 @@ return (
               {note?.tags?.split(",").map(tag => (
                 <p
                 key={tag}
-                className="py-[2px] px-[6px] text-sm rounded-md bg-[#E0E4EA]"
+                className="py-[2px] px-[6px] text-sm rounded-md bg-tagsBg"
               >
                 {tag}
               </p>
               ))}
               </div>
 
-              <small className="text-[#2B303B] block mt-4 font-medium text-xs tracking-[-0.2px]">
+              <small className="text-lightText block mt-4 font-medium text-xs tracking-[-0.2px]">
                 {note?.updatedAt?.split("T")[0]}
               </small>
             </article>
@@ -142,7 +142,7 @@ return (
         })
       ) : (
         <div className="bg-lightGray p-1 mt-8">
-        <p className="flex items-center justify-center text-sm text-[#2B303B]">
+        <p className="flex items-center justify-center text-sm text-lightText">
         {emptyState}
         </p>
         </div>
@@ -152,7 +152,7 @@ return (
     <div
       role="button"
       onClick={() => navigate("/new")}
-      className="fixed bottom-[15%] rounded-full w-[60px] h-[60px] max-lg:flex hidden items-center justify-center right-[5%] z-10 bg-[#335CFF]"
+      className="fixed bottom-[15%] rounded-full w-[60px] h-[60px] max-lg:flex hidden items-center justify-center right-[5%] z-10 bg-skyBlue"
     >
       <PlusIcon color="#FFFFFF" size={30} />
     </div>

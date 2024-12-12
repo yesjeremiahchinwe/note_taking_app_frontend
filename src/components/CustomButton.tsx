@@ -12,7 +12,7 @@ interface CustomButtonProps {
 }
 
 const CustomButton = ({ className, buttonText, icon, href, type, ...props}: CustomButtonProps) => (
-    <Button {...props} className={cn("py-6 rounded-lg bg-[#335CFF] hover:bg-[#3357e9] w-full", className)} size="lg"><img src={icon} alt="Plus Icon" /> {buttonText}</Button>
+    <Button {...props} className={cn("py-6 rounded-lg bg-skyBlue text-white dark:text-white hover:bg-[#3357e9] w-full", className)} size="lg"><img src={icon} alt="Plus Icon" /> {buttonText}</Button>
   )
 
 export default CustomButton

@@ -108,7 +108,7 @@ const NoteForm = ({ isNewNote, note }: NoteFormProps) => {
 
   return (
     <>
-      <form className="w-full lg:px-2" onSubmit={onSubmit}>
+      <form className="w-full flex flex-col lg:px-2" onSubmit={onSubmit}>
         {errMsg && <small className="text-lightRed">{errMsg}</small>}
         <div>
           <label
@@ -182,7 +182,7 @@ const NoteForm = ({ isNewNote, note }: NoteFormProps) => {
           </div>
         </article>
 
-        <div className="flex flex-col justify-between h-full">
+        <div className="flex flex-col justify-between h-full flex-grow">
           <div className="py-4 flex-1">
             <label
               htmlFor="title"

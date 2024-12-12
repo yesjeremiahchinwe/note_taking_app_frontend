@@ -40,7 +40,7 @@ useTitle('Change Pasword')
       newPassword: false,
       confirmNewPassword: false
     })
-    const [updateUserPassword, { isLoading }] = useUpdateUserPasswordMutation()
+    const [updateUserPassword, { isLoading, isSuccess, isError }] = useUpdateUserPasswordMutation()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -54,13 +54,17 @@ useTitle('Change Pasword')
       const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
           await updateUserPassword({ oldPassword: values.oldPassword, newPassword: values.newPassword, confirmNewPassword: values.confirmNewPassword})
-          toast({
-            title: "Password updated successfully!",
-          })
+          if (isSuccess) {
+            toast({
+              title: "Password updated successfully!",
+            })
+          }
         } catch (err: any) {
+          if (isError) {
           toast({
-            title: `Oops! ${err?.message || err?.data?.message}`,
+            title: `Oops! ${err?.error?.data?.message}`,
           })
+        }
         }
        }
 

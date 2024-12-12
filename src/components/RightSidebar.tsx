@@ -1,6 +1,3 @@
-import iconArchive from "/images/icon-archive.svg";
-import iconDelete from "/images/icon-delete.svg";
-import iconRestore from "/images/icon-restore.svg";
 import { Button } from "./ui/button";
 import { Note } from "@/lib/types"
 import {
@@ -20,6 +17,8 @@ import {
   useRestoreArchivedNoteMutation,
 } from "@/store/notes/notesApiSlice";
 import { toast } from "@/hooks/use-toast";
+import { ArchiveRestore, ArchiveRestoreIcon, TrashIcon } from "lucide-react";
+import { Theme } from "@/providers/theme-provider";
 
 const RightSidebar = () => {
   const location = useLocation();
@@ -30,8 +29,11 @@ const RightSidebar = () => {
     archiveNote: false,
     deleteNote: false,
   });
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const noteQueryParam = searchParams.get("note");
+  const [theme] = useState<Theme>(
+          () => (localStorage.getItem('notes-theme') as Theme) || 'system'
+        )
 
   const {
     data: notes,
@@ -126,45 +128,45 @@ const RightSidebar = () => {
 
   return (
     <>
-      <section className="hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] border-[#E0E4EA]">
+      <section className="hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] border-grayBorder">
         {!isLoaded ? null : (
         <div>
         {location.pathname.includes("archived") ? (
           <Button
-            className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-[#CACFD8] mb-3 w-full"
+            className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full"
             size="lg"
             onClick={() => onRestoreNote()}
             disabled={isLoadingRestoreNote}
           >
-            <img src={iconRestore} alt="Archive svg icon" />{" "}
-            <span className="ml-1 text-[#0E121B] shadow-none tracking-[-0.2px]">
+            <ArchiveRestoreIcon color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
+            <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
               {isLoadingRestoreNote ? "Restoring..." : "Restore Note"}
             </span>
           </Button>
         ) : (
           <Button
-            className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-[#CACFD8] mb-3 w-full"
+            className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full"
             size="lg"
             onClick={() =>
               setIsOpen((prev) => ({ ...prev, archiveNote: !prev.archiveNote }))
             }
           >
-            <img src={iconArchive} alt="Archive svg icon" />{" "}
-            <span className="ml-1 text-[#0E121B] shadow-none tracking-[-0.2px]">
+            <ArchiveRestore color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
+            <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
               Archive Note
             </span>
           </Button>
         )}
 
         <Button
-          className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-[#CACFD8] w-full"
+          className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder w-full"
           size="lg"
           onClick={() =>
             setIsOpen((prev) => ({ ...prev, deleteNote: !prev.deleteNote }))
           }
         >
-          <img src={iconDelete} alt="Delete svg icon" />{" "}
-          <span className="ml-1 text-[#0E121B] shadow-none tracking-[-0.2px]">
+          <TrashIcon color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
+          <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
             Delete Note
           </span>
         </Button>

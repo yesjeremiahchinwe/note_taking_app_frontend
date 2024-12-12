@@ -34,9 +34,7 @@ function App() {
     pollingInterval: 15000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
-  });
-
-  // console.log(notes)
+  })
 
   const { data: archivedNotes, isLoading: isLoadingArchiveNote } = useGetArchivedNotesQuery(
     "archivedNotesList",
@@ -64,9 +62,9 @@ function App() {
           </Route>
 
           {/* -------------- Home and Main application routes ---------------- */}
-          <Route element={<RequireAuth />}>
+          {/* <Route element={<RequireAuth />}> */}
             <Route path="/" element={<Layout />}>
-              <Route element={<Prefetch />}>
+              {/* <Route element={<Prefetch />}> */}
                 <Route element={<Home />}>
                   <Route index element={<NoteDetailsPage notes={notes} isLoading={isLoadingGetNotes} />} />
                   <Route
@@ -97,7 +95,7 @@ function App() {
                 <Route path="search" element={<SearchPage />}>
                   <Route index element={<NoteDetailsPage notes={notes} isLoading={isLoadingGetNotes} />} />
                 </Route>
-              </Route>
+              {/* </Route> */}
 
               <Route path="settings" element={<SettingsPage />}>
                 <Route index element={<ColorThemeSettings />} />
@@ -111,7 +109,7 @@ function App() {
 
               <Route path="search" element={<SearchPage />} />
             </Route>
-          </Route>
+          {/* </Route> */}
 
           <Route path="*" element={<h1>Not Found!</h1>} />
         </Routes>

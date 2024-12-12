@@ -6,11 +6,16 @@ import {
   IconChevronRight,
   IconTag,
 } from "@/lib/icons";
+import { Theme } from "@/providers/theme-provider";
+import { useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation()
   const [searchParams] = useSearchParams();
+  const [theme] = useState<Theme>(
+        () => (localStorage.getItem('notes-theme') as Theme) || 'system'
+      )
 
   const tagQueryParam = searchParams.get("tag");
 
@@ -21,37 +26,37 @@ const Sidebar = () => {
       <section className="flex lg:hidden w-full min-h-[60px] bg-lightGray text-white lg:bg-transparent">
         <div className="pt-4 px-[1.85rem]">
           <Link to="/">
-            <LogoSVG color="#fff" />
+            <LogoSVG color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
           </Link>
         </div>
       </section>
 
-      <aside className="md:basis-[35%] xl:basis-[25%] max-h-screen hidden lg:flex flex-col border-r-[1px] border-[#E0E4EA]">
+      <aside className="md:basis-[35%] xl:basis-[25%] max-h-screen hidden lg:flex flex-col border-r-[1px] border-lightText">
         <div className="min-h-[81px] pt-6 px-[1.85rem]">
           <Link to="/">
-            <LogoSVG color="#fff" />
+            <LogoSVG color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
           </Link>
         </div>
 
-        <nav className="border-b-[1px] border-[#E0E4EA] pb-3 pt-2 mx-5">
+        <nav className="border-b-[1px] border-lightText pb-3 pt-2 mx-5">
           <ul>
             <li>
-              <Link className={`nav-link bg-[#F3F5F8] rounded-[8px] mb-1 ${isHomePath ? "bg-[#F3F5F8] dark:bg-lightGray" : "bg-transparent"}`} to="/">
-                <IconHome color="#0E121B" /> <span className="">All Notes</span>{" "}
-                <IconChevronRight className={`ml-auto ${location.pathname.includes("/") && location.pathname !== "/archived" ? 'flex' : 'hidden'}`} />
+              <Link className={`nav-link rounded-[8px] mb-1 ${isHomePath && tagQueryParam === null ? "bg-lightGray" : "bg-transparent"}`} to="/">
+                <IconHome color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span className="">All Notes</span>{" "}
+                <IconChevronRight className={`ml-auto ${location.pathname.includes("/") && location.pathname !== "/archived" && tagQueryParam === null ? 'flex' : 'hidden'}`} />
               </Link>
             </li>
             <li>
-              <Link className={`nav-link rounded-[8px] ${location.pathname.includes("/archived") ? "bg-[#F3F5F8]" : "bg-transparent"}`} to="/archived">
-                <IconArchive color="#0E121B" /> <span className="">Archived Notes</span>
-                <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") ? 'flex' : 'hidden'}`} />
+              <Link className={`nav-link rounded-[8px] ${location.pathname.includes("/archived") && tagQueryParam === null ? "bg-lightGray" : "bg-transparent"}`} to="/archived">
+                <IconArchive color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span className="">Archived Notes</span>
+                <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === null ? 'flex' : 'hidden'}`} />
               </Link>
             </li>
           </ul>
         </nav>
 
         <section className="px-[1.85rem] py-3">
-          <h3 className="text-[#717784] font-medium text-base leading-5 tracking-[-0.2px]">
+          <h3 className="text-darkGray font-medium text-base leading-5 tracking-[-0.2px]">
             Tags
           </h3>
 
@@ -61,18 +66,18 @@ const Sidebar = () => {
                 {location.pathname.includes("archived") ? (
                   <Link
                   to={`/archived/?tag=${tag}`}
-                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-[#2B303B] font-medium text-base tracking-[-0.2px] ${location.pathname.includes("/archived") && tagQueryParam === tag ? "bg-[#F3F5F8]" : "bg-transparent"}`}
+                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] ${location.pathname.includes("/archived") && tagQueryParam === tag ? "bg-lightGray" : "bg-transparent"}`}
                 >
-                  <IconTag color="#0E121B" /> <span>{tag}</span>
+                  <IconTag color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span>{tag}</span>
                   <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === tag ? 'flex' : 'hidden'}`} />
                 </Link>
                 ) : (
                   <Link
                   to={`/?tag=${tag}`}
-                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-[#2B303B] font-medium text-base tracking-[-0.2px] 
-                    ${location.pathname === "/" && tagQueryParam === tag ? "bg-[#F3F5F8]" : "bg-transparent"}`}
+                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] 
+                    ${location.pathname === "/" && tagQueryParam === tag ? "bg-lightGray" : "bg-transparent"}`}
                 >
-                  <IconTag color="#0E121B" /> <span>{tag}</span>
+                  <IconTag color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span>{tag}</span>
                   <IconChevronRight className={`ml-auto ${location.pathname === "/" && tagQueryParam === tag ? 'flex' : 'hidden'}`} />
                 </Link>
                 )}
