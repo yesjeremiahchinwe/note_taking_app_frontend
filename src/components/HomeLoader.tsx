@@ -1,14 +1,36 @@
-import loaderGif from "/images/loader.gif"
+import { cn } from "@/lib/utils";
+import loaderGif from "/images/loadingUI.gif";
+import loaderGifDark from "/images/loaderUIDark.gif";
+import { useState } from "react";
+import { Theme } from "@/providers/theme-provider";
 
-const HomeLoader = () => {
+const LoadiingState = ({
+  message,
+  className,
+}: {
+  message: string;
+  className?: string;
+}) => {
+  const [theme] = useState<Theme>(
+    () => (localStorage.getItem("notes-theme") as Theme) || "system"
+  );
+
   return (
-    <section className="w-full h-screen flex items-center justify-center">
-        <div className="flex flex-col gap-3 items-center justify-center z-10">
-            <img src={loaderGif} alt="Loading state Gif"/>
-            <p className="italic text-base">Please wait...</p>
-        </div>
+    <section
+      className={cn(
+        "w-full h-screen flex items-center justify-center",
+        className
+      )}
+    >
+      <div className="flex flex-col gap-3 items-center justify-center z-10">
+        {theme === "system" || theme === "dark" ? (
+          <img src={loaderGifDark} alt="Loading state Gif" />
+        ) : (
+          <img src={loaderGif} alt="Loading state Gif" />
+        )}
+        <p className="italic text-base">{message}...</p>
+      </div>
     </section>
-  )
-}
-
-export default HomeLoader
+  );
+};
+export default LoadiingState;

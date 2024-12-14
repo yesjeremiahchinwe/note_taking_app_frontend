@@ -1,7 +1,14 @@
 import { MobileNavLinks } from "@/lib/constants";
+import { Theme } from "@/providers/theme-provider";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Footer = () => (
+const Footer = () => {
+  const [theme] = useState<Theme>(
+          () => (localStorage.getItem('notes-theme') as Theme) || 'system'
+        )
+
+  return (
   <footer className="block border-t-[1px] border-grayBorder bg-darkerGray fixed bottom-0 z-10 h-[70px] sm:h-[90px] lg:hidden w-full px-[2rem]">
     <nav className="pt-3 sm:pt-4">
       <ul className="flex items-center gap-1 justify-between w-full flex-grow">
@@ -10,10 +17,10 @@ const Footer = () => (
             <Link
               to={path}
               className={`flex flex-col items-center justify-center gap-1 flex-grow px-3 py-2 rounded-sm ${
-                isActive ? "bg-[#EBF1FF] dark:bg-darkText" : "bg-transparent"
+                isActive ? "bg-lightGray dark:bg-grayBorder" : "bg-transparent"
               }`}
             >
-              <Icon color={`${isActive ? "#335CFF" : "#717784"}`} />
+              <Icon color={`${isActive ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} />
               <span
                 className={`hidden sm:flex ${
                   isActive ? "text-[#335CFF]" : "#717784"
@@ -27,6 +34,7 @@ const Footer = () => (
       </ul>
     </nav>
   </footer>
-);
+)
+}
 
 export default Footer;

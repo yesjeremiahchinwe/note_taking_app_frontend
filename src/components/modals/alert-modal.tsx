@@ -28,7 +28,7 @@ const AlertModal: React.FC<ModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onChange}>
+    <Dialog open={isOpen} onOpenChange={() => onClose()}>
       <DialogContent>
         <div className="flex flex-col items-center p-4 pb-6">
           <div className="min-w-[50px] h-[95px] flex justify-center items-center rounded-[8px]">
@@ -36,15 +36,15 @@ const AlertModal: React.FC<ModalProps> = ({
           </div>
 
           <DialogHeader className="pb-2">
-            <DialogTitle className="text-[#0E121B] text-center font-semibold tracking-[-0.3px] text-[2rem]">
+            <DialogTitle className="text--primaryText text-center font-semibold tracking-[-0.3px] text-[2rem]">
               {title}
             </DialogTitle>
 
-            <DialogDescription className="text-base text-center text-[#2B303B] tracking-[-0.2px] pb-6 font-normal">
+            <DialogDescription className="text-base text-center text-lightText tracking-[-0.2px] pb-6 font-normal">
               {description}
             </DialogDescription>
 
-            <Link to="/login" onClick={() => onClose()} className="inline-block mt-4 w-full rounded-lg py-3 bg-[#335CFF] text-white text-center hover:scale-[1.02] duration-500">Login</Link>
+            <Link to="/login" onClick={() => onClose()} className="inline-block mt-4 w-full rounded-lg py-3 bg-skyBlue text-white text-center hover:scale-[1.02] duration-500">Login</Link>
           </DialogHeader>
         </div>
       </DialogContent>

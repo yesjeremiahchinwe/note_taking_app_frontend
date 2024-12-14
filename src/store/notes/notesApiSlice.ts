@@ -1,20 +1,20 @@
-import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
+import { createEntityAdapter } from "@reduxjs/toolkit";
 import { apiSlice } from "../api/apiSlice";
 import { Note } from "@/lib/types";
 
-const notesAdapter = createEntityAdapter({
+createEntityAdapter({
     sortComparer: (a, b) => (a.id === b.id) ? 0 :
     a.id ? 1 : -1
 })
 
-const initialState = notesAdapter.getInitialState()
+// const initialState = notesAdapter.getInitialState()
 
 export const notesApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getNotes: builder.query({
+        getNotes: builder.query<Note[], string>({
             query: () => ({
                 url: '/notes',
-                validateStatus: (response, result) => {
+                validateStatus: (response: any, result: any) => {
                     return response.status === 200 && !result.isError
                 }
             }),
@@ -36,10 +36,10 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             }
         }),
 
-        getArchivedNotes: builder.query({
+        getArchivedNotes: builder.query<Note[], string>({
             query: () => ({
                 url: '/notes/archived',
-                validateStatus: (response, result) => {
+                validateStatus: (response: any, result: any) => {
                     return response.status === 200 && !result.isError
                 }
             }),
@@ -61,9 +61,8 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             }
         }),
 
-
         addNewNote: builder.mutation({
-            query: initialNote => ({
+            query: (initialNote: any) => ({
                 url: '/notes',
                 method: 'POST',
                 body: {
@@ -75,53 +74,52 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             ]
         }),
 
-
         updateNote: builder.mutation({
-            query: initialNote => ({
+            query: (initialNote: any) => ({
                 url: '/notes',
                 method: 'PUT',
                 body: {
                     ...initialNote,
                 }
             }),
-            invalidatesTags: (result, error, arg) => [
+            invalidatesTags: (result: any, error: any, arg: any) => [
                 { type: 'Note', id: arg.id }
             ]
         }),
 
         markNoteAsArchived: builder.mutation({
-            query: initialNote => ({
+            query: (initialNote: any) => ({
                 url: '/notes',
                 method: 'PATCH',
                 body: {
                     ...initialNote,
                 }
             }),
-            invalidatesTags: (result, error, arg) => [
+            invalidatesTags: (result: any, error: any, arg: any) => [
                 { type: 'Note', id: arg.id }
             ]
         }),
 
         restoreArchivedNote: builder.mutation({
-            query: initialNote => ({
+            query: (initialNote: any) => ({
                 url: '/notes/restore',
                 method: 'PATCH',
                 body: {
                     ...initialNote,
                 }
             }),
-            invalidatesTags: (result, error, arg) => [
+            invalidatesTags: (result: any, error: any, arg: any) => [
                 { type: 'Note', id: arg.id }
             ]
         }),
 
         deleteNote: builder.mutation({
-            query: ({ id }) => ({
+            query: ({ id }: { id: string }) => ({
                 url: `/notes`,
                 method: 'DELETE',
                 body: { id }
             }),
-            invalidatesTags: (result, error, arg) => [
+            invalidatesTags: (result: any, error: any, arg: any) => [
                 { type: 'Note', id: arg.id }
             ]
         }),
@@ -139,19 +137,20 @@ export const {
  } = notesApiSlice
 
 // returns the query result object
-export const selectNotesResult = notesApiSlice.endpoints.getNotes.select({})
+export const selectNotesResult = notesApiSlice.endpoints.getNotes.select("notesList")
+console.log(selectNotesResult)
 
 
 // creates memoized selector
-const selectNotesData = createSelector(
-    selectNotesResult,
-    notesResult => notesResult.data  // normalized state object with ids & entities
-)
+// const selectNotesData = createSelector(
+//     selectNotesResult,
+//     notesResult => notesResult.data  // normalized state object with ids & entities
+// )
 
 //getSelectors creates these selectors and we rename them with aliases using destructuring
-export const {
-    selectAll: selectAllNotes,
-    selectById: selectNoteById,
-    selectIds: selectNoteIds
+// export const {
+//     selectAll: selectAllNotes,
+//     selectById: selectNoteById,
+//     selectIds: selectNoteIds
      // Pass in a selector that returns the notes slice of state
-} = notesAdapter.getSelectors((state: any) => selectNotesData(state) ?? initialState)
+// } = notesAdapter.getSelectors((state: any) => selectNotesData(state) ?? initialState)

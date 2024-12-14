@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { Note } from "@/lib/types";
 import { useGetArchivedNotesQuery } from "@/store/notes/notesApiSlice";
 import { PlusIcon } from "lucide-react";
+import LoadiingState from "./HomeLoader";
 
 const ArchivedNotes = () => {
   const location = useLocation();
@@ -14,14 +15,16 @@ const ArchivedNotes = () => {
 
   const {
     data: notes,
+    isLoading,
+    isError
 } = useGetArchivedNotesQuery('archivedNotesList', {
     pollingInterval: 15000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true
 })
 
-  const allNotes: Note[] = tagQueryParam && location.pathname.includes("archived")
-    ? notes.filter((note: Note) => note.tags.includes(tagQueryParam as string)) 
+  const allNotes: Note[] | undefined = tagQueryParam && location.pathname.includes("archived")
+    ? notes?.filter((note: Note) => note.tags.includes(tagQueryParam as string)) 
     : notes
 
   return (
@@ -63,6 +66,10 @@ const ArchivedNotes = () => {
           them anytime.
         </p>
       )}
+
+    {isLoading && <LoadiingState message="Fetching archived notes" className="h-full" />}
+
+    {isError && <p className="text-lightRed text-center">Oops! Failed to fetch tags!</p>}
 
       {allNotes?.length !== 0 ? allNotes?.map((note: Note, index: number) => {
         const formatNoteTitle = note.title.toLowerCase().split(" ").join("-");

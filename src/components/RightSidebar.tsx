@@ -6,7 +6,7 @@ import {
   useSearchParams,
   useNavigate,
 } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DeleteModal from "./modals/DeleteNoteModal";
 import ArchiveNoteModal from "./modals/ArchiveNoteModal";
 import {
@@ -23,7 +23,6 @@ import { Theme } from "@/providers/theme-provider";
 const RightSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isLoaded, setIsLoaded] = useState(false)
   const { title } = useParams();
   const [isOpen, setIsOpen] = useState({
     archiveNote: false,
@@ -122,14 +121,9 @@ const RightSidebar = () => {
     }
   };
 
-  useEffect(() => {
-    setIsLoaded(true)
-  }, [])
-
   return (
     <>
       <section className="hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] border-darkerGray">
-        {!isLoaded ? null : (
         <div>
         {location.pathname.includes("archived") ? (
           <Button
@@ -171,7 +165,6 @@ const RightSidebar = () => {
           </span>
         </Button>
         </div>
-        )}
       </section>
 
       <DeleteModal

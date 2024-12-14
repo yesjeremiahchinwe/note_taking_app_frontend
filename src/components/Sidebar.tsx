@@ -1,4 +1,3 @@
-import { tags } from "@/lib/constants";
 import {
   IconArchive,
   IconHome,
@@ -7,8 +6,10 @@ import {
   IconTag,
 } from "@/lib/icons";
 import { Theme } from "@/providers/theme-provider";
+import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
 import { useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
+import LoadiingState from "./HomeLoader";
 
 const Sidebar = () => {
   const location = useLocation()
@@ -18,6 +19,22 @@ const Sidebar = () => {
       )
 
   const tagQueryParam = searchParams.get("tag");
+
+  const {
+      data: notes,
+      isLoading,
+      isError
+  } = useGetNotesQuery('notesList', {
+      pollingInterval: 15000,
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true
+  })
+
+  const allTags: string[] = notes?.map((note) => note.tags) as string[]
+  const tags: string[][] = allTags?.map((tag) => tag.split(","))
+
+  console.log(allTags)
+  console.log(tags)
 
   const isHomePath = location.pathname.includes("/") && !location.pathname.includes("/archived") && !location.pathname.includes("/settings") && !location.pathname.includes("/tags")
 
@@ -42,7 +59,7 @@ const Sidebar = () => {
           <ul>
             <li>
               <Link className={`nav-link rounded-[8px] mb-1 ${isHomePath && tagQueryParam === null ? "bg-lightGray" : "bg-transparent"}`} to="/">
-                <IconHome color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span className="">All Notes</span>{" "}
+                <IconHome color={`${location.pathname.includes("/archived") ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span className="">All Notes</span>{" "}
 
                 <IconChevronRight className={`ml-auto ${location.pathname.includes("/") && location.pathname !== "/archived" && tagQueryParam === null ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
               </Link>
@@ -50,7 +67,7 @@ const Sidebar = () => {
 
             <li>
               <Link className={`nav-link rounded-[8px] ${location.pathname.includes("/archived") && tagQueryParam === null ? "bg-lightGray" : "bg-transparent"}`} to="/archived">
-                <IconArchive color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span className="">Archived Notes</span>
+                <IconArchive color={`${location.pathname === "/" ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span className="">Archived Notes</span>
 
                 <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === null ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
               </Link>
@@ -59,30 +76,35 @@ const Sidebar = () => {
         </nav>
 
         <section className="px-[1.85rem] py-3">
-          <h3 className="text-darkGray font-medium text-base leading-5 tracking-[-0.2px]">
+          <h3 className="text-darkGray font-medium text-base leading-5 tracking-[-0.2px] static top-0">
             Tags
           </h3>
 
-          <ul className="flex flex-col gap-1 my-4">
+          {isLoading && <LoadiingState message="Fetching tags" />}
+
+          {isError && <p className="text-lightRed">Oops! Failed to fetch tags!</p>}
+
+          <ul className="flex flex-col gap-1 my-4 overflow-y-auto">
             {tags.map((tag, index) => (
               <li key={index}>
                 {location.pathname.includes("archived") ? (
                   <Link
                   to={`/archived/?tag=${tag}`}
-                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] ${location.pathname.includes("/archived") && tagQueryParam === tag ? "bg-lightGray" : "bg-transparent"}`}
+                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] ${location.pathname.includes("/archived") && tagQueryParam === tag.join() ? "bg-lightGray" : "bg-transparent"}`}
                 >
-                  <IconTag color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span>{tag}</span>
+                  <IconTag color={`${location.pathname.includes("/archived") && tagQueryParam === tag.join() ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span>{tag}</span>
 
-                  <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === tag ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
+                  <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === tag.join() ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
                 </Link>
                 ) : (
                   <Link
                   to={`/?tag=${tag}`}
                   className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] 
-                    ${location.pathname === "/" && tagQueryParam === tag ? "bg-lightGray" : "bg-transparent"}`}
+                    ${location.pathname === "/" && tagQueryParam === tag.join() ? "bg-lightGray" : "bg-transparent"}`}
                 >
-                  <IconTag color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span>{tag}</span>
-                  <IconChevronRight className={`ml-auto ${location.pathname === "/" && tagQueryParam === tag ? 'flex' : 'hidden'}`} 
+                  <IconTag color={`${location.pathname === "/" && tagQueryParam === tag.join() ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span>{tag}</span>
+
+                  <IconChevronRight className={`ml-auto ${location.pathname === "/" && tagQueryParam === tag.join() ? 'flex' : 'hidden'}`} 
                   color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
                 </Link>
                 )}

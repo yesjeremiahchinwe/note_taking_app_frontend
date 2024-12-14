@@ -34,11 +34,15 @@ const ColorThemeSettingsPage = () => {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    setTheme(data.theme);
-    toast({
-      title: `You switched to ${data.theme} theme`,
-    })
-    window.location.reload()
+    window.location.reload
+
+    setTimeout(() => {
+      setTheme(data.theme)
+      toast({
+        title: `You switched to ${data.theme} theme`,
+      })
+    }, 500) 
+
   }
 
   return (

@@ -2,7 +2,9 @@ import { IconSearch } from "@/lib/icons";
 import { Input } from "./ui/input";
 import { Theme } from "@/providers/theme-provider";
 import { useState } from "react";
-import AllNotes from "./AllNotes";
+import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
+import { Note } from "@/lib/types";
+import { Link } from "react-router-dom";
 
 interface Props {
   searchQuery: string,
@@ -14,6 +16,20 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
         () => (localStorage.getItem('notes-theme') as Theme) || 'system'
       )
 
+  const {
+      data: notes,
+  } = useGetNotesQuery('notesList', {
+      pollingInterval: 15000,
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true
+  })
+
+  const findNotes: Note[] = notes?.filter((note: Note) => (
+    note?.title?.toLowerCase().includes(searchQuery) 
+    || note?.tags?.toLowerCase().includes(searchQuery) 
+    || note?.content?.toLowerCase().includes(searchQuery)
+  ))
+  
   return (
     <section className="block lg:hidden px-[1.85rem] pt-3 mt-3 pb-[6rem] min-h-screen">
          <div className="w-full relative">
@@ -28,7 +44,48 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
           </div>
 
           <div className="py-6">
-            <AllNotes />
+            {findNotes.length ? (
+              <div>
+                {findNotes.map((note, index: number) => {
+                  const formatNoteTitle = note.title
+                              .toLowerCase()
+                              .split(" ")
+                              .join("-");
+                  
+                            return (
+                              <article
+                                key={note.title}
+                                className={`bg-transparent mb-2 rounded-md p-3 ${
+                                  index === notes.length - 1
+                                    ? "border-b-0"
+                                    : "border-b-[1px] border-darkerGray"
+                                }`}
+                              >
+                                <h2 className="text-xl font-semibold tracking-[-0.3px] text-primaryText">
+                                  <Link to={`/${formatNoteTitle}`}>{note.title}</Link>
+                                </h2>
+                  
+                                <div className="flex flex-wrap items-center gap-[8px] mt-3">
+                                {note?.tags?.split(",").map(tag => (
+                                  <p
+                                  key={tag}
+                                  className="py-[2px] px-[6px] text-sm rounded-md bg-tagsBg"
+                                >
+                                  {tag}
+                                </p>
+                                ))}
+                                </div>
+                  
+                                <small className="text-lightText block mt-4 font-medium text-xs tracking-[-0.2px]">
+                                  {note?.updatedAt?.split("T")[0]}
+                                </small>
+                              </article>
+                            );
+                })}
+              </div>
+            ) : (
+              <p>Note not found</p>
+            )}
           </div>
     </section>
   )

@@ -22,8 +22,8 @@ import {
 } from "@/store/notes/notesApiSlice";
 import useAuth from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
-import HomeLoader from "@/components/HomeLoader";
 import { Theme } from "@/providers/theme-provider";
+import LoadiingState from "@/components/HomeLoader";
 
 interface NotesProp {
   notes?: Note[];
@@ -120,10 +120,6 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
     }
   };
 
-  if (isLoading) {
-    return <HomeLoader />;
-  }
-
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -171,6 +167,10 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
       }
     }
   };
+
+  if (isLoading) {
+    return <LoadiingState message={noteTitle ? "Fetching note data" : "Please wait"} />
+  }
 
   return (
     <>

@@ -11,6 +11,7 @@ import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
 import { PlusIcon } from "lucide-react";
 import useDebouncedValue from "@/hooks/useDebouncedValue";
 import { useEffect, useState } from "react";
+import LoadiingState from "./HomeLoader";
 
 const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
   const location = useLocation();
@@ -25,13 +26,15 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
 
   const {
     data: notes,
+    isLoading,
+    isError
 } = useGetNotesQuery('notesList', {
     pollingInterval: 15000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true
 })
 
-const allNotes: Note[] = notes?.length && tagQueryParam
+const allNotes: Note[] | undefined = notes?.length && tagQueryParam
 ? notes?.filter((note: Note) => note?.tags?.includes(tagQueryParam as string))
 : location.pathname === "/tags"
 ? notes
@@ -83,6 +86,10 @@ return (
           All notes with with the "{tagQueryParam}" tag are shown here.
         </p>
       )}
+
+      {isLoading && <LoadiingState message="Loading notes" className="h-full" />}
+
+      {isError && <p className="text-lightRed text-center">Oops! Failed to fetch tags!</p>}
 
       {allNotes?.length !== 0 ? (
         allNotes?.map((note: Note, index: number) => {
