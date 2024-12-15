@@ -20,7 +20,6 @@ import {
   useAddNewNoteMutation,
   useUpdateNoteMutation,
 } from "@/store/notes/notesApiSlice";
-import useAuth from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { Theme } from "@/providers/theme-provider";
 import LoadiingState from "@/components/HomeLoader";
@@ -78,7 +77,6 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   const [addNewNote, { isLoading: isLoadingAddNote, isSuccess }] =
     useAddNewNoteMutation();
   const [updateNote, { isLoading: isLoadingUpdate }] = useUpdateNoteMutation();
-  const { userId } = useAuth();
 
   const goBackToPreviousPage = location.pathname.includes("archived")
     ? "/archived"
@@ -128,7 +126,6 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
         content: noteContent,
       };
 
-      if (userId) {
         if (location.pathname === "/new") {
           await addNewNote({ ...values });
           toast({
@@ -148,10 +145,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
           });
           navigate("/");
         }
-      } else {
-        setIsOpenAlert(true);
-      }
-    } catch (err: any) {
+      } catch (err: any) {
       if (!err.status) {
         setErrMsg("No Server Response");
       } else if (err.status === 400) {
@@ -169,8 +163,6 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   if (isLoading) {
     return <LoadiingState message={noteTitle ? "Fetching note data" : "Please wait"} />
   }
-
-  if (!notes?.length) return null;
 
   return (
     <>
@@ -232,7 +224,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
             : "block"
         } pt-4 mx-[20px] lg:px-0 lg:mx-0 lg:pt-0 border-t-[1px] border-darkerGray lg:border-t-0`}
       >
-        <NoteForm isNewNote={location.pathname === "/new"} note={note} noteTitle={noteTitle} setNoteTitle={setNoteTitle} noteTags={noteTags} setNoteTags={setNoteTags} noteContent={noteContent} setNoteContent={setNoteContent} onSubmit={onSubmit} errMsg={errMsg} isLoadingAddNote={isLoadingAddNote} isLoadingUpdate={isLoadingUpdate} isOpenAlert={isOpenAlert} setIsOpenAlert={setIsOpenAlert} />
+        <NoteForm isNewNote={location.pathname.includes("/new") || !note } note={note} noteTitle={noteTitle} setNoteTitle={setNoteTitle} noteTags={noteTags} setNoteTags={setNoteTags} noteContent={noteContent} setNoteContent={setNoteContent} onSubmit={onSubmit} errMsg={errMsg} isLoadingAddNote={isLoadingAddNote} isLoadingUpdate={isLoadingUpdate} isOpenAlert={isOpenAlert} setIsOpenAlert={setIsOpenAlert} />
       </section>
 
       <DeleteModal

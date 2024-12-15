@@ -87,7 +87,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
           </p>
         )}
 
-        {isLoading || isError && (
+        {isLoading && (
           <LoadiingState message="Loading notes" className="h-full" />
         )}
 
@@ -100,8 +100,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
           </div>
         )}
 
-        {allNotes?.length !== 0 &&
-          allNotes?.map((note: Note, index: number) => {
+        {allNotes?.map((note: Note, index: number) => {
             const formatNoteTitle = note.title
               .toLowerCase()
               .split(" ")

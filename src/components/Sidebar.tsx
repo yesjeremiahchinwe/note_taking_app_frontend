@@ -9,7 +9,6 @@ import { Theme } from "@/providers/theme-provider";
 import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
 import { useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
-import LoadiingState from "./HomeLoader";
 
 const Sidebar = () => {
   const location = useLocation()
@@ -22,7 +21,6 @@ const Sidebar = () => {
 
   const {
       data: notes,
-      isLoading,
       isError,
       isSuccess
   } = useGetNotesQuery('notesList', {
@@ -78,7 +76,7 @@ const Sidebar = () => {
             Tags
           </h3>
 
-          {isLoading || isError && <LoadiingState message="Fetching tags" />}
+          {/* {isLoading || isError && <LoadiingState message="Fetching tags" />} */}
 
           {!notes?.length && isSuccess && !isError && null}
 

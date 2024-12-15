@@ -126,8 +126,8 @@ const RightSidebar = () => {
 
   return (
     <>
-      {notes?.length && (
-        <section className="hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] border-darkerGray">
+        <section className={`hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] ${notes?.length ? 'border-darkerGray' : 'border-transparent'}`}>
+        {notes?.length && (
           <div>
             {location.pathname.includes("archived") ? (
               <Button
@@ -184,8 +184,8 @@ const RightSidebar = () => {
               </span>
             </Button>
           </div>
+        )}
         </section>
-      )}
 
       <DeleteModal
         isOpen={isOpen.deleteNote}

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react"
 
-type Font = "sans-serif" | "serif" | "monospace"
+export type Font = "sans-serif" | "serif" | "monospace"
 
 type FontProviderProps = {
   children: React.ReactNode

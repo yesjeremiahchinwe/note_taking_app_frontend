@@ -1,8 +1,12 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
+import { Font } from '@/providers/font-provider';
 
-const TinyMCEEditor = ({ content }: { content: string }) => {
+const TinyMCEEditor = ({ content, setNoteContent }: { content: string, setNoteContent: (content: string) => void }) => {
   const editorRef = useRef<HTMLInputElement>(null)
+  const [font] = useState<Font>(
+      () => (localStorage.getItem('notes-font') as Font) || 'sans-serif'
+    )
 
   return (
     <>
@@ -11,8 +15,9 @@ const TinyMCEEditor = ({ content }: { content: string }) => {
         //@ts-ignore
         onInit={(_evt, editor) => editorRef.current = editor}
         initialValue={content}
+        onChange={(e) => setNoteContent(e.target.value)}
         init={{
-          height: 500,
+          height: 260,
           menubar: false,
           plugins: [
             'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
@@ -23,7 +28,7 @@ const TinyMCEEditor = ({ content }: { content: string }) => {
             'bold italic forecolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
             'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+          content_style: `body { font-family:${font}; font-size:14px }`
         }}
       />
     </>

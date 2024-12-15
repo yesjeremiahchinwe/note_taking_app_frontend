@@ -58,7 +58,7 @@ const NoteForm = ({
     if (isNewNote) {
       inputRef?.current?.focus();
     }
-  }, [isNewNote]);
+  }, [isNewNote])
 
   useEffect(() => {
     if (note && !isNewNote) {
@@ -69,8 +69,6 @@ const NoteForm = ({
   }, [note, location.pathname]);
 
   useTitle(isNewNote ? "Create Note" : note?.title ?? "Note Details");
-
-  if (!note) return null;
 
   return (
     <>
@@ -169,13 +167,7 @@ const NoteForm = ({
               Note Content
             </label>
 
-            {/* <Editor
-              className="h-full text-primaryText tracking-[-0.5px] border-none"
-              value={noteContent}
-              
-              disabled={location.pathname.includes("archived")}
-            /> */}
-            <TinyMCEEditor content={noteContent}  />
+            <TinyMCEEditor content={noteContent} setNoteContent={setNoteContent}  />
           </div>
 
           {!location.pathname.includes("archived") && (
@@ -184,7 +176,6 @@ const NoteForm = ({
                 disabled={
                   !noteTitle ||
                   !noteTags ||
-                  !noteContent ||
                   isLoadingAddNote ||
                   isLoadingUpdate
                 }
