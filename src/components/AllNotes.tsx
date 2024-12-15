@@ -29,6 +29,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
     data: notes,
     isLoading,
     isError,
+    isSuccess
   } = useGetNotesQuery("notesList", {
     pollingInterval: 15000,
     refetchOnFocus: true,
@@ -86,17 +87,11 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
           </p>
         )}
 
-        {isLoading && (
+        {isLoading || isError && (
           <LoadiingState message="Loading notes" className="h-full" />
         )}
 
-        {isError && (
-          <p className="text-lightRed text-center">
-            Oops! Failed to fetch notes!
-          </p>
-        )}
-
-        {!notes?.length && !isError && (
+        {!notes?.length && !isError && isSuccess && (
           <div className="bg-lightGray p-1 mt-8">
             <p className="flex items-center justify-center text-sm text-lightText">
               You don&apos;t have a note yet. Start a new note to capture your

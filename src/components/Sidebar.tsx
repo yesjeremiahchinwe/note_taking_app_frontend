@@ -23,7 +23,8 @@ const Sidebar = () => {
   const {
       data: notes,
       isLoading,
-      isError
+      isError,
+      isSuccess
   } = useGetNotesQuery('notesList', {
       pollingInterval: 15000,
       refetchOnFocus: true,
@@ -32,9 +33,6 @@ const Sidebar = () => {
 
   const allTags: string[] = notes?.map((note) => note.tags) as string[]
   const tags: string[][] = allTags?.map((tag) => tag.split(","))
-
-  console.log(allTags)
-  console.log(tags)
 
   const isHomePath = location.pathname.includes("/") && !location.pathname.includes("/archived") && !location.pathname.includes("/settings") && !location.pathname.includes("/tags")
 
@@ -48,7 +46,7 @@ const Sidebar = () => {
         </div>
       </section>
 
-      <aside className="md:basis-[35%] xl:basis-[25%] max-h-screen hidden lg:flex flex-col border-r-[1px] border-darkerGray">
+      <aside className="md:basis-[35%] xl:basis-[25%] h-screen hidden lg:flex flex-col border-r-[1px] border-darkerGray">
         <div className="min-h-[81px] pt-6 px-[1.85rem]">
           <Link to="/">
             <LogoSVG color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
@@ -59,7 +57,7 @@ const Sidebar = () => {
           <ul>
             <li>
               <Link className={`nav-link rounded-[8px] mb-1 ${isHomePath && tagQueryParam === null ? "bg-lightGray" : "bg-transparent"}`} to="/">
-                <IconHome color={`${location.pathname.includes("/archived") ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span className="">All Notes</span>{" "}
+                <IconHome color={`${location.pathname === "/" ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span className="">All Notes</span>{" "}
 
                 <IconChevronRight className={`ml-auto ${location.pathname.includes("/") && location.pathname !== "/archived" && tagQueryParam === null ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
               </Link>
@@ -67,7 +65,7 @@ const Sidebar = () => {
 
             <li>
               <Link className={`nav-link rounded-[8px] ${location.pathname.includes("/archived") && tagQueryParam === null ? "bg-lightGray" : "bg-transparent"}`} to="/archived">
-                <IconArchive color={`${location.pathname === "/" ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span className="">Archived Notes</span>
+                <IconArchive color={`${location.pathname.includes("/archived") ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span className="">Archived Notes</span>
 
                 <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === null ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
               </Link>
@@ -80,11 +78,9 @@ const Sidebar = () => {
             Tags
           </h3>
 
-          {isLoading && <LoadiingState message="Fetching tags" />}
+          {isLoading || isError && <LoadiingState message="Fetching tags" />}
 
-          {isError && <p className="text-lightRed">Oops! Failed to fetch tags!</p>}
-
-          {!notes?.length && !isError && null}
+          {!notes?.length && isSuccess && !isError && null}
 
           <ul className="flex flex-col gap-1 my-4 overflow-y-auto">
             {tags?.map((tag, index) => (

@@ -16,7 +16,7 @@ const SettingsOptions = () => {
   const logoutOnClick = async () => {
     try {
       await sendLogout({})
-      navigate("/")
+      navigate("/login")
     } catch (err: any) {
       console.log(err?.message)
     }

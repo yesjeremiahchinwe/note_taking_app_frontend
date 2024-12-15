@@ -16,7 +16,8 @@ const ArchivedNotes = () => {
   const {
     data: notes,
     isLoading,
-    isError
+    isError,
+    isSuccess
 } = useGetArchivedNotesQuery('archivedNotesList', {
     pollingInterval: 15000,
     refetchOnFocus: true,
@@ -67,11 +68,9 @@ const ArchivedNotes = () => {
         </p>
       )}
 
-    {isLoading && <LoadiingState message="Fetching archived notes" className="h-full" />}
+    {isLoading || isError && <LoadiingState message="Fetching archived notes" className="h-full" />}
 
-    {isError && <p className="text-lightRed text-center">Oops! Failed to fetch archived notes!</p>}
-
-    {!notes?.length && !isError && (
+    {!notes?.length && !isError && isSuccess && (
       <div className="bg-lightGray p-1 mt-8">
       <p className="flex items-center justify-center text-sm text-lightText">
       You haven&apos;t archived a note yet. Start a new note to capture your thoughts and ideas.

@@ -7,7 +7,6 @@ import SearchPage from "@/pages/SearchPage";
 import LoadingState from "@/components/HomeLoader";
 import RequireAuth from "@/components/RequireLogin";
 import Prefetch from "@/components/Prefetch";
-import PersistLogin from "@/components/PersistentLogin";
 import {
   useGetArchivedNotesQuery,
   useGetNotesQuery,
@@ -56,7 +55,7 @@ function App() {
         <Route path="/:userId/reset-password" element={<ResetPasswordPage />} />
 
         {/* -------------- Home and Main application routes ---------------- */}
-        <Route element={<PersistLogin />}>
+        {/* <Route element={<PersistLogin />}> */}
           <Route element={<RequireAuth />}>
             <Route path="/" element={<Layout />}>
               <Route element={<Prefetch />}>
@@ -147,7 +146,7 @@ function App() {
               </Route>
             </Route>
           </Route>
-        </Route>
+        {/* </Route> */}
 
         <Route path="*" element={<h1>Not Found!</h1>} />
       </Routes>
