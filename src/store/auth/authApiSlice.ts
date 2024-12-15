@@ -10,7 +10,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: { ...credentials }
             }),
 
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted({ queryFulfilled }) {
                 try {
                     await queryFulfilled
                 } catch (err) {
@@ -26,11 +26,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 method: "POST"
             }),
 
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted({ dispatch, queryFulfilled }) {
                 try {
-                    const { data } = await queryFulfilled
-                    console.log(data)
-                    dispatch(logOut({}))
+                    await queryFulfilled
+                    // console.log(data)
+                    dispatch(logOut())
+
                     setTimeout(() => {
                         dispatch(apiSlice.util.resetApiState())
                     }, 1000)
@@ -48,7 +49,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: { ...credentials }
             }),
 
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted({ queryFulfilled }) {
                 try {
                     await queryFulfilled
                 } catch (err) {
@@ -64,7 +65,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: { ...credentials }
             }),
 
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted({ queryFulfilled }) {
                 try {
                     await queryFulfilled
                 } catch (err) {
@@ -79,7 +80,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 method: "GET"
             }),
 
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted({ dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled
                     const { accessToken } = data

@@ -4,9 +4,9 @@ import { IconClock, IconStatus, IconTag } from "@/lib/icons";
 import { Note } from "@/lib/types";
 import useTitle from "@/hooks/useTitle";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import Editor from "react-simple-wysiwyg";
 import AlertModal from "./modals/alert-modal";
 import { Theme } from "@/providers/theme-provider";
+import TinyMCEEditor from "./Editor";
 
 interface NoteFormProps {
   isNewNote?: boolean;
@@ -169,12 +169,13 @@ const NoteForm = ({
               Note Content
             </label>
 
-            <Editor
+            {/* <Editor
               className="h-full text-primaryText tracking-[-0.5px] border-none"
               value={noteContent}
-              onChange={(e) => setNoteContent(e.target.value)}
+              
               disabled={location.pathname.includes("archived")}
-            />
+            /> */}
+            <TinyMCEEditor content={noteContent}  />
           </div>
 
           {!location.pathname.includes("archived") && (

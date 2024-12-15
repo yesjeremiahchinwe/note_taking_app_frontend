@@ -33,6 +33,8 @@ const NotesWithTag = () => {
 
       {isError && <p className="text-lightRed">Oops! Failed to fetch tags!</p>}
 
+      {!notes?.length && !isError && <p>No tags yet. Create a note and tags associated with your notes will appear here.</p>}
+
       <ul className="flex flex-col gap-6 my-5">
         {tags?.map((tag, index) => (
           <li
@@ -44,10 +46,10 @@ const NotesWithTag = () => {
           } pb-4`}
         >
           <Link
-            to={`/?tag=${tag}`}
+            to={`/?tag=${tag.join()}`}
             className="flex items-center text-primaryText gap-3 font-medium text-base tracking-[-0.2px]"
           >
-            <IconTag color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span>{tag}</span>
+            <IconTag color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span>{tag.join()}</span>
           </Link>
         </li>
         ))}

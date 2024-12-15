@@ -69,9 +69,17 @@ const ArchivedNotes = () => {
 
     {isLoading && <LoadiingState message="Fetching archived notes" className="h-full" />}
 
-    {isError && <p className="text-lightRed text-center">Oops! Failed to fetch tags!</p>}
+    {isError && <p className="text-lightRed text-center">Oops! Failed to fetch archived notes!</p>}
 
-      {allNotes?.length !== 0 ? allNotes?.map((note: Note, index: number) => {
+    {!notes?.length && !isError && (
+      <div className="bg-lightGray p-1 mt-8">
+      <p className="flex items-center justify-center text-sm text-lightText">
+      You haven&apos;t archived a note yet. Start a new note to capture your thoughts and ideas.
+      </p>
+      </div>
+    )}
+
+      {allNotes?.length !== 0 && allNotes?.map((note: Note, index: number) => {
         const formatNoteTitle = note.title.toLowerCase().split(" ").join("-");
 
         return (
@@ -117,9 +125,7 @@ const ArchivedNotes = () => {
             </small>
           </article>
         );
-      }) : (
-        <p className="flex items-center justify-center mt-6 pt-6 text-sm text-lightText">No Note found</p>
-      )}
+      })}
     </section>
 
     {location.pathname === "/" || location.pathname === "/archived" && (

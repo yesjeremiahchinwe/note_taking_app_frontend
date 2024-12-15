@@ -3,7 +3,7 @@ import { setCredentials } from "../auth/authSlice"
 import { RootState } from "../store"
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'http://localhost:3500',
+    baseUrl: import.meta.env.VITE_REACT_APP_API_BASE_URL,
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).auth.token
 

@@ -21,11 +21,6 @@ const AlertModal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const onChange = (open: boolean) => {
-    if (!open) {
-      onClose();
-    }
-  };
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>

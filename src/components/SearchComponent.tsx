@@ -24,11 +24,11 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
       refetchOnMountOrArgChange: true
   })
 
-  const findNotes: Note[] = notes?.filter((note: Note) => (
+  const findNotes: Note[] | undefined = notes?.filter((note: Note) => (
     note?.title?.toLowerCase().includes(searchQuery) 
     || note?.tags?.toLowerCase().includes(searchQuery) 
     || note?.content?.toLowerCase().includes(searchQuery)
-  ))
+  )) as Note[]
   
   return (
     <section className="block lg:hidden px-[1.85rem] pt-3 mt-3 pb-[6rem] min-h-screen">
@@ -56,7 +56,7 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
                               <article
                                 key={note.title}
                                 className={`bg-transparent mb-2 rounded-md p-3 ${
-                                  index === notes.length - 1
+                                  index === findNotes.length - 1
                                     ? "border-b-0"
                                     : "border-b-[1px] border-darkerGray"
                                 }`}

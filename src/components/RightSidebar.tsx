@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { Note } from "@/lib/types"
+import { Note } from "@/lib/types";
 import {
   useLocation,
   useParams,
@@ -31,34 +31,37 @@ const RightSidebar = () => {
   const [searchParams] = useSearchParams();
   const noteQueryParam = searchParams.get("note");
   const [theme] = useState<Theme>(
-          () => (localStorage.getItem('notes-theme') as Theme) || 'system'
-        )
+    () => (localStorage.getItem("notes-theme") as Theme) || "system"
+  );
 
-  const {
-    data: notes,
-} = useGetNotesQuery('notesList', {
+  const { data: notes } = useGetNotesQuery("notesList", {
     pollingInterval: 15000,
     refetchOnFocus: true,
-    refetchOnMountOrArgChange: true
-})
+    refetchOnMountOrArgChange: true,
+  });
 
-  const {
-    data: archivedNotes,
-} = useGetArchivedNotesQuery('notesList', {
+  const { data: archivedNotes } = useGetArchivedNotesQuery("notesList", {
     pollingInterval: 15000,
     refetchOnFocus: true,
-    refetchOnMountOrArgChange: true
-})
+    refetchOnMountOrArgChange: true,
+  });
 
   const noteTitle = (noteQueryParam ?? title) as string;
 
-  const note: Note = notes?.length && location.pathname === "/" 
-    ? notes[0]
-    : archivedNotes?.length && location.pathname == "/archived"
-    ? archivedNotes[0]
-    : archivedNotes?.length && location.pathname.includes("/archived")
-    ? archivedNotes?.find((note: Note) => note?.title.toLowerCase().split(" ").join("-") === noteTitle)
-    : notes?.find((note: Note) => note?.title.toLowerCase().split(" ").join("-") === noteTitle)
+  const note: Note | undefined =
+    notes?.length && location.pathname === "/"
+      ? notes[0]
+      : archivedNotes?.length && location.pathname == "/archived"
+      ? archivedNotes[0]
+      : archivedNotes?.length && location.pathname.includes("/archived")
+      ? archivedNotes?.find(
+          (note: Note) =>
+            note?.title.toLowerCase().split(" ").join("-") === noteTitle
+        )
+      : notes?.find(
+          (note: Note) =>
+            note?.title.toLowerCase().split(" ").join("-") === noteTitle
+        );
 
   const [markNoteAsArchived, { isLoading: isLoadingArchiveNote }] =
     useMarkNoteAsArchivedMutation();
@@ -69,15 +72,15 @@ const RightSidebar = () => {
 
   const onDeleteNote = async () => {
     try {
-      await deleteNote({ id: note._id });
+      await deleteNote({ id: note?._id });
       setIsOpen((prev) => ({ ...prev, deleteNote: false }));
       toast({
-        title: "Note deleted successfully!"
+        title: "Note deleted successfully!",
       });
       if (location.pathname.includes("/archived")) {
-        navigate("/archived")
+        navigate("/archived");
       } else {
-      navigate("/")
+        navigate("/");
       }
     } catch (err: any) {
       toast({
@@ -89,11 +92,11 @@ const RightSidebar = () => {
 
   const onRestoreNote = async () => {
     try {
-      await restoreArchivedNote({ id: note._id });
+      await restoreArchivedNote({ id: note?._id });
       setIsOpen((prev) => ({ ...prev, archiveNote: false }));
       toast({
         title: "Note restored successfully!",
-        description: "Your note is now under your 'All Notes' tab"
+        description: "Your note is now under your 'All Notes' tab",
       });
       navigate("/archived");
     } catch (err: any) {
@@ -106,7 +109,7 @@ const RightSidebar = () => {
 
   const onArchiveNote = async () => {
     try {
-      await markNoteAsArchived({ id: note._id });
+      await markNoteAsArchived({ id: note?._id });
       setIsOpen((prev) => ({ ...prev, archiveNote: false }));
       toast({
         title: "Note archived successfully!",
@@ -123,49 +126,66 @@ const RightSidebar = () => {
 
   return (
     <>
-      <section className="hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] border-darkerGray">
-        <div>
-        {location.pathname.includes("archived") ? (
-          <Button
-            className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full"
-            size="lg"
-            onClick={() => onRestoreNote()}
-            disabled={isLoadingRestoreNote}
-          >
-            <ArchiveRestoreIcon color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
-            <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
-              {isLoadingRestoreNote ? "Restoring..." : "Restore Note"}
-            </span>
-          </Button>
-        ) : (
-          <Button
-            className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full"
-            size="lg"
-            onClick={() =>
-              setIsOpen((prev) => ({ ...prev, archiveNote: !prev.archiveNote }))
-            }
-          >
-            <ArchiveRestore color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
-            <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
-              Archive Note
-            </span>
-          </Button>
-        )}
+      {notes?.length && (
+        <section className="hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] border-darkerGray">
+          <div>
+            {location.pathname.includes("archived") ? (
+              <Button
+                className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full"
+                size="lg"
+                onClick={() => onRestoreNote()}
+                disabled={isLoadingRestoreNote}
+              >
+                <ArchiveRestoreIcon
+                  color={
+                    theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
+                  }
+                />
+                <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
+                  {isLoadingRestoreNote ? "Restoring..." : "Restore Note"}
+                </span>
+              </Button>
+            ) : (
+              <Button
+                className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full"
+                size="lg"
+                onClick={() =>
+                  setIsOpen((prev) => ({
+                    ...prev,
+                    archiveNote: !prev.archiveNote,
+                  }))
+                }
+              >
+                <ArchiveRestore
+                  color={
+                    theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
+                  }
+                />
+                <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
+                  Archive Note
+                </span>
+              </Button>
+            )}
 
-        <Button
-          className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder w-full"
-          size="lg"
-          onClick={() =>
-            setIsOpen((prev) => ({ ...prev, deleteNote: !prev.deleteNote }))
-          }
-        >
-          <TrashIcon color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
-          <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
-            Delete Note
-          </span>
-        </Button>
-        </div>
-      </section>
+            <Button
+              className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder w-full"
+              size="lg"
+              onClick={() =>
+                setIsOpen((prev) => ({ ...prev, deleteNote: !prev.deleteNote }))
+              }
+            >
+              <TrashIcon
+                color={
+                  theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
+                }
+              />
+              <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
+                Delete Note
+              </span>
+            </Button>
+          </div>
+        </section>
+      )}
 
       <DeleteModal
         isOpen={isOpen.deleteNote}

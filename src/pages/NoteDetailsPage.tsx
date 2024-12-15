@@ -38,17 +38,15 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   const tagQueryParam = searchParams.get("tag");
   const { title } = useParams();
 
-  if (!notes?.length) return null;
-
-  const note: Note = title
-    ? (notes?.find(
+  const note: Note = (title
+    ? notes?.find(
         (note: Note) => note.title.toLowerCase().split(" ").join("-") === title
-      ) as Note)
+      )
     : noteQueryParam
-    ? (notes?.find(
+    ? notes?.find(
         (note: Note) =>
           note.title.toLowerCase().split(" ").join("-") === noteQueryParam
-      ) as Note)
+      )
     : tagQueryParam
     ? notes?.filter((note: Note) =>
         note.tags.includes(tagQueryParam as string)
@@ -57,7 +55,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
     ? notes?.filter((note: Note) =>
         note.tags.includes(tagQueryParam as string)
       )[0]
-    : notes[0];
+    : notes?.length && notes[0]) as Note;
 
   const [isOpen, setIsOpen] = useState({
     archiveNote: false,
@@ -90,7 +88,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
 
   const onDeleteNote = async () => {
     try {
-      await deleteNote({ id: note._id });
+      await deleteNote({ id: note?._id });
       setIsOpen((prev) => ({ ...prev, deleteNote: false }));
       toast({
         title: "Note deleted successfully!",
@@ -106,7 +104,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
 
   const onArchiveNote = async () => {
     try {
-      await markNoteAsArchived({ id: note._id });
+      await markNoteAsArchived({ id: note?._id });
       setIsOpen((prev) => ({ ...prev, archiveNote: false }));
       toast({
         title: "Note archived successfully!",
@@ -144,7 +142,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
             setNoteContent("");
           }
         } else {
-          await updateNote({ ...values, id: note._id });
+          await updateNote({ ...values, id: note?._id });
           toast({
             title: "Note updated successfully!",
           });
@@ -171,6 +169,8 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   if (isLoading) {
     return <LoadiingState message={noteTitle ? "Fetching note data" : "Please wait"} />
   }
+
+  if (!notes?.length) return null;
 
   return (
     <>

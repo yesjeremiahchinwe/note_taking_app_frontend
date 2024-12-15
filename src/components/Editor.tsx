@@ -1,17 +1,16 @@
 import { useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import './App.css'
 
-export default function App() {
+const TinyMCEEditor = ({ content }: { content: string }) => {
   const editorRef = useRef<HTMLInputElement>(null)
 
   return (
     <>
       <Editor
-        apiKey='your-api-key'
+        apiKey={import.meta.env.VITE_REACT_APP_TINYMCE_TEXT_EDITOR_API_KEY}
         //@ts-ignore
-        // onInit={(_evt, editor) => editorRef.current = editor}
-        initialValue="<p>This is the initial content of the editor.</p>"
+        onInit={(_evt, editor) => editorRef.current = editor}
+        initialValue={content}
         init={{
           height: 500,
           menubar: false,
@@ -30,3 +29,5 @@ export default function App() {
     </>
   );
 }
+
+export default TinyMCEEditor

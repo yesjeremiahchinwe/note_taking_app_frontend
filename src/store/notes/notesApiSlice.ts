@@ -82,7 +82,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                     ...initialNote,
                 }
             }),
-            invalidatesTags: (result: any, error: any, arg: any) => [
+            invalidatesTags: (arg: any) => [
                 { type: 'Note', id: arg.id }
             ]
         }),
@@ -95,7 +95,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                     ...initialNote,
                 }
             }),
-            invalidatesTags: (result: any, error: any, arg: any) => [
+            invalidatesTags: (arg: any) => [
                 { type: 'Note', id: arg.id }
             ]
         }),
@@ -108,18 +108,20 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                     ...initialNote,
                 }
             }),
-            invalidatesTags: (result: any, error: any, arg: any) => [
+            invalidatesTags: (arg: any) => [
                 { type: 'Note', id: arg.id }
             ]
         }),
 
         deleteNote: builder.mutation({
-            query: ({ id }: { id: string }) => ({
+            query: (initialData: any) => ({
                 url: `/notes`,
                 method: 'DELETE',
-                body: { id }
+                body: { 
+                    ...initialData 
+                }
             }),
-            invalidatesTags: (result: any, error: any, arg: any) => [
+            invalidatesTags: (arg: any) => [
                 { type: 'Note', id: arg.id }
             ]
         }),

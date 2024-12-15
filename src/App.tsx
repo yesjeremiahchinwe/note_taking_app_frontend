@@ -12,7 +12,6 @@ import {
   useGetArchivedNotesQuery,
   useGetNotesQuery,
 } from "@/store/notes/notesApiSlice";
-import { Note } from "./lib/types";
 
 const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
@@ -66,7 +65,7 @@ function App() {
                     index
                     element={
                       <NoteDetailsPage
-                        notes={notes as Note[]}
+                        notes={notes}
                         isLoading={isLoadingGetNotes}
                       />
                     }
@@ -75,7 +74,7 @@ function App() {
                     path=":title"
                     element={
                       <NoteDetailsPage
-                        notes={notes as Note[]}
+                        notes={notes}
                         isLoading={isLoadingGetNotes}
                       />
                     }
@@ -84,7 +83,7 @@ function App() {
                     path="new"
                     element={
                       <NoteDetailsPage
-                        notes={notes as Note[]}
+                        notes={notes}
                         isLoading={isLoadingGetNotes}
                       />
                     }
@@ -96,7 +95,7 @@ function App() {
                     index
                     element={
                       <NoteDetailsPage
-                        notes={archivedNotes as Note[]}
+                        notes={archivedNotes}
                         isLoading={isLoadingArchiveNote}
                       />
                     }
@@ -105,7 +104,7 @@ function App() {
                     path=":title"
                     element={
                       <NoteDetailsPage
-                        notes={archivedNotes as Note[]}
+                        notes={archivedNotes}
                         isLoading={isLoadingArchiveNote}
                       />
                     }
@@ -117,7 +116,7 @@ function App() {
                     index
                     element={
                       <NoteDetailsPage
-                        notes={notes as Note[]}
+                        notes={notes}
                         isLoading={isLoadingGetNotes}
                       />
                     }
@@ -129,7 +128,7 @@ function App() {
                     index
                     element={
                       <NoteDetailsPage
-                        notes={notes as Note[]}
+                        notes={notes}
                         isLoading={isLoadingGetNotes}
                       />
                     }

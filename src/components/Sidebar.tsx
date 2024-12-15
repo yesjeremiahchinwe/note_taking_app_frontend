@@ -84,8 +84,10 @@ const Sidebar = () => {
 
           {isError && <p className="text-lightRed">Oops! Failed to fetch tags!</p>}
 
+          {!notes?.length && !isError && null}
+
           <ul className="flex flex-col gap-1 my-4 overflow-y-auto">
-            {tags.map((tag, index) => (
+            {tags?.map((tag, index) => (
               <li key={index}>
                 {location.pathname.includes("archived") ? (
                   <Link
