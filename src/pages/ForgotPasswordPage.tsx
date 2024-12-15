@@ -17,6 +17,8 @@ import { useForgotPasswordMutation } from "@/store/auth/authApiSlice";
 import { toast } from "@/hooks/use-toast";
 import { Theme } from "@/providers/theme-provider";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useAuth from "@/hooks/useAuth";
 
 const formSchema = z.object({
   email: z
@@ -27,6 +29,8 @@ const formSchema = z.object({
 
 const ForgotPasswordPage = () => {
   useTitle("Forgot Password");
+  const navigate = useNavigate()
+  const { userId } = useAuth()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,6 +50,7 @@ const ForgotPasswordPage = () => {
         title: "Sent successfully!",
         description: `A password reset link has been sent to your email ${values.email}`,
       });
+      navigate(`${userId}/reset-password`)
     } catch (err: any) {
       toast({
         title: `Oops! ${err?.message || err?.data?.message}`,
