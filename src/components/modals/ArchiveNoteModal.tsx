@@ -13,7 +13,7 @@ const ArchiveNoteModal: React.FC<ArchiveNoteModalProps> = ({
     isOpen,
     onClose,
     onConfirm,
-    loading
+    loading,
 }) => {
     const [isMounted, setIsMounted] = useState(false)
 
@@ -24,7 +24,6 @@ const ArchiveNoteModal: React.FC<ArchiveNoteModalProps> = ({
     if (!isMounted) {
         return null
     }
-
 
     return ( 
         <Modal

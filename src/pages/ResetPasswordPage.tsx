@@ -69,11 +69,11 @@ const ResetPasswordPage = () => {
     return (
     <main className="bg-lightGray dark:bg-tagsBg flex justify-center items-center min-h-screen w-full px-4">
 
-<section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] p-[48px]">
+<section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] max-w-sm:px-4 p-[48px]">
       <LogoSVG color={theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"} />
-      <h1 className="font-bold text-2xl tracking-[-0.5px] text-primaryText mt-5 mb-2">Reset Your Password
+      <h1 className="font-bold text-2xl text-center tracking-[-0.5px] text-primaryText mt-5 mb-2">Reset Your Password
       </h1>
-      <p className="font-normal text-sm tracking-[-0.2px] text-lighterGray dark:text-[#99A0AE]">
+      <p className="font-normal text-sm text-center tracking-[-0.2px] text-lighterGray dark:text-[#99A0AE]">
       Choose a new password to secure your account.
       </p>
 

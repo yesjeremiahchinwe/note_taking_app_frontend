@@ -7,8 +7,6 @@ createEntityAdapter({
     a.id ? 1 : -1
 })
 
-// const initialState = notesAdapter.getInitialState()
-
 export const notesApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getNotes: builder.query<Note[], string>({

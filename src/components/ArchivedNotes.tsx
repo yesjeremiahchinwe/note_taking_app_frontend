@@ -16,8 +16,6 @@ const ArchivedNotes = () => {
   const {
     data: notes,
     isLoading,
-    isError,
-    isSuccess
 } = useGetArchivedNotesQuery('archivedNotesList', {
     pollingInterval: 15000,
     refetchOnFocus: true,
@@ -33,7 +31,7 @@ const ArchivedNotes = () => {
     <section
       className={`${
         location.pathname === "/archived" ? "block" : "hidden lg:block"
-      } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen overflow-auto lg:border-r-[1px] border-lightText w-full`}
+      } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 h-screen overflow-auto lg:border-r-[1px] border-darkerGray w-full custom_scroll_bar`}
     >
       <div className="max-w-[96%] mx-auto">
         <Button
@@ -68,9 +66,9 @@ const ArchivedNotes = () => {
         </p>
       )}
 
-    {isLoading || isError && <LoadiingState message="Fetching archived notes" className="h-full" />}
+    {isLoading && <LoadiingState message="Fetching archived notes" className="h-[200px]" />}
 
-    {!notes?.length && !isError && isSuccess && (
+    {!notes?.length && (
       <div className="bg-lightGray p-1 mt-8">
       <p className="flex items-center justify-center text-sm text-lightText">
       You haven&apos;t archived a note yet. Start a new note to capture your thoughts and ideas.
@@ -112,7 +110,7 @@ const ArchivedNotes = () => {
               {note?.tags?.split(",").map((tag: string, index: number) => (
                 <p
                   key={index}
-                  className="py-[2px] px-[6px] text-sm rounded-md bg-lightText border-lightText"
+                  className="py-[2px] px-[6px] text-sm rounded-md bg-tagsBg border-lightText"
                 >
                   {tag}
                 </p>

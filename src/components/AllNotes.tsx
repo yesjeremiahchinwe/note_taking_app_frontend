@@ -27,9 +27,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
 
   const {
     data: notes,
-    isLoading,
-    isError,
-    isSuccess
+    isLoading
   } = useGetNotesQuery("notesList", {
     pollingInterval: 15000,
     refetchOnFocus: true,
@@ -56,10 +54,10 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
     <>
       <section
         className={`${
-          location.pathname === "/" && noteQueryParam === null
+          (notes?.length && location.pathname === "/" && noteQueryParam === null)
             ? "block"
             : "hidden lg:block"
-        } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 h-screen lg:border-r-[1px] border-darkerGray w-full`}
+        } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 h-screen lg:border-r-[1px] border-darkerGray w-full custom_scroll_bar`}
       >
         <div className="max-w-[96%] mx-auto">
           <CustomButton
@@ -91,7 +89,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
           <LoadiingState message="Loading notes" className="h-full" />
         )}
 
-        {!notes?.length && !isError && isSuccess && (
+        {!allNotes?.length && (
           <div className="bg-lightGray p-1 mt-8">
             <p className="flex items-center justify-center text-sm text-lightText">
               You don&apos;t have a note yet. Start a new note to capture your

@@ -23,6 +23,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { Theme } from "@/providers/theme-provider";
 import LoadiingState from "@/components/HomeLoader";
+import useAuth from "@/hooks/useAuth";
 
 interface NotesProp {
   notes?: Note[];
@@ -36,6 +37,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   const noteQueryParam = searchParams.get("note");
   const tagQueryParam = searchParams.get("tag");
   const { title } = useParams();
+  const { userId } = useAuth()
 
   const note: Note = (title
     ? notes?.find(
@@ -66,6 +68,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   const [noteTitle, setNoteTitle] = useState(note?.title || "");
   const [noteTags, setNoteTags] = useState(note?.tags || "");
   const [noteContent, setNoteContent] = useState(note?.content || "");
+
   const [theme] = useState<Theme>(
     () => (localStorage.getItem("notes-theme") as Theme) || "system"
   );
@@ -124,9 +127,10 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
         title: noteTitle,
         tags: noteTags,
         content: noteContent,
+        userId
       };
 
-        if (location.pathname === "/new") {
+        if (!note || location.pathname.includes("/new")) {
           await addNewNote({ ...values });
           toast({
             title: "Note created successfully!",
@@ -167,7 +171,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   return (
     <>
       {/* ------------ Note Details Header --------------- */}
-      <div className="flex lg:hidden items-center justify-between w-full py-3">
+      <div className={`${(note && location.pathname === "/") ? "hidden lg:flex" : !note ? "flex" : "flex"} lg:hidden items-center justify-between w-full py-3`}>
         <Link
           to={goBackToPreviousPage}
           className="flex items-center gap-1 pl-[14px] text-primaryText"
@@ -205,6 +209,12 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
 
           <form onSubmit={onSubmit}>
             <Button
+              disabled={
+                !noteTitle ||
+                !noteTags ||
+                isLoadingAddNote ||
+                isLoadingUpdate
+              }
               type="submit"
               className="bg-transparent hover:bg-transparent shadow-none border-none text-skyBlue"
             >
@@ -217,10 +227,12 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
       {/* -------------- Note Body ------------------ */}
       <section
         className={`${
-          location.pathname === "/" && noteQueryParam === null
+          (note && location.pathname === "/" && noteQueryParam === null)
             ? "hidden lg:block"
             : location.pathname === "/archived"
             ? "hidden lg:block"
+            : !note
+            ? "block"
             : "block"
         } pt-4 mx-[20px] lg:px-0 lg:mx-0 lg:pt-0 border-t-[1px] border-darkerGray lg:border-t-0`}
       >

@@ -28,6 +28,7 @@ const RightSidebar = () => {
     archiveNote: false,
     deleteNote: false,
   });
+
   const [searchParams] = useSearchParams();
   const noteQueryParam = searchParams.get("note");
   const [theme] = useState<Theme>(
@@ -63,8 +64,10 @@ const RightSidebar = () => {
             note?.title.toLowerCase().split(" ").join("-") === noteTitle
         );
 
-  const [markNoteAsArchived, { isLoading: isLoadingArchiveNote }] =
-    useMarkNoteAsArchivedMutation();
+  const [
+    markNoteAsArchived,
+    { isLoading: isLoadingArchiveNote },
+  ] = useMarkNoteAsArchivedMutation();
   const [deleteNote, { isLoading: isLoadingDeleteNote }] =
     useDeleteNoteMutation();
   const [restoreArchivedNote, { isLoading: isLoadingRestoreNote }] =
@@ -77,6 +80,7 @@ const RightSidebar = () => {
       toast({
         title: "Note deleted successfully!",
       });
+
       if (location.pathname.includes("/archived")) {
         navigate("/archived");
       } else {
@@ -98,7 +102,7 @@ const RightSidebar = () => {
         title: "Note restored successfully!",
         description: "Your note is now under your 'All Notes' tab",
       });
-      navigate("/archived");
+      navigate("/");
     } catch (err: any) {
       toast({
         title: "Oops! Couldn't restore note",
@@ -115,6 +119,11 @@ const RightSidebar = () => {
         title: "Note archived successfully!",
         description: `You can view note '${note?.title}' under your Archived Notes tab`,
       });
+
+      if (!notes?.length) {
+        window.location.reload();
+      }
+
       navigate("/");
     } catch (err: any) {
       toast({
@@ -126,15 +135,19 @@ const RightSidebar = () => {
 
   return (
     <>
-        <section className={`hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] ${notes?.length ? 'border-darkerGray' : 'border-transparent'}`}>
-        {notes?.length && (
+      <section
+        className={`hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] ${
+          notes?.length ? "border-darkerGray" : "border-transparent"
+        }`}
+      >
+        {note && (
           <div>
             {location.pathname.includes("archived") ? (
               <Button
                 className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full"
                 size="lg"
                 onClick={() => onRestoreNote()}
-                disabled={isLoadingRestoreNote}
+                disabled={isLoadingRestoreNote || !note}
               >
                 <ArchiveRestoreIcon
                   color={
@@ -147,6 +160,7 @@ const RightSidebar = () => {
               </Button>
             ) : (
               <Button
+                disabled={!note}
                 className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full"
                 size="lg"
                 onClick={() =>
@@ -168,6 +182,7 @@ const RightSidebar = () => {
             )}
 
             <Button
+              disabled={!note}
               className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder w-full"
               size="lg"
               onClick={() =>
@@ -185,7 +200,7 @@ const RightSidebar = () => {
             </Button>
           </div>
         )}
-        </section>
+      </section>
 
       <DeleteModal
         isOpen={isOpen.deleteNote}

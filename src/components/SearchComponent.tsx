@@ -43,6 +43,7 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
             />
           </div>
 
+          {searchQuery && (
           <div className="py-6">
             {findNotes.length ? (
               <div>
@@ -87,6 +88,7 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
               <p>Note not found</p>
             )}
           </div>
+          )}
     </section>
   )
 }

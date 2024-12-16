@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoginMutation } from "@/store/auth/authApiSlice";
 import { useAddNewUserMutation } from "@/store/users/usersApiSlice";
 import { setCredentials } from "@/store/auth/authSlice";
@@ -37,7 +37,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [login, {isLoading: isLoadingLogin}] = useLoginMutation()
-  const [addNewUser, { isLoading: isLoadingNewUser}] = useAddNewUserMutation()
+  const [addNewUser, { isLoading: isLoadingNewUser, isSuccess, isError, error }] = useAddNewUserMutation()
   const [theme] = useState<Theme>(
         () => (localStorage.getItem('notes-theme') as Theme) || 'system'
       )
@@ -49,6 +49,23 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       password: "",
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        title: 'Account created successfully!',
+        description: `You've signed up for an account`
+      })
+      setErrMsg("")
+      navigate("/login")
+      window.location.reload()
+    }
+    
+    if (isError) {
+      //@ts-ignore
+      setErrMsg(error.data?.message || 'Invalid Credentials');
+    }
+  }, [isSuccess, isError])
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -62,11 +79,6 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         navigate("/")
       } else {
         await addNewUser({ email: values.email, password: values.password })
-        toast({
-          title: 'Account created successfully!',
-          description: `You signed up for an account using the email ${values.email}`
-        })
-        navigate("/login")
       }
   } catch (err: any) {
       if (!err.status) {
@@ -85,13 +97,13 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
 
   return (
-    <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] p-[48px]">
+    <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] max-w-sm:px-[24px] p-[48px]">
       <LogoSVG color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
 
-      <h1 className="font-bold text-2xl tracking-[-0.5px] text-primaryText mt-5 mb-2">
+      <h1 className="font-bold text-2xl text-center tracking-[-0.5px] text-primaryText mt-5 mb-2">
         {title}
       </h1>
-      <p className="font-normal text-sm tracking-[-0.2px] text-lighterGray">
+      <p className="font-normal text-sm text-center tracking-[-0.2px] text-lighterGray">
         {description}
       </p>
 

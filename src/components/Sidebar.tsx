@@ -2,8 +2,7 @@ import {
   IconArchive,
   IconHome,
   LogoSVG,
-  IconChevronRight,
-  IconTag,
+  IconChevronRight
 } from "@/lib/icons";
 import { Theme } from "@/providers/theme-provider";
 import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
@@ -20,17 +19,23 @@ const Sidebar = () => {
   const tagQueryParam = searchParams.get("tag");
 
   const {
-      data: notes,
-      isError,
-      isSuccess
+      data: notes
   } = useGetNotesQuery('notesList', {
       pollingInterval: 15000,
       refetchOnFocus: true,
       refetchOnMountOrArgChange: true
   })
 
-  const allTags: string[] = notes?.map((note) => note.tags) as string[]
-  const tags: string[][] = allTags?.map((tag) => tag.split(","))
+  // const filteredTags = []
+  // const allTags: string[] = notes?.map((note) => note.tags?.split(","))
+
+  // console.log(Array.prototype.flat(allTags, true))
+  // const tags: string[][] = allTags?.map((tag) => tag.split(","))
+  
+  // console.log(allTags)
+  // console.log(tags)
+
+  // const listOfTags = tags?.map(tag => !tags?.includes(tag))
 
   const isHomePath = location.pathname.includes("/") && !location.pathname.includes("/archived") && !location.pathname.includes("/settings") && !location.pathname.includes("/tags")
 
@@ -76,38 +81,36 @@ const Sidebar = () => {
             Tags
           </h3>
 
-          {/* {isLoading || isError && <LoadiingState message="Fetching tags" />} */}
+          {!notes?.length && null}
 
-          {!notes?.length && isSuccess && !isError && null}
-
-          <ul className="flex flex-col gap-1 my-4 overflow-y-auto">
+          {/* <ul className="flex flex-col gap-1 my-4 overflow-y-auto">
             {tags?.map((tag, index) => (
               <li key={index}>
                 {location.pathname.includes("archived") ? (
                   <Link
                   to={`/archived/?tag=${tag}`}
-                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] ${location.pathname.includes("/archived") && tagQueryParam === tag.join() ? "bg-lightGray" : "bg-transparent"}`}
+                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] ${location.pathname.includes("/archived") && tagQueryParam ? "bg-lightGray" : "bg-transparent"}`}
                 >
-                  <IconTag color={`${location.pathname.includes("/archived") && tagQueryParam === tag.join() ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span>{tag}</span>
+                  <IconTag color={`${location.pathname.includes("/archived") && tagQueryParam ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span>{tag}</span>
 
-                  <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam === tag.join() ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
+                  <IconChevronRight className={`ml-auto ${location.pathname.includes("/archived") && tagQueryParam ? 'flex' : 'hidden'}`} color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
                 </Link>
                 ) : (
                   <Link
                   to={`/?tag=${tag}`}
                   className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] 
-                    ${location.pathname === "/" && tagQueryParam === tag.join() ? "bg-lightGray" : "bg-transparent"}`}
+                    ${location.pathname === "/" && tagQueryParam ? "bg-lightGray" : "bg-transparent"}`}
                 >
-                  <IconTag color={`${location.pathname === "/" && tagQueryParam === tag.join() ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span>{tag}</span>
+                  <IconTag color={`${location.pathname === "/" && tagQueryParam ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span>{tag}</span>
 
-                  <IconChevronRight className={`ml-auto ${location.pathname === "/" && tagQueryParam === tag.join() ? 'flex' : 'hidden'}`} 
+                  <IconChevronRight className={`ml-auto ${location.pathname === "/" && tagQueryParam ? 'flex' : 'hidden'}`} 
                   color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
                 </Link>
                 )}
                 
               </li>
             ))}
-          </ul>
+          </ul> */}
         </section>
       </aside>
     </>

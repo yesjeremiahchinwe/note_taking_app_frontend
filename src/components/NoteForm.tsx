@@ -4,9 +4,10 @@ import { IconClock, IconStatus, IconTag } from "@/lib/icons";
 import { Note } from "@/lib/types";
 import useTitle from "@/hooks/useTitle";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { Editor } from '@tinymce/tinymce-react';
+import { Font } from '@/providers/font-provider';
 import AlertModal from "./modals/alert-modal";
 import { Theme } from "@/providers/theme-provider";
-import TinyMCEEditor from "./Editor";
 
 interface NoteFormProps {
   isNewNote?: boolean;
@@ -42,6 +43,9 @@ const NoteForm = ({
   setIsOpenAlert
 }: NoteFormProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [font] = useState<Font>(
+      () => (localStorage.getItem('notes-font') as Font) || 'sans-serif'
+    )
   const [theme] = useState<Theme>(
     () => (localStorage.getItem("notes-theme") as Theme) || "system"
   );
@@ -55,10 +59,10 @@ const NoteForm = ({
   }, [location.pathname]);
 
   useEffect(() => {
-    if (isNewNote) {
+    if (isNewNote && !note) {
       inputRef?.current?.focus();
     }
-  }, [isNewNote])
+  }, [isNewNote, note])
 
   useEffect(() => {
     if (note && !isNewNote) {
@@ -83,7 +87,7 @@ const NoteForm = ({
           </label>
           <Input
             type="text"
-            ref={isNewNote ? inputRef : null}
+            ref={isNewNote && !note ? inputRef : null}
             className={`h-[50px] text-[1.75rem] md:text-[1.7rem] font-bold placeholder:text-primaryText tracking-[-0.5px] ml-[-0.65rem] border-none shadow-none`}
             value={noteTitle}
             placeholder="Enter note title..."
@@ -92,7 +96,7 @@ const NoteForm = ({
           />
         </div>
 
-        <article className="w-full flex items-center gap-[3rem] pb-5 mb-2 border-b-[1px] border-darkerGray px-1 pt-3">
+        <article className="w-full flex items-center gap-[3rem] mb-2 px-1 pt-3">
           <div className="flex flex-col gap-[1rem]">
             <div className="flex items-center gap-2">
               <IconTag
@@ -167,11 +171,34 @@ const NoteForm = ({
               Note Content
             </label>
 
-            <TinyMCEEditor content={noteContent} setNoteContent={setNoteContent}  />
+            <Editor
+                apiKey={import.meta.env.VITE_REACT_APP_TINYMCE_TEXT_EDITOR_API_KEY}
+                onInit={(_evt, editor) => {
+                  setNoteContent(editor.getContent())
+                }}
+                value={noteContent}
+                onEditorChange={(newValue) => {
+                  setNoteContent(newValue)
+                }}
+                init={{
+                      height: 280,
+                      menubar: false,
+                      plugins: [
+                        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                        'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                      ],
+                      toolbar: 'undo redo | blocks | ' +
+                        'bold italic forecolor | alignleft aligncenter ' +
+                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                        'removeformat | help',
+                      content_style: `body { font-family:${font}; font-size:14px; }`
+                    }}    
+            />
           </div>
 
           {!location.pathname.includes("archived") && (
-            <div className="flex items-center gap-3 border-t-[1px] border-darkerGray py-4">
+            <div className="flex items-center gap-3 py-4">
               <Button
                 disabled={
                   !noteTitle ||

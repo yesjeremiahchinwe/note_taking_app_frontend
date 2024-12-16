@@ -14,7 +14,8 @@ const TinyMCEEditor = ({ content, setNoteContent }: { content: string, setNoteCo
         apiKey={import.meta.env.VITE_REACT_APP_TINYMCE_TEXT_EDITOR_API_KEY}
         //@ts-ignore
         onInit={(_evt, editor) => editorRef.current = editor}
-        initialValue={content}
+        value={content}
+        tagName='input'
         onChange={(e) => setNoteContent(e.target.value)}
         init={{
           height: 260,
@@ -28,7 +29,7 @@ const TinyMCEEditor = ({ content, setNoteContent }: { content: string, setNoteCo
             'bold italic forecolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
             'removeformat | help',
-          content_style: `body { font-family:${font}; font-size:14px }`
+          content_style: `body { font-family:${font}; font-size:14px; }`
         }}
       />
     </>
