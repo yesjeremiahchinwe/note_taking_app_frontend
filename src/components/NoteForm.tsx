@@ -140,7 +140,7 @@ const NoteForm = ({
             </label>
             <Input
               type="text"
-              className={`h-8 w-full block md:text-[1.75rem] px-2 -mt-[6px] -ml-2 font-normal tracking-[-0.5px] placeholder:text-lightText placeholder:text-sm md:text-base border-none shadow-none`}
+              className={`h-8 w-full block md:text-[1.75rem] px-2 -ml-2 font-normal tracking-[-0.5px] placeholder:text-lightText placeholder:text-sm md:text-base border-none shadow-none`}
               value={noteTags}
               placeholder="Add tags separated by commas (e.g. Work, Planning)"
               onChange={(e) => setNoteTags(e.target.value)}
