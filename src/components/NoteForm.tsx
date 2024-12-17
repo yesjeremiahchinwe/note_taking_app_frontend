@@ -195,7 +195,7 @@ const NoteForm = ({
           </div>
 
           {!location.pathname.includes("archived") && (
-            <div className="flex items-center gap-3 py-4">
+            <div className="hidden lg:flex items-center gap-3 py-4">
               <Button
                 disabled={
                   !noteTitle ||

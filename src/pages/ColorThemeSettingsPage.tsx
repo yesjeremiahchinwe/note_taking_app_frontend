@@ -1,7 +1,7 @@
 import { IconMoon, IconSun, IconSystemTheme } from "@/lib/icons";
 import useTitle from "@/hooks/useTitle";
 import { Button } from "../components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -28,13 +28,14 @@ const FormSchema = z.object({
 
 const ColorThemeSettingsPage = () => {
   useTitle("Choose Color Theme");
-
+  const navigate = useNavigate()
   const { theme, setTheme } = useTheme();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    navigate('/')
     window.location.reload()
 
     toast({
