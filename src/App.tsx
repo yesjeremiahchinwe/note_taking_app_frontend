@@ -3,7 +3,6 @@ import { lazy, Suspense } from "react";
 
 import Layout from "@/components/Layout";
 import Home from "@/components/Home";
-import SearchPage from "@/pages/SearchPage";
 import LoadingState from "@/components/HomeLoader";
 import RequireAuth from "@/components/RequireLogin";
 import Prefetch from "@/components/Prefetch";
@@ -16,11 +15,12 @@ import SignUpPage from "@/pages/SignUpPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SettingsPage from "@/pages/SettingsPage";
+import SearchPage from "@/pages/SearchPage";
+import TagsPage from "./pages/TagsPage";
+import ArchivedNotesPage from "@/pages/ArchivedNotesPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 
-// const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const NoteDetailsPage = lazy(() => import("@/pages/NoteDetailsPage"));
-const TagsPage = lazy(() => import("@/pages/TagsPage"));
-const ArchivedNotesPage = lazy(() => import("@/pages/ArchivedNotesPage"));
 const ColorThemeSettings = lazy(() => import("@/pages/ColorThemeSettingsPage"));
 const FontThemeSettings = lazy(() => import("@/pages/FontThemeSettingsPage"));
 const ChangePasswordSettings = lazy(
@@ -150,7 +150,7 @@ function App() {
           </Route>
         </Route>
 
-        <Route path="*" element={<h1>Not Found!</h1>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );
