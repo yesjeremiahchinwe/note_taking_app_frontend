@@ -11,13 +11,12 @@ import {
   useGetArchivedNotesQuery,
   useGetNotesQuery,
 } from "@/store/notes/notesApiSlice";
+import LoginPage from "@/pages/LoginPage";
+import SignUpPage from "@/pages/SignUpPage";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
 
 const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
-const LoginPage = lazy(() => import("@/pages/LoginPage"));
-const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
-const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
-const ResetPasswordPage = lazy(() => import("@/pages/ResetPasswordPage"));
-
 const NoteDetailsPage = lazy(() => import("@/pages/NoteDetailsPage"));
 const TagsPage = lazy(() => import("@/pages/TagsPage"));
 const ArchivedNotesPage = lazy(() => import("@/pages/ArchivedNotesPage"));

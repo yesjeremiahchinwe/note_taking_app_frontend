@@ -197,7 +197,7 @@ const NoteForm = ({
             />
           </div>
 
-          {!location.pathname.includes("archived") || noteQueryParam !== null && (
+          {!location.pathname.includes("archived") || noteQueryParam !== null ||location.pathname === "/new" && (
             <div className="flex items-center gap-3 py-4">
               <Button
                 disabled={
