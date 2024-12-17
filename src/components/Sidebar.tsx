@@ -40,7 +40,7 @@ const Sidebar = () => {
       <section className="flex lg:hidden w-full min-h-[60px] bg-lightGray text-primaryText lg:bg-transparent">
         <div className="pt-4 px-4 sm:px-[1.5rem]">
           <Link to="/">
-            <LogoSVG color='#0E121B' />
+            <LogoSVG color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
           </Link>
         </div>
       </section>
