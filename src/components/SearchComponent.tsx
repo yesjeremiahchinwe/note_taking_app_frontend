@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
 import { Note } from "@/lib/types";
 import { Link } from "react-router-dom";
+import useDebouncedValue from "@/hooks/useDebouncedValue";
 
 interface Props {
   searchQuery: string,
@@ -16,7 +17,10 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
         () => (localStorage.getItem('notes-theme') as Theme) || 'system'
       )
 
-  const lowerCasedSearchTerm = searchQuery?.toLowerCase()
+  const debouncedSearchTerm = useDebouncedValue(
+    searchQuery as string,
+    500
+  )?.toLowerCase();
 
   const {
       data: notes,
@@ -27,9 +31,9 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
   })
 
   const findNotes: Note[] | undefined = notes?.filter((note: Note) => (
-    note?.title?.toLowerCase().includes(lowerCasedSearchTerm) 
-    || note?.tags?.toLowerCase().includes(lowerCasedSearchTerm) 
-    || note?.content?.toLowerCase().includes(lowerCasedSearchTerm)
+    note?.title?.toLowerCase().includes(debouncedSearchTerm) 
+    || note?.tags?.toLowerCase().includes(debouncedSearchTerm) 
+    || note?.content?.toLowerCase().includes(debouncedSearchTerm)
   )) as Note[]
   
   return (
@@ -45,7 +49,7 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
             />
           </div>
 
-          {searchQuery && (
+          {debouncedSearchTerm && (
           <div className="py-6">
             {findNotes.length ? (
               <div>

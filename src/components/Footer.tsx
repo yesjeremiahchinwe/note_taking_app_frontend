@@ -17,7 +17,7 @@ const Footer = () => {
             <Link
               to={path}
               className={`flex flex-col items-center justify-center gap-1 flex-grow px-3 py-2 rounded-sm ${
-                isActive ? "bg-lightGray dark:bg-[#717784]" : "bg-transparent"
+                isActive ? "bg-lightGray dark:bg-lighterGray" : "bg-transparent"
               }`}
             >
               <Icon color={`${isActive ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} />

@@ -6,14 +6,12 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import deleteIcon from "/images/icon-delete.svg";
-import archivedIcon from "/images/icon-archive.svg";
 import { Link } from "react-router-dom";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import DeleteModal from "@/components/modals/DeleteNoteModal";
 import ArchiveNoteModal from "@/components/modals/ArchiveNoteModal";
 import NoteForm from "@/components/NoteForm";
-import { ChevronLeftIcon, RefreshCcwIcon } from "lucide-react";
+import { ArchiveRestore, ChevronLeftIcon, RefreshCcwIcon, Trash2Icon } from "lucide-react";
 import {
   useDeleteNoteMutation,
   useMarkNoteAsArchivedMutation,
@@ -67,8 +65,6 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
     deleteNote: false,
   });
   const [isOpenAlert, setIsOpenAlert] = useState(false);
-
-  const [errMsg, setErrMsg] = useState("");
   const [noteTitle, setNoteTitle] = useState(note?.title || "");
   const [noteTags, setNoteTags] = useState(note?.tags || "");
   const [noteContent, setNoteContent] = useState(note?.content || "");
@@ -81,11 +77,46 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
     useDeleteNoteMutation();
   const [markNoteAsArchived, { isLoading: isLoadingMarkedNote }] =
     useMarkNoteAsArchivedMutation();
-  const [addNewNote, { isLoading: isLoadingAddNote, isSuccess }] =
+  const [addNewNote, { isLoading: isLoadingAddNote, isSuccess: isSuccessAddNewNote, isError: isErrorAddNewNote, error: errorAddNewNote }] =
     useAddNewNoteMutation();
-  const [updateNote, { isLoading: isLoadingUpdate }] = useUpdateNoteMutation();
+  const [updateNote, { isLoading: isLoadingUpdate, isSuccess: isSuccessUpdateNote, isError: isErrorUpdateNote , error: errorUpdateNote}] = useUpdateNoteMutation();
   const [restoreArchivedNote, { isLoading: isLoadingRestoreNote }] =
     useRestoreArchivedNoteMutation();
+
+  useEffect(() => {
+    if (isSuccessAddNewNote) {
+      setNoteTitle("");
+      setNoteTags("");
+      setNoteContent("");
+      toast({
+      title: "Note created successfully!",
+    });
+    navigate("/");
+    }
+
+    if (isErrorAddNewNote) {
+      toast({
+        //@ts-ignore
+        title: `${errorAddNewNote.data?.message || errorAddNewNote?.message || "Oops! Failed to create note"}`,
+      });
+    }
+  }, [isSuccessAddNewNote, isErrorAddNewNote])
+
+  useEffect(() => {
+    if (isSuccessUpdateNote) {
+      toast({
+        title: "Note updated successfully!",
+      });
+      navigate("/");
+    }
+
+    if (isErrorUpdateNote) {
+      toast({
+        //@ts-ignore
+        title: `${errorUpdateNote.data?.message || errorUpdateNote?.message || "Oops! Failed to update note"}`,
+      });
+    }
+  }, [isSuccessUpdateNote, isErrorUpdateNote])
 
   const goBackToPreviousPage = location.pathname.includes("archived")
     ? "/archived"
@@ -157,35 +188,11 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
 
       if (!note || location.pathname.includes("/new")) {
         await addNewNote({ ...values });
-        toast({
-          title: "Note created successfully!",
-        });
-        navigate("/");
-
-        if (isSuccess) {
-          setNoteTitle("");
-          setNoteTags("");
-          setNoteContent("");
-        }
       } else {
         await updateNote({ ...values, id: note?._id });
-        toast({
-          title: "Note updated successfully!",
-        });
-        navigate("/");
       }
     } catch (err: any) {
-      if (!err.status) {
-        setErrMsg("No Server Response");
-      } else if (err.status === 400) {
-        setErrMsg("Invalid Credentials");
-      } else if (err.status === 401) {
-        setErrMsg("Unauthorized");
-      } else if (err.status === 409) {
-        setErrMsg("Conflict");
-      } else {
-        setErrMsg(err.data?.message);
-      }
+      console.log(err)
     }
   };
 
@@ -202,10 +209,12 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
       {/* ------------ Note Details Header --------------- */}
       <div
         className={`${
-          note && location.pathname === "/"
+          note && location.pathname === "/" && tagQueryParam === null && noteQueryParam === null
             ? "hidden lg:flex"
             : !note
             ? "flex"
+            : tagQueryParam && noteQueryParam
+            ? "flex lg:hidden"
             : location.pathname === "/archived"
             ? "hidden lg:flex"
             : "flex"
@@ -228,30 +237,34 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
         <div className="flex items-center">
           <Button
             size="icon"
-            className="bg-transparent hover:bg-transparent shadow-none border-none mr-2"
+            className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none mr-2"
             onClick={() =>
               setIsOpen((prev) => ({ ...prev, deleteNote: !prev.deleteNote }))
             }
           >
-            <img src={deleteIcon} alt="A delete Icon" />
+            <Trash2Icon size={24} color={
+                  (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"
+                } />
           </Button>
 
           {isArchivedPage ? (
             <Button
+            size="icon"
               onClick={() => onRestoreNote()}
               disabled={isLoadingRestoreNote}
+              className="bg-transparent dark:bg-transparent hover:bg-transparent"
             >
               <RefreshCcwIcon
-              size={20}
+              size={24}
                 color={
-                  theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
+                  (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"
                 }
               />
             </Button>
           ) : (
             <Button
               size="icon"
-              className="bg-transparent hover:bg-transparent shadow-none border-none"
+              className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none"
               onClick={() =>
                 setIsOpen((prev) => ({
                   ...prev,
@@ -259,7 +272,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
                 }))
               }
             >
-              <img src={archivedIcon} alt="Archive Icon" />
+              <ArchiveRestore size={20} color={(theme === "system" || theme === "dark") ? "#717784" : "#0E121B"} />
             </Button>
           )}
 
@@ -273,9 +286,9 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
                 isLoadingUpdate
               }
               type="submit"
-              className="bg-transparent hover:bg-transparent shadow-none border-none text-skyBlue"
+              className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none text-skyBlue dark:text-lighterGray"
             >
-              Save Note
+              {isLoadingAddNote || isLoadingUpdate ? "Saving..." : "Save Note"}
             </Button>
           </form>
         </div>
@@ -303,7 +316,6 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
           noteContent={noteContent}
           setNoteContent={setNoteContent}
           onSubmit={onSubmit}
-          errMsg={errMsg}
           isLoadingAddNote={isLoadingAddNote}
           isLoadingUpdate={isLoadingUpdate}
           isOpenAlert={isOpenAlert}

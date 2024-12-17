@@ -6,7 +6,7 @@ import {
   useSearchParams,
   useNavigate,
 } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteModal from "./modals/DeleteNoteModal";
 import ArchiveNoteModal from "./modals/ArchiveNoteModal";
 import {
@@ -17,7 +17,7 @@ import {
   useRestoreArchivedNoteMutation,
 } from "@/store/notes/notesApiSlice";
 import { toast } from "@/hooks/use-toast";
-import { ArchiveRestore, ArchiveRestoreIcon, TrashIcon } from "lucide-react";
+import { ArchiveRestore, RefreshCcwIcon, TrashIcon } from "lucide-react";
 import { Theme } from "@/providers/theme-provider";
 
 const RightSidebar = () => {
@@ -35,16 +35,17 @@ const RightSidebar = () => {
     () => (localStorage.getItem("notes-theme") as Theme) || "system"
   );
 
-  const { data: notes } = useGetNotesQuery("notesList", {
+  const { data: notes, currentData } = useGetNotesQuery("notesList", {
     pollingInterval: 15000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
   const { data: archivedNotes } = useGetArchivedNotesQuery("notesList", {
-    pollingInterval: 15000,
+    pollingInterval: 3000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true
   });
 
   const noteTitle = (noteQueryParam ?? title) as string;
@@ -66,12 +67,18 @@ const RightSidebar = () => {
 
   const [
     markNoteAsArchived,
-    { isLoading: isLoadingArchiveNote },
+    { isLoading: isLoadingArchiveNote, isSuccess: isSuccessArchiveNote },
   ] = useMarkNoteAsArchivedMutation();
   const [deleteNote, { isLoading: isLoadingDeleteNote }] =
     useDeleteNoteMutation();
   const [restoreArchivedNote, { isLoading: isLoadingRestoreNote }] =
     useRestoreArchivedNoteMutation();
+
+  useEffect(() => {
+    if (isSuccessArchiveNote && currentData?.length === 0) {
+      window.location.reload()
+    }
+  }, [isSuccessArchiveNote, currentData])
 
   const onDeleteNote = async () => {
     try {
@@ -120,10 +127,6 @@ const RightSidebar = () => {
         description: `You can view note '${note?.title}' under your Archived Notes tab`,
       });
 
-      if (!notes?.length) {
-        window.location.reload();
-      }
-
       navigate("/");
     } catch (err: any) {
       toast({
@@ -149,11 +152,12 @@ const RightSidebar = () => {
                 onClick={() => onRestoreNote()}
                 disabled={isLoadingRestoreNote || !note}
               >
-                <ArchiveRestoreIcon
-                  color={
-                    theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
-                  }
-                />
+                <RefreshCcwIcon
+              size={24}
+                color={
+                  (theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"
+                }
+              />
                 <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
                   {isLoadingRestoreNote ? "Restoring..." : "Restore Note"}
                 </span>

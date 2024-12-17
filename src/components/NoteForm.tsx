@@ -8,6 +8,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { Font } from '@/providers/font-provider';
 import AlertModal from "./modals/alert-modal";
 import { Theme } from "@/providers/theme-provider";
+import { useSearchParams } from "react-router-dom";
 
 interface NoteFormProps {
   isNewNote?: boolean;
@@ -19,7 +20,6 @@ interface NoteFormProps {
   noteContent: string;
   setNoteContent: (noteContent: string) => void;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  errMsg: string;
   isLoadingAddNote: boolean,
   isLoadingUpdate: boolean,
   isOpenAlert: boolean,
@@ -36,13 +36,14 @@ const NoteForm = ({
   noteContent,
   setNoteContent,
   onSubmit,
-  errMsg,
   isLoadingAddNote,
   isLoadingUpdate,
   isOpenAlert,
   setIsOpenAlert
 }: NoteFormProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [searchParams] = useSearchParams();
+    const noteQueryParam = searchParams.get("note");
   const [font] = useState<Font>(
       () => (localStorage.getItem('notes-font') as Font) || 'sans-serif'
     )
@@ -77,7 +78,6 @@ const NoteForm = ({
   return (
     <>
       <form className="w-full flex flex-col lg:px-2" onSubmit={onSubmit}>
-        {errMsg && <small className="text-lightRed">{errMsg}</small>}
         <div>
           <label
             htmlFor="title"
@@ -197,7 +197,7 @@ const NoteForm = ({
             />
           </div>
 
-          {!location.pathname.includes("archived") && (
+          {!location.pathname.includes("archived") || noteQueryParam !== null && (
             <div className="flex items-center gap-3 py-4">
               <Button
                 disabled={

@@ -16,7 +16,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { title } = useParams();
+  const { title } = useParams()
   const debouncedSearchTerm = useDebouncedValue(
     searchQuery as string,
     500
@@ -26,9 +26,10 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
   const noteQueryParam = searchParams.get("note");
 
   const { data: notes, isLoading } = useGetNotesQuery("notesList", {
-    pollingInterval: 15000,
+    pollingInterval: 3000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true
   });
 
   const allNotes: Note[] | undefined =
@@ -82,17 +83,17 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
           </p>
         )}
 
-        {isLoading && (
-          <LoadiingState message="Loading notes" className="h-full" />
-        )}
-
-        {!allNotes?.length && (
-          <div className="bg-lightGray p-1 mt-8">
+        {!allNotes?.length && !isLoading && (
+          <div className="bg-lightGray p-2 mt-8 rounded-md">
             <p className="flex items-center justify-center text-sm text-lightText">
               You don&apos;t have a note yet. Start a new note to capture your
               thoughts and ideas.
             </p>
           </div>
+        )}
+
+        {isLoading && (
+          <LoadiingState message="Loading notes" className="h-full" />
         )}
 
         <div className="overflow-y-auto max-h-[90vh] custom_scroll_bar">

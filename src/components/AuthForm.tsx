@@ -57,8 +57,8 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         description: `You've signed up for an account`
       })
       setErrMsg("")
-      navigate("/login")
       window.location.reload()
+      navigate("/login")
     }
     
     if (isError) {
@@ -90,7 +90,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       } else if (err.status === 409) {
           setErrMsg('Conflict');
       } else {
-          setErrMsg(err.data?.message);
+          setErrMsg(err.data?.message || err?.message || "Oops! Something went wront. Please try again");
       }
   }
   }

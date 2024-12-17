@@ -85,7 +85,7 @@ const Sidebar = () => {
                 {location.pathname.includes("archived") ? (
                   <Link
                   to={`/archived/?tag=${tag}`}
-                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] ${location.pathname.includes("/archived") && tagQueryParam === tag ? "bg-lightGray" : "bg-transparent"}`}
+                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-sm tracking-[-0.2px] ${location.pathname.includes("/archived") && tagQueryParam === tag ? "bg-lightGray" : "bg-transparent"}`}
                 >
                   <IconTag color={`${location.pathname.includes("/archived") && tagQueryParam === tag ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span>{tag}</span>
 
@@ -94,7 +94,7 @@ const Sidebar = () => {
                 ) : (
                   <Link
                   to={`/?tag=${tag}`}
-                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-base tracking-[-0.2px] 
+                  className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-sm tracking-[-0.2px] 
                     ${location.pathname === "/" && tagQueryParam === tag ? "bg-lightGray" : "bg-transparent"}`}
                 >
                   <IconTag color={`${location.pathname === "/" && tagQueryParam === tag ? "#335CFF" : (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"}`} /> <span>{tag}</span>
