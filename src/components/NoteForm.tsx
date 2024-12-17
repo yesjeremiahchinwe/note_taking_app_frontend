@@ -101,7 +101,7 @@ const NoteForm = ({
             <div className="flex items-center gap-2">
               <IconTag
                 color={
-                  theme === "system" || theme === "dark" ? "#FFF" : "#2B303B"
+                  (theme === "system" || theme === "dark") ? "#FFF" : "#2B303B"
                 }
               />{" "}
               <span className="text-lightText font-normal text-sm tracking-[-0.2px]">
@@ -113,7 +113,7 @@ const NoteForm = ({
               <div className="flex items-center gap-2">
                 <IconStatus
                   color={
-                    theme === "system" || theme === "dark" ? "#FFF" : "#2B303B"
+                    (theme === "system" || theme === "dark") ? "#FFF" : "#2B303B"
                   }
                 />{" "}
                 <span className="text-lightText font-normal text-sm pt-1 tracking-[-0.2px]">
@@ -125,7 +125,7 @@ const NoteForm = ({
             <div className="flex items-center gap-2">
               <IconClock
                 color={
-                  theme === "system" || theme === "dark" ? "#FFF" : "#2B303B"
+                  (theme === "system" || theme === "dark") ? "#FFF" : "#2B303B"
                 }
               />{" "}
               <span className="text-lightText mt-[5px] font-normal text-sm tracking-[-0.2px]">

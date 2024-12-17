@@ -98,7 +98,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
   return (
     <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] max-sm:px-4 p-[48px]">
-      <LogoSVG color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} />
+      <LogoSVG color={(theme === "system" || theme === "dark") ? "#fff" : "#0E121B"} />
 
       <h1 className="font-bold text-2xl text-center tracking-[-0.5px] text-primaryText mt-5 mb-2">
         {title}
