@@ -15,8 +15,9 @@ import LoginPage from "@/pages/LoginPage";
 import SignUpPage from "@/pages/SignUpPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
+import SettingsPage from "@/pages/SettingsPage";
 
-const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
+// const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const NoteDetailsPage = lazy(() => import("@/pages/NoteDetailsPage"));
 const TagsPage = lazy(() => import("@/pages/TagsPage"));
 const ArchivedNotesPage = lazy(() => import("@/pages/ArchivedNotesPage"));
