@@ -16,7 +16,7 @@ import useTitle from "@/hooks/useTitle";
 import { useForgotPasswordMutation } from "@/store/auth/authApiSlice";
 import { toast } from "@/hooks/use-toast";
 import { Theme } from "@/providers/theme-provider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 
@@ -38,19 +38,31 @@ const ForgotPasswordPage = () => {
     },
   });
 
-  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+  const [forgotPassword, { isLoading, isSuccess, isError, error }] = useForgotPasswordMutation();
   const [theme] = useState<Theme>(
           () => (localStorage.getItem('notes-theme') as Theme) || 'system'
         )
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        title: "Sent successfully!",
+        description: 'A password reset link has been sent to your email'
+      });
+      navigate(`/${userId}/reset-password`)
+    }
+
+    if (isError) {
+      toast({
+        title: "Oops! Something went wrong!",
+        //@ts-ignore
+        description: `${error.data?.message || error?.message || "Try again please!"}`,
+      });
+    }
+  }, [isSuccess, isError])
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await forgotPassword({ email: values.email });
-      toast({
-        title: "Sent successfully!",
-        description: `A password reset link has been sent to your email ${values.email}`,
-      });
-      navigate(`${userId}/reset-password`)
     } catch (err: any) {
       toast({
         title: `Oops! ${err?.message || err?.data?.message}`,
@@ -62,7 +74,7 @@ const ForgotPasswordPage = () => {
     <main className="bg-lightGray dark:bg-tagsBg flex justify-center items-center min-h-screen w-full px-4">
       <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] max-sm:px-4 p-[48px]">
         <LogoSVG
-          color={theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"}
+          color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"}
         />
         <h1 className="font-bold text-2xl text-center tracking-[-0.5px] text-primaryText mt-5 mb-2">
           Forgotten your password?
