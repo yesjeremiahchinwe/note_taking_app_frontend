@@ -13,12 +13,13 @@ import { FormEvent, useState } from "react";
 import DeleteModal from "@/components/modals/DeleteNoteModal";
 import ArchiveNoteModal from "@/components/modals/ArchiveNoteModal";
 import NoteForm from "@/components/NoteForm";
-import { ChevronLeftIcon } from "lucide-react";
+import { ChevronLeftIcon, RefreshCcwIcon } from "lucide-react";
 import {
   useDeleteNoteMutation,
   useMarkNoteAsArchivedMutation,
   useAddNewNoteMutation,
   useUpdateNoteMutation,
+  useRestoreArchivedNoteMutation,
 } from "@/store/notes/notesApiSlice";
 import { toast } from "@/hooks/use-toast";
 import { Theme } from "@/providers/theme-provider";
@@ -37,32 +38,35 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   const noteQueryParam = searchParams.get("note");
   const tagQueryParam = searchParams.get("tag");
   const { title } = useParams();
-  const { userId } = useAuth()
+  const { userId } = useAuth();
 
-  const note: Note = (title
-    ? notes?.find(
-        (note: Note) => note.title.toLowerCase().split(" ").join("-") === title
-      )
-    : noteQueryParam
-    ? notes?.find(
-        (note: Note) =>
-          note.title.toLowerCase().split(" ").join("-") === noteQueryParam
-      )
-    : tagQueryParam
-    ? notes?.filter((note: Note) =>
-        note.tags.includes(tagQueryParam as string)
-      )[0]
-    : tagQueryParam && location.pathname.includes("archived")
-    ? notes?.filter((note: Note) =>
-        note.tags.includes(tagQueryParam as string)
-      )[0]
-    : notes?.length && notes[0]) as Note;
+  const note: Note = (
+    title
+      ? notes?.find(
+          (note: Note) =>
+            note.title.toLowerCase().split(" ").join("-") === title
+        )
+      : noteQueryParam
+      ? notes?.find(
+          (note: Note) =>
+            note.title.toLowerCase().split(" ").join("-") === noteQueryParam
+        )
+      : tagQueryParam
+      ? notes?.filter((note: Note) =>
+          note.tags.includes(tagQueryParam as string)
+        )[0]
+      : tagQueryParam && location.pathname.includes("archived")
+      ? notes?.filter((note: Note) =>
+          note.tags.includes(tagQueryParam as string)
+        )[0]
+      : notes?.length && notes[0]
+  ) as Note;
 
   const [isOpen, setIsOpen] = useState({
     archiveNote: false,
     deleteNote: false,
   });
-  const [isOpenAlert, setIsOpenAlert] = useState(false)
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
   const [noteTitle, setNoteTitle] = useState(note?.title || "");
@@ -80,12 +84,16 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   const [addNewNote, { isLoading: isLoadingAddNote, isSuccess }] =
     useAddNewNoteMutation();
   const [updateNote, { isLoading: isLoadingUpdate }] = useUpdateNoteMutation();
+  const [restoreArchivedNote, { isLoading: isLoadingRestoreNote }] =
+    useRestoreArchivedNoteMutation();
 
   const goBackToPreviousPage = location.pathname.includes("archived")
     ? "/archived"
     : tagQueryParam !== null
     ? `/tags`
     : "/";
+
+  const isArchivedPage = location.pathname.includes("/archived");
 
   const onDeleteNote = async () => {
     try {
@@ -119,37 +127,54 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
     }
   };
 
+  const onRestoreNote = async () => {
+    try {
+      await restoreArchivedNote({ id: note?._id });
+      setIsOpen((prev) => ({ ...prev, archiveNote: false }));
+      toast({
+        title: "Note restored successfully!",
+        description: "Your note is now under your 'All Notes' tab",
+      });
+      navigate("/");
+    } catch (err: any) {
+      toast({
+        title: "Oops! Couldn't restore note",
+        description: `Error message: ${err?.message || err?.data?.message}`,
+      });
+    }
+  };
+
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const values = {
-        title: noteTitle,
-        tags: noteTags,
-        content: noteContent,
-        userId
+        title: noteTitle?.trim(),
+        tags: noteTags?.trim(),
+        content: noteContent?.trim(),
+        userId,
       };
 
-        if (!note || location.pathname.includes("/new")) {
-          await addNewNote({ ...values });
-          toast({
-            title: "Note created successfully!",
-          });
-          navigate("/");
+      if (!note || location.pathname.includes("/new")) {
+        await addNewNote({ ...values });
+        toast({
+          title: "Note created successfully!",
+        });
+        navigate("/");
 
-          if (isSuccess) {
-            setNoteTitle("");
-            setNoteTags("");
-            setNoteContent("");
-          }
-        } else {
-          await updateNote({ ...values, id: note?._id });
-          toast({
-            title: "Note updated successfully!",
-          });
-          navigate("/");
+        if (isSuccess) {
+          setNoteTitle("");
+          setNoteTags("");
+          setNoteContent("");
         }
-      } catch (err: any) {
+      } else {
+        await updateNote({ ...values, id: note?._id });
+        toast({
+          title: "Note updated successfully!",
+        });
+        navigate("/");
+      }
+    } catch (err: any) {
       if (!err.status) {
         setErrMsg("No Server Response");
       } else if (err.status === 400) {
@@ -165,13 +190,27 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   };
 
   if (isLoading) {
-    return <LoadiingState message={noteTitle ? "Fetching note data" : "Please wait"} />
+    return (
+      <LoadiingState
+        message={noteTitle ? "Fetching note data" : "Please wait"}
+      />
+    );
   }
 
   return (
     <>
       {/* ------------ Note Details Header --------------- */}
-      <div className={`${(note && location.pathname === "/") ? "hidden lg:flex" : !note ? "flex" : "flex"} lg:hidden items-center justify-between w-full py-3`}>
+      <div
+        className={`${
+          note && location.pathname === "/"
+            ? "hidden lg:flex"
+            : !note
+            ? "flex"
+            : location.pathname === "/archived"
+            ? "hidden lg:flex"
+            : "flex"
+        } lg:hidden items-center justify-between w-full py-3`}
+      >
         <Link
           to={goBackToPreviousPage}
           className="flex items-center gap-1 pl-[14px] text-primaryText"
@@ -197,15 +236,32 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
             <img src={deleteIcon} alt="A delete Icon" />
           </Button>
 
-          <Button
-            size="icon"
-            className="bg-transparent hover:bg-transparent shadow-none border-none"
-            onClick={() =>
-              setIsOpen((prev) => ({ ...prev, archiveNote: !prev.archiveNote }))
-            }
-          >
-            <img src={archivedIcon} alt="Archive Icon" />
-          </Button>
+          {isArchivedPage ? (
+            <Button
+              onClick={() => onRestoreNote()}
+              disabled={isLoadingRestoreNote}
+            >
+              <RefreshCcwIcon
+              size={20}
+                color={
+                  theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
+                }
+              />
+            </Button>
+          ) : (
+            <Button
+              size="icon"
+              className="bg-transparent hover:bg-transparent shadow-none border-none"
+              onClick={() =>
+                setIsOpen((prev) => ({
+                  ...prev,
+                  archiveNote: !prev.archiveNote,
+                }))
+              }
+            >
+              <img src={archivedIcon} alt="Archive Icon" />
+            </Button>
+          )}
 
           <form onSubmit={onSubmit}>
             <Button
@@ -213,6 +269,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
                 !noteTitle ||
                 !noteTags ||
                 isLoadingAddNote ||
+                isArchivedPage ||
                 isLoadingUpdate
               }
               type="submit"
@@ -227,7 +284,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
       {/* -------------- Note Body ------------------ */}
       <section
         className={`${
-          (note && location.pathname === "/" && noteQueryParam === null)
+          note && location.pathname === "/" && noteQueryParam === null
             ? "hidden lg:block"
             : location.pathname === "/archived"
             ? "hidden lg:block"
@@ -236,7 +293,22 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
             : "block"
         } pt-4 mx-[20px] lg:px-0 lg:mx-0 lg:pt-0 border-t-[1px] border-darkerGray lg:border-t-0`}
       >
-        <NoteForm isNewNote={location.pathname.includes("/new") || !note } note={note} noteTitle={noteTitle} setNoteTitle={setNoteTitle} noteTags={noteTags} setNoteTags={setNoteTags} noteContent={noteContent} setNoteContent={setNoteContent} onSubmit={onSubmit} errMsg={errMsg} isLoadingAddNote={isLoadingAddNote} isLoadingUpdate={isLoadingUpdate} isOpenAlert={isOpenAlert} setIsOpenAlert={setIsOpenAlert} />
+        <NoteForm
+          isNewNote={location.pathname.includes("/new") || !note}
+          note={note}
+          noteTitle={noteTitle}
+          setNoteTitle={setNoteTitle}
+          noteTags={noteTags}
+          setNoteTags={setNoteTags}
+          noteContent={noteContent}
+          setNoteContent={setNoteContent}
+          onSubmit={onSubmit}
+          errMsg={errMsg}
+          isLoadingAddNote={isLoadingAddNote}
+          isLoadingUpdate={isLoadingUpdate}
+          isOpenAlert={isOpenAlert}
+          setIsOpenAlert={setIsOpenAlert}
+        />
       </section>
 
       <DeleteModal

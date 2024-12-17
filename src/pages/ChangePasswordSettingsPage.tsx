@@ -1,4 +1,3 @@
-import { IconArrowLeft } from "@/lib/icons";
 import { Button } from "../components/ui/button";
 import {
   Form,
@@ -11,12 +10,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import useTitle from "@/hooks/useTitle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
-import { useState } from "react";
+import { ChevronLeftIcon, EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useUpdateUserPasswordMutation } from "@/store/users/usersApiSlice";
 import { toast } from "@/hooks/use-toast";
 import { Theme } from "@/providers/theme-provider";
@@ -41,7 +40,8 @@ const ChangePasswordSettingsPage = () => {
     newPassword: false,
     confirmNewPassword: false,
   });
-  const [updateUserPassword, { isLoading, isSuccess, isError }] =
+  const [errMsg, setErrMsg] = useState("");
+  const [updateUserPassword, { isLoading, isSuccess, isError, error }] =
     useUpdateUserPasswordMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,9 +52,30 @@ const ChangePasswordSettingsPage = () => {
       confirmNewPassword: "",
     },
   });
+  const navigate = useNavigate()
   const [theme] = useState<Theme>(
     () => (localStorage.getItem("notes-theme") as Theme) || "system"
   );
+
+  useEffect(() => {
+    if (isError) {
+      //@ts-ignore
+      setErrMsg(error.data?.message || error?.message);
+      toast({
+        //@ts-ignore
+        title: `Oops! ${error?.data?.message}`,
+      });
+    }
+  }, [isError])
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        title: "Password updated successfully!",
+      });
+      navigate("/settings")
+    }
+  }, [isSuccess])
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -63,17 +84,8 @@ const ChangePasswordSettingsPage = () => {
         newPassword: values.newPassword,
         confirmNewPassword: values.confirmNewPassword,
       });
-      if (isSuccess) {
-        toast({
-          title: "Password updated successfully!",
-        });
-      }
     } catch (err: any) {
-      if (isError) {
-        toast({
-          title: `Oops! ${err?.error?.data?.message}`,
-        });
-      }
+      console.log(err)
     }
   };
 
@@ -87,13 +99,21 @@ const ChangePasswordSettingsPage = () => {
           : "block"
       }`}
     >
-      <Link to="/settings" className="flex lg:hidden items-center gap-1 pt-3">
-        <IconArrowLeft /> <span>Settings</span>
+      <Link
+        to="/settings"
+        className="flex lg:hidden items-center gap-1 pt-3 ml-[-0.5rem]"
+      >
+        <ChevronLeftIcon
+          color={theme === "system" || theme === "dark" ? "#525866" : "#CACFD8"}
+        />{" "}
+        <span>Settings</span>
       </Link>
 
       <h2 className="text-primaryText pt-5 lg:pt-0 font-bold lg:font-semibold text-2xl lg:text-base  tracking-[-0.5px] lg:tracking-[-0.3px]">
         Change Password
       </h2>
+
+      <p className="text-lightRed block">{errMsg}</p>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-5">
@@ -108,9 +128,7 @@ const ChangePasswordSettingsPage = () => {
                 <FormControl>
                   <Input
                     type={showPassord.oldPassword ? "text" : "password"}
-                    className={`${
-                      fieldState.error && "border-lightRed"
-                    }`}
+                    className={`${fieldState.error && "border-lightRed"}`}
                     {...field}
                   />
                 </FormControl>
@@ -122,7 +140,11 @@ const ChangePasswordSettingsPage = () => {
                       oldPassword: !prev.oldPassword,
                     }))
                   }
-                  color={(theme === "system" || theme === "dark") ? "#CACFD8" : "#525866"}
+                  color={
+                    theme === "system" || theme === "dark"
+                      ? "#CACFD8"
+                      : "#525866"
+                  }
                   size={18}
                   className={`absolute top-[39px] right-4 cursor-pointer ${
                     !showPassord.oldPassword ? "block" : "hidden"
@@ -136,7 +158,11 @@ const ChangePasswordSettingsPage = () => {
                       oldPassword: !prev.oldPassword,
                     }))
                   }
-                  color={(theme === "system" || theme === "dark") ? "#CACFD8" : "#525866"}
+                  color={
+                    theme === "system" || theme === "dark"
+                      ? "#CACFD8"
+                      : "#525866"
+                  }
                   size={18}
                   className={`absolute top-[39px] right-4 cursor-pointer ${
                     showPassord.oldPassword ? "block" : "hidden"
@@ -158,9 +184,7 @@ const ChangePasswordSettingsPage = () => {
                 <FormControl>
                   <Input
                     type={showPassord.newPassword ? "text" : "password"}
-                    className={`${
-                      fieldState.error && "border-lightRed"
-                    }`}
+                    className={`${fieldState.error && "border-lightRed"}`}
                     {...field}
                   />
                 </FormControl>
@@ -172,7 +196,11 @@ const ChangePasswordSettingsPage = () => {
                       newPassword: !prev.newPassword,
                     }))
                   }
-                  color={(theme === "system" || theme === "dark") ? "#CACFD8" : "#525866"}
+                  color={
+                    theme === "system" || theme === "dark"
+                      ? "#CACFD8"
+                      : "#525866"
+                  }
                   size={18}
                   className={`absolute top-[39px] right-4 cursor-pointer ${
                     !showPassord.newPassword ? "block" : "hidden"
@@ -186,7 +214,11 @@ const ChangePasswordSettingsPage = () => {
                       newPassword: !prev.newPassword,
                     }))
                   }
-                  color={(theme === "system" || theme === "dark") ? "#CACFD8" : "#525866"}
+                  color={
+                    theme === "system" || theme === "dark"
+                      ? "#CACFD8"
+                      : "#525866"
+                  }
                   size={18}
                   className={`absolute top-[39px] right-4 cursor-pointer ${
                     showPassord.newPassword ? "block" : "hidden"
@@ -194,7 +226,14 @@ const ChangePasswordSettingsPage = () => {
                 />
 
                 <FormDescription className="text flex items-center gap-1">
-                <InfoIcon color={(theme === "system" || theme === "dark") ? "#99A0AE" : "#525866"} size={16} />{" "}
+                  <InfoIcon
+                    color={
+                      theme === "system" || theme === "dark"
+                        ? "#99A0AE"
+                        : "#525866"
+                    }
+                    size={16}
+                  />{" "}
                   <span>At least 8 characters</span>
                 </FormDescription>
 
@@ -213,9 +252,7 @@ const ChangePasswordSettingsPage = () => {
                 <FormControl>
                   <Input
                     type={showPassord.confirmNewPassword ? "text" : "password"}
-                    className={`${
-                      fieldState.error && "border-lightRed"
-                    }`}
+                    className={`${fieldState.error && "border-lightRed"}`}
                     {...field}
                   />
                 </FormControl>
@@ -227,7 +264,11 @@ const ChangePasswordSettingsPage = () => {
                       confirmNewPassword: !prev.confirmNewPassword,
                     }))
                   }
-                  color={(theme === "system" || theme === "dark") ? "#CACFD8" : "#525866"}
+                  color={
+                    theme === "system" || theme === "dark"
+                      ? "#CACFD8"
+                      : "#525866"
+                  }
                   size={18}
                   className={`absolute top-[39px] right-4 cursor-pointer ${
                     !showPassord.confirmNewPassword ? "block" : "hidden"
@@ -241,7 +282,11 @@ const ChangePasswordSettingsPage = () => {
                       confirmNewPassword: !prev.confirmNewPassword,
                     }))
                   }
-                  color={(theme === "system" || theme === "dark") ? "#CACFD8" : "#525866"}
+                  color={
+                    theme === "system" || theme === "dark"
+                      ? "#CACFD8"
+                      : "#525866"
+                  }
                   size={18}
                   className={`absolute top-[39px] right-4 cursor-pointer ${
                     showPassord.confirmNewPassword ? "block" : "hidden"

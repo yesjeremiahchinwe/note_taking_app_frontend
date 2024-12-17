@@ -1,8 +1,7 @@
 import {
-  IconArrowLeft,
   IconFontMonospace,
   IconFontSansSerif,
-  IconFontSerif,
+  IconFontSerif
 } from "@/lib/icons";
 import { Button } from "../components/ui/button";
 import { Link } from "react-router-dom";
@@ -25,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { useFont } from "@/providers/font-provider";
 import { Theme } from "@/providers/theme-provider";
 import { useState } from "react";
+import { ChevronLeftIcon } from "lucide-react";
 
 const FormSchema = z.object({
   font: z.enum(["sans-serif", "serif", "monospace"], {
@@ -60,8 +60,12 @@ const FontThemeSettingsPage = () => {
           : "block"
       }`}
     >
-      <Link to="/settings" className="flex lg:hidden items-center gap-1 pt-3">
-        <IconArrowLeft /> <span>Settings</span>
+      <Link to="/settings" className="flex lg:hidden items-center gap-1 pt-3 ml-[-0.5rem]">
+      <ChevronLeftIcon
+            color={
+              theme === "system" || theme === "dark" ? "#525866" : "#CACFD8"
+            }
+          /> <span>Settings</span>
       </Link>
 
       <h2 className="text-primaryText pt-5 lg:pt-0 font-bold lg:font-semibold text-2xl lg:text-base  tracking-[-0.5px] lg:tracking-[-0.3px]">

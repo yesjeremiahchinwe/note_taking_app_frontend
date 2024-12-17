@@ -41,7 +41,7 @@ const Header = ({ searchQuery, setSearchQuery }: Props) => {
           {tagQueryParam !== null 
           ? <span className="text-lighterGray">Notes Tagged: <span className="text-primaryText">{tagQueryParam}</span></span> 
           : location.pathname === "/search" 
-          ? <span className="text-lighterGray">Showing results for: {searchQuery}<span className="text-primaryText">{tagQueryParam}</span></span> 
+          ? <span className="text-lighterGray">Showing results for: {searchQuery} <span className="text-primaryText">{tagQueryParam}</span></span>
           : headingText}
         </h1>
 

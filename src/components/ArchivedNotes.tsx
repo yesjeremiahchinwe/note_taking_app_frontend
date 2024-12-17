@@ -35,7 +35,7 @@ const ArchivedNotes = () => {
     >
       <div className="max-w-[96%] mx-auto">
         <Button
-          className="hidden lg:flex py-6 rounded-lg bg-skyBlue hover:bg-skyBlue  hover:scale-[1.02] duration-500 w-full mb-5 "
+          className="hidden lg:flex py-6 rounded-lg bg-skyBlue hover:bg-skyBlue text-white  hover:scale-[1.02] duration-500 w-full mb-5 "
           size="lg"
           onClick={() => navigate("/new")}
         >
@@ -91,7 +91,7 @@ const ArchivedNotes = () => {
                 ? "lg:bg-lightGray border-t-0"
                 : note.tags.includes(tagQueryParam as string) && noteQueryParam === null && index === 0
                 ? "lg:bg-lightGray border-t-0"
-                : "bg-transparent border-t-[1px] border-lightText"
+                : "bg-transparent border-t-[1px] border-darkerGray"
             } mb-2 rounded-md p-3`}
           >
             <h2 className="text-xl font-semibold tracking-[-0.3px] text-primaryText">

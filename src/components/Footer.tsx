@@ -9,7 +9,7 @@ const Footer = () => {
         )
 
   return (
-  <footer className="block border-t-[1px] border-grayBorder dark:border-background bg-darkerGray fixed bottom-0 z-10 h-[70px] sm:h-[90px] lg:hidden w-full px-[2rem]">
+  <footer className="block border-t-[1px] border-grayBorder dark:border-background bg-darkerGray fixed bottom-0 z-10 h-[70px] sm:h-[90px] lg:hidden w-full max-sm:px-3 px-[2rem]">
     <nav className="pt-3 sm:pt-4">
       <ul className="flex items-center gap-1 justify-between w-full flex-grow">
         {MobileNavLinks().map(({ text, path, isActive, Icon }) => (

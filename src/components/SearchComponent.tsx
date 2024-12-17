@@ -16,6 +16,8 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
         () => (localStorage.getItem('notes-theme') as Theme) || 'system'
       )
 
+  const lowerCasedSearchTerm = searchQuery?.toLowerCase()
+
   const {
       data: notes,
   } = useGetNotesQuery('notesList', {
@@ -25,9 +27,9 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
   })
 
   const findNotes: Note[] | undefined = notes?.filter((note: Note) => (
-    note?.title?.toLowerCase().includes(searchQuery) 
-    || note?.tags?.toLowerCase().includes(searchQuery) 
-    || note?.content?.toLowerCase().includes(searchQuery)
+    note?.title?.toLowerCase().includes(lowerCasedSearchTerm) 
+    || note?.tags?.toLowerCase().includes(lowerCasedSearchTerm) 
+    || note?.content?.toLowerCase().includes(lowerCasedSearchTerm)
   )) as Note[]
   
   return (

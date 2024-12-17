@@ -4,3 +4,11 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+export function flattenAndRemoveDuplicates(arr: any) {
+  const flattenedArray = arr?.flat(Infinity)
+
+  const uniqueArray = [...new Set(flattenedArray)]
+
+  return uniqueArray
+}

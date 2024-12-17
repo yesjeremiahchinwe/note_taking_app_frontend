@@ -25,10 +25,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
   const tagQueryParam = searchParams.get("tag");
   const noteQueryParam = searchParams.get("note");
 
-  const {
-    data: notes,
-    isLoading
-  } = useGetNotesQuery("notesList", {
+  const { data: notes, isLoading } = useGetNotesQuery("notesList", {
     pollingInterval: 15000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
@@ -54,10 +51,10 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
     <>
       <section
         className={`${
-          (notes?.length && location.pathname === "/" && noteQueryParam === null)
+          notes?.length && location.pathname === "/" && noteQueryParam === null
             ? "block"
             : "hidden lg:block"
-        } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 h-screen lg:border-r-[1px] border-darkerGray w-full custom_scroll_bar`}
+        } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 min-h-screen lg:border-r-[1px] border-darkerGray w-full`}
       >
         <div className="max-w-[96%] mx-auto">
           <CustomButton
@@ -98,7 +95,8 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
           </div>
         )}
 
-        {allNotes?.map((note: Note, index: number) => {
+        <div className="overflow-y-auto max-h-[90vh] custom_scroll_bar">
+          {allNotes?.map((note: Note, index: number) => {
             const formatNoteTitle = note.title
               .toLowerCase()
               .split(" ")
@@ -114,7 +112,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
                 } ${
                   location.pathname === formatNoteTitle
                     ? "lg:bg-lightGray lg:border-b-0"
-                    : noteQueryParam === formatNoteTitle
+                    : formatNoteTitle === noteQueryParam && index > 0
                     ? "lg:bg-lightGray lg:border-b-0"
                     : note.title.toLowerCase().split(" ").join("-") ===
                       (title as string)
@@ -153,6 +151,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
               </article>
             );
           })}
+        </div>
       </section>
 
       <div

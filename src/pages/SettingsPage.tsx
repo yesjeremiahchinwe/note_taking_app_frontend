@@ -15,7 +15,7 @@ const SettingsPage = () => {
     <article className="flex rounded-t-[1.25rem] lg:rounded-t-none bg-background flex-col lg:flex-row min-h-screen items-start justify-between lg:pr-[2rem] lg:pl-6 w-full">
      <SettingsOptions />
 
-      <div className="basis-full w-full pb-5 lg:max-w-[50%] mr-auto px-6 lg:p-[2rem]">
+      <div className="basis-full w-full pb-5 lg:max-w-[50%] mr-auto px-4 lg:px-6 lg:p-[2rem]">
         <Outlet />
       </div>
 

@@ -60,7 +60,7 @@ const ForgotPasswordPage = () => {
 
   return (
     <main className="bg-lightGray dark:bg-tagsBg flex justify-center items-center min-h-screen w-full px-4">
-      <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] max-w-sm:px-4 p-[48px]">
+      <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] max-sm:px-4 p-[48px]">
         <LogoSVG
           color={theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"}
         />

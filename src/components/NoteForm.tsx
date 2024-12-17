@@ -162,7 +162,7 @@ const NoteForm = ({
           </div>
         </article>
 
-        <div className="flex flex-col justify-between h-full flex-grow">
+        <div className="flex flex-col justify-between h-full flex-grow pb-[3rem] mb-[3rem]">
           <div className="py-4 flex-1">
             <label
               htmlFor="title"

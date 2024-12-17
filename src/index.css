@@ -114,17 +114,17 @@
 		--light-red: "#FB3748";
 		--dim-white: "#F0F0F099"; */
   }
+}
 
-  /* body {
-    background-color: hsl(231, 16%, 16%);
-  } */
+body::-webkit-scrollbar {
+  display: none;
 }
 
 ::-webkit-scrollbar {
   display: none,
 }
 
-.custom_scroll_bar::webkit-scrollbar {
+.custom_scroll_bar::-webkit-scrollbar {
   display: none;
 }
 

@@ -11,7 +11,7 @@ const Layout = () => {
   <div className="layout">
     <Sidebar />
 
-    <div className="w-full min-h-screen">
+    <div className="w-full max-h-screen overflow-y-auto custom_scroll_bar">
       <Outlet />
     </div>
 
