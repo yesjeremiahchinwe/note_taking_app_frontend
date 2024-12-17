@@ -97,15 +97,6 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: (arg: any) => [
                 { type: 'Note', id: arg.id }
             ],
-
-            async onQueryStarted({ queryFulfilled }) {
-                try {
-                   const { data } = await queryFulfilled
-                   console.log(data)
-                } catch (err) {
-                    console.log(err)
-                }
-            }
         }),
 
         restoreArchivedNote: builder.mutation({

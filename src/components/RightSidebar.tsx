@@ -6,7 +6,7 @@ import {
   useSearchParams,
   useNavigate,
 } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DeleteModal from "./modals/DeleteNoteModal";
 import ArchiveNoteModal from "./modals/ArchiveNoteModal";
 import {
@@ -35,7 +35,7 @@ const RightSidebar = () => {
     () => (localStorage.getItem("notes-theme") as Theme) || "system"
   );
 
-  const { data: notes, currentData } = useGetNotesQuery("notesList", {
+  const { data: notes } = useGetNotesQuery("notesList", {
     pollingInterval: 15000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
@@ -67,18 +67,12 @@ const RightSidebar = () => {
 
   const [
     markNoteAsArchived,
-    { isLoading: isLoadingArchiveNote, isSuccess: isSuccessArchiveNote },
+    { isLoading: isLoadingArchiveNote },
   ] = useMarkNoteAsArchivedMutation();
   const [deleteNote, { isLoading: isLoadingDeleteNote }] =
     useDeleteNoteMutation();
   const [restoreArchivedNote, { isLoading: isLoadingRestoreNote }] =
     useRestoreArchivedNoteMutation();
-
-  useEffect(() => {
-    if (isSuccessArchiveNote && currentData?.length === 0) {
-      window.location.reload()
-    }
-  }, [isSuccessArchiveNote, currentData])
 
   const onDeleteNote = async () => {
     try {
@@ -109,7 +103,7 @@ const RightSidebar = () => {
         title: "Note restored successfully!",
         description: "Your note is now under your 'All Notes' tab",
       });
-      navigate("/");
+      navigate('/')
     } catch (err: any) {
       toast({
         title: "Oops! Couldn't restore note",
