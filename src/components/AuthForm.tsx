@@ -96,17 +96,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         await addNewUser({ email: values.email, password: values.password })
       }
   } catch (err: any) {
-      if (!err.status) {
-          setErrMsg('No Server Response');
-      } else if (err.status === 400) {
-          setErrMsg('Invalid Credentials');
-      } else if (err.status === 401) {
-          setErrMsg('Unauthorized');
-      } else if (err.status === 409) {
-          setErrMsg('Conflict');
-      } else {
-          setErrMsg(err.data?.message || err?.message || "Oops! Something went wront. Please try again");
-      }
+      console.log(err)
   }
   }
 
