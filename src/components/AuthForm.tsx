@@ -36,8 +36,12 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const [errMsg, setErrMsg] = useState<string>("")
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [login, {isLoading: isLoadingLogin}] = useLoginMutation()
-  const [addNewUser, { isLoading: isLoadingNewUser, isSuccess, isError, error }] = useAddNewUserMutation()
+  const [login, {isLoading: isLoadingLogin, isSuccess: isSuccessLogin, isError: isErrorLogin, error: errorLogin}] = useLoginMutation()
+
+  const [addNewUser, { isLoading: isLoadingNewUser, isSuccess: isSuccessAddNewUser, isError: isErrorAddNewUser, error: errorAddNewUser }] = useAddNewUserMutation()
+
+  const [userEmail, setUserEmail] = useState("")
+
   const [theme] = useState<Theme>(
         () => (localStorage.getItem('notes-theme') as Theme) || 'system'
       )
@@ -51,7 +55,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   });
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccessAddNewUser) {
       toast({
         title: 'Account created successfully!',
         description: `You've signed up for an account`
@@ -60,22 +64,34 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       navigate("/login")
     }
     
-    if (isError) {
+    if (isErrorAddNewUser) {
       //@ts-ignore
-      setErrMsg(error.data?.message || 'Invalid Credentials');
+      setErrMsg(errorAddNewUser.data?.message || 'Invalid Credentials');
     }
-  }, [isSuccess, isError])
+  }, [isSuccessAddNewUser, isErrorAddNewUser])
+
+  useEffect(() => {
+    if (isSuccessLogin) {
+      toast({
+        title: 'Login successfully!',
+        description: `You are currently logged in as ${userEmail}`
+      })
+      setErrMsg("")
+      navigate("/")
+    }
+    
+    if (isErrorLogin) {
+      //@ts-ignore
+      setErrMsg(errorLogin.data?.message || 'Invalid Credentials');
+    }
+  }, [isSuccessLogin, isErrorLogin])
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (isLogin) {
         const { accessToken } = await login({ email: values.email, password: values.password }).unwrap()
         dispatch(setCredentials({ accessToken }))
-        toast({
-          title: 'Login successfully!',
-          description: `You are currently logged in as ${values.email}`
-        })
-        navigate("/")
+        setUserEmail(values?.email)
       } else {
         await addNewUser({ email: values.email, password: values.password })
       }
