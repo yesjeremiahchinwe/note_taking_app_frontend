@@ -49,7 +49,7 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
             />
           </div>
 
-          {debouncedSearchTerm && (
+          {(debouncedSearchTerm && notes?.length) && (
           <div className="py-6">
             {findNotes.length ? (
               <div>

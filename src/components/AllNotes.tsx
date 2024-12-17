@@ -39,7 +39,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
         )
       : location.pathname === "/tags"
       ? notes
-      : debouncedSearchTerm
+      : debouncedSearchTerm && notes?.length
       ? notes?.filter(
           (note: Note) =>
             note?.title?.toLowerCase().includes(debouncedSearchTerm) ||
@@ -83,7 +83,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
           </p>
         )}
 
-        {!allNotes?.length && !isLoading && (
+        {(!notes?.length || allNotes?.length) && !isLoading && (
           <div className="bg-lightGray p-2 mt-8 rounded-md">
             <p className="flex items-center justify-center text-sm text-lightText">
               You don&apos;t have a note yet. Start a new note to capture your
@@ -107,7 +107,7 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
               <article
                 key={note.title}
                 className={`bg-transparent mb-2 rounded-md p-3 ${
-                  index === allNotes.length - 1
+                  index === allNotes?.length - 1
                     ? "border-b-0"
                     : "border-b-[1px] border-darkerGray"
                 } ${
