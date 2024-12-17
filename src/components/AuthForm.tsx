@@ -66,7 +66,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
     
     if (isErrorAddNewUser) {
       //@ts-ignore
-      setErrMsg(errorAddNewUser.data?.message || 'Invalid Credentials');
+      setErrMsg(errorAddNewUser.data?.message || 'Oops! Something went wrong! Please try again.');
     }
   }, [isSuccessAddNewUser, isErrorAddNewUser])
 
@@ -82,7 +82,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
     
     if (isErrorLogin) {
       //@ts-ignore
-      setErrMsg(errorLogin.data?.message || 'Invalid Credentials');
+      setErrMsg(errorLogin.data?.message || 'Oops! Something went wrong! Please try again.');
     }
   }, [isSuccessLogin, isErrorLogin])
 
