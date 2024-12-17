@@ -83,8 +83,8 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
           </p>
         )}
 
-        {(!notes?.length || allNotes?.length) && !isLoading && (
-          <div className="bg-lightGray p-2 mt-8 rounded-md">
+        {(!notes?.length && !isLoading) && (
+          <div className="bg-lightGray p-2 mt-8 mb-4 rounded-md">
             <p className="flex items-center justify-center text-sm text-lightText">
               You don&apos;t have a note yet. Start a new note to capture your
               thoughts and ideas.
