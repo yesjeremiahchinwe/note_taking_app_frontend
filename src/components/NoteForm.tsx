@@ -8,7 +8,6 @@ import { Editor } from '@tinymce/tinymce-react';
 import { Font } from '@/providers/font-provider';
 import AlertModal from "./modals/alert-modal";
 import { Theme } from "@/providers/theme-provider";
-import { useSearchParams } from "react-router-dom";
 
 interface NoteFormProps {
   isNewNote?: boolean;
@@ -42,8 +41,6 @@ const NoteForm = ({
   setIsOpenAlert
 }: NoteFormProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [searchParams] = useSearchParams();
-    const noteQueryParam = searchParams.get("note");
   const [font] = useState<Font>(
       () => (localStorage.getItem('notes-font') as Font) || 'sans-serif'
     )
@@ -197,7 +194,7 @@ const NoteForm = ({
             />
           </div>
 
-          {!location.pathname.includes("archived") || noteQueryParam !== null ||location.pathname === "/new" && (
+          {!location.pathname.includes("archived") && (
             <div className="flex items-center gap-3 py-4">
               <Button
                 disabled={
