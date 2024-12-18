@@ -1,9 +1,5 @@
-import { apiSlice } from "../api/apiSlice";
-
-type User = {
-    email: string,
-    password: string
-}
+import { apiSlice } from "../api/apiSlice"
+import { setCredentials } from "../auth/authSlice"
 
 export const usersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -16,15 +12,15 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 }
             }),
 
-            async onQueryStarted({ queryFulfilled }) {
+            async onQueryStarted({ dispatch, queryFulfilled }) {
                 try {
-                    await queryFulfilled
+                    const { data } = await queryFulfilled
+                    const { accessToken } = data
+                    dispatch(setCredentials({ accessToken }))
                 } catch (err) {
                     console.log(err)
                 }
             }
-            
-            // invalidatesTags: [{ type: "User", id: "LIST" }]
         }),
 
 

@@ -61,6 +61,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         description: `You've signed up for an account`
       })
       setErrMsg("")
+      window.location.reload()
       navigate("/")
     }
     
