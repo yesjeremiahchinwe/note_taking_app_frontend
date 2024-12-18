@@ -23,7 +23,7 @@ const Header = ({ searchQuery, setSearchQuery }: Props) => {
       ? "All Notes"
       : location.pathname.includes("/archived")
       ? "Archived Notes"
-      : location.pathname === "/settings"
+      : location.pathname.includes("/settings")
       ? "Settings"
       : 'All Notes'
 

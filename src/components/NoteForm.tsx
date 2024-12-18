@@ -57,7 +57,7 @@ const NoteForm = ({
   }, [location.pathname]);
 
   useEffect(() => {
-    if (isNewNote && !note) {
+    if (isNewNote || !note) {
       inputRef?.current?.focus();
     }
   }, [isNewNote, note])
