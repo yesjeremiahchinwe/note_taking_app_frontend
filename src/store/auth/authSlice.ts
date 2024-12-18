@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { persistor } from "../store"
 
 type StateType = {
     auth: { token: string | null }
@@ -15,7 +16,10 @@ const authSlice = createSlice({
 
         logOut: (state) => {
             state.token = null
-            localStorage.setItem('persist:root', '')
+            persistor.pause()
+            persistor.flush().then(() => {
+                return persistor.purge()
+            })
         }
     }
 })
