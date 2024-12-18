@@ -85,7 +85,7 @@ const NoteForm = ({
           <Input
             type="text"
             ref={isNewNote && !note ? inputRef : null}
-            className={`h-[50px] text-[1.75rem] md:text-[1.7rem] font-bold placeholder:text-primaryText tracking-[-0.5px] ml-[-0.65rem] border-none shadow-none`}
+            className={`h-[50px] flex flex-wrap text-xl md:text-[1.7rem] font-bold placeholder:text-primaryText tracking-[-0.5px] ml-[-0.65rem] border-none shadow-none`}
             value={noteTitle}
             placeholder="Enter note title..."
             onChange={(e) => setNoteTitle(e.target.value)}
@@ -140,7 +140,7 @@ const NoteForm = ({
             </label>
             <Input
               type="text"
-              className={`h-8 w-full block md:text-[1.75rem] px-2 -ml-2 font-normal tracking-[-0.5px] placeholder:text-lightText placeholder:text-sm md:text-base border-none shadow-none`}
+              className={`h-8 w-full flex flex-wrap md:text-[1.75rem] px-2 -ml-2 font-normal tracking-[-0.5px] placeholder:text-lightText placeholder:text-sm md:text-base border-none shadow-none`}
               value={noteTags}
               placeholder="Add tags separated by commas (e.g. Work, Planning)"
               onChange={(e) => setNoteTags(e.target.value)}
