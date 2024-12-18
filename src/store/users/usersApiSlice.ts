@@ -1,4 +1,5 @@
 import { apiSlice } from "../api/apiSlice";
+import { setCredentials } from "../auth/authSlice";
 
 type User = {
     email: string,
@@ -15,6 +16,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                     ...initialUserState
                 }
             }),
+
+            //@ts-ignore
+            async onQueryStarted({ dispatch, queryFulfilled }) {
+                try {
+                    const { data } = await queryFulfilled
+                    const { accessToken } = data
+                    dispatch(setCredentials({ accessToken }))
+                } catch (err) {
+                    console.log(err)
+                }
+            },
 
             invalidatesTags: [{ type: "User", id: "LIST" }]
         }),
