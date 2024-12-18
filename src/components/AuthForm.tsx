@@ -62,7 +62,6 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       })
       setErrMsg("")
       navigate("/")
-      window.location.reload()
     }
     
     if (isErrorAddNewUser) {
