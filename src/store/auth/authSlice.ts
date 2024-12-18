@@ -15,6 +15,7 @@ const authSlice = createSlice({
 
         logOut: (state) => {
             state.token = null
+            localStorage.setItem('persist:root', '')
         }
     }
 })
