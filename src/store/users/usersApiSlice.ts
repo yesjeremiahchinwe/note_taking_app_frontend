@@ -11,15 +11,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 }
             }),
 
-            // async onQueryStarted({ dispatch, queryFulfilled }) {
-            //     try {
-            //         const { data } = await queryFulfilled
-            //         const { accessToken } = data
-            //         dispatch(setCredentials({ accessToken }))
-            //     } catch (err) {
-            //         console.log(err)
-            //     }
-            // }
+            async onQueryStarted({ queryFulfilled }) {
+                try {
+                     await queryFulfilled
+                } catch (err) {
+                    console.log(err)
+                }
+            }
         }),
 
 

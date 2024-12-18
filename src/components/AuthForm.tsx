@@ -58,9 +58,10 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
     if (isSuccessAddNewUser) {
       toast({
         title: 'Account created successfully!',
-        description: `You've signed up for an account`
+        description: `You've signed up for an account using ${userEmail}`
       })
       setErrMsg("")
+      window.location.reload()
       navigate("/")
     }
     
@@ -93,7 +94,8 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         dispatch(setCredentials({ accessToken }))
         setUserEmail(values?.email)
       } else {
-        await addNewUser({ email: values.email, password: values.password })
+        const { accessToken } = await addNewUser({ email: values.email, password: values.password }).unwrap()
+        dispatch(setCredentials({ accessToken }))
       }
   } catch (err: any) {
       console.log(err)
