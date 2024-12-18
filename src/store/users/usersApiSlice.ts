@@ -1,5 +1,4 @@
 import { apiSlice } from "../api/apiSlice";
-import { setCredentials } from "../auth/authSlice";
 
 type User = {
     email: string,
@@ -7,28 +6,25 @@ type User = {
 }
 
 export const usersApiSlice = apiSlice.injectEndpoints({
-    endpoints: (builder: any) => ({
+    endpoints: builder => ({
         addNewUser: builder.mutation({
-            query: (initialUserState: User) => ({
+            query: credentials => ({
                 url: "/users",
                 method: "POST",
                 body: {
-                    ...initialUserState
+                    ...credentials
                 }
             }),
 
-            //@ts-ignore
-            async onQueryStarted({ dispatch, queryFulfilled }) {
+            async onQueryStarted({ queryFulfilled }) {
                 try {
-                    const { data } = await queryFulfilled
-                    const { accessToken } = data
-                    dispatch(setCredentials({ accessToken }))
+                    await queryFulfilled
                 } catch (err) {
                     console.log(err)
                 }
-            },
-
-            invalidatesTags: [{ type: "User", id: "LIST" }]
+            }
+            
+            // invalidatesTags: [{ type: "User", id: "LIST" }]
         }),
 
 
