@@ -1,5 +1,4 @@
 import { apiSlice } from "../api/apiSlice"
-import { setCredentials } from "../auth/authSlice"
 
 export const usersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -12,15 +11,15 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 }
             }),
 
-            async onQueryStarted({ dispatch, queryFulfilled }) {
-                try {
-                    const { data } = await queryFulfilled
-                    const { accessToken } = data
-                    dispatch(setCredentials({ accessToken }))
-                } catch (err) {
-                    console.log(err)
-                }
-            }
+            // async onQueryStarted({ dispatch, queryFulfilled }) {
+            //     try {
+            //         const { data } = await queryFulfilled
+            //         const { accessToken } = data
+            //         dispatch(setCredentials({ accessToken }))
+            //     } catch (err) {
+            //         console.log(err)
+            //     }
+            // }
         }),
 
 
