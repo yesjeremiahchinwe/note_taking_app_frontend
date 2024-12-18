@@ -1,8 +1,10 @@
 import { IconChevronRight, IconFont, IconLock, IconLogout, IconSun } from "@/lib/icons"
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSendLogoutMutation } from "@/store/auth/authApiSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Theme } from "@/providers/theme-provider";
+import { persistor } from "@/store/store";
+import { toast } from "@/hooks/use-toast";
 
 const SettingsOptions = () => {
   const location = useLocation();
@@ -11,12 +13,32 @@ const SettingsOptions = () => {
               () => (localStorage.getItem('notes-theme') as Theme) || 'system'
             )
 
-  const [sendLogout, { isLoading }] = useSendLogoutMutation()
+  const [sendLogout, { isLoading, isSuccess, isError, error}] = useSendLogoutMutation()
+
+  useEffect(() => {
+    if (isSuccess) {
+      persistor.pause();
+      persistor.flush().then(() => {
+          return persistor.purge()
+      })
+
+      toast({
+        title: "Logged out successfully!."
+      })
+      navigate("/login")
+    }
+
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: `${error.data?.message || "Oops! Something went wrong. Please try again."}`
+      })
+    }
+  }, [isSuccess, isError])
 
   const logoutOnClick = async () => {
     try {
       await sendLogout({})
-      navigate("/login")
     } catch (err: any) {
       console.log(err?.message)
     }
