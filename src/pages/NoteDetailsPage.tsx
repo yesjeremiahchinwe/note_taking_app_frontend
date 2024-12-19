@@ -175,6 +175,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
     }
   };
 
+
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

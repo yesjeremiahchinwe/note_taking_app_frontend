@@ -2,15 +2,15 @@ import Header from "@/components/Header"
 import SettingsOptions from "@/components/SettingsOptions"
 import { Outlet } from "react-router-dom"
 import useTitle from "@/hooks/useTitle";
-import { useState } from "react";
+import useSearch from "@/hooks/useSearch";
 
 const SettingsPage = () => {
   useTitle("Settings")
-  const [searchQuery, setSearchQuery] = useState("")
+  const { searchTerm, setSearchTerm } = useSearch()
   
   return (
     <section className="flex flex-col min-h-screen w-full rounded-t-md lg:rounded-t-none">
-    <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+    <Header searchQuery={searchTerm} setSearchQuery={setSearchTerm} />
 
     <article className="flex rounded-t-[1.25rem] lg:rounded-t-none bg-background flex-col lg:flex-row min-h-screen items-start justify-between lg:pr-[2rem] lg:pl-6 w-full">
      <SettingsOptions />

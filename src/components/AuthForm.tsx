@@ -25,7 +25,7 @@ import { toast } from "@/hooks/use-toast";
 import { Theme } from "@/providers/theme-provider";
 
 const formSchema = z.object({
-  email: z.string().email({message: "Please provide a valid email address"}),
+  email: z.string().email({ message: "Please provide a valid email address" }),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
@@ -33,18 +33,32 @@ const formSchema = z.object({
 
 const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const [showPassord, setShowPassword] = useState<boolean>(false);
-  const [errMsg, setErrMsg] = useState<string>("")
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const [login, {isLoading: isLoadingLogin, isSuccess: isSuccessLogin, isError: isErrorLogin, error: errorLogin}] = useLoginMutation()
+  const [errMsg, setErrMsg] = useState<string>("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [
+    login,
+    {
+      isLoading: isLoadingLogin,
+      isSuccess: isSuccessLogin,
+      isError: isErrorLogin,
+      error: errorLogin,
+    },
+  ] = useLoginMutation();
 
-  const [addNewUser, { isLoading: isLoadingNewUser, isSuccess: isSuccessAddNewUser, isError: isErrorAddNewUser, error: errorAddNewUser }] = useAddNewUserMutation()
-
-  const [userEmail, setUserEmail] = useState("")
+  const [
+    addNewUser,
+    {
+      isLoading: isLoadingNewUser,
+      isSuccess: isSuccessAddNewUser,
+      isError: isErrorAddNewUser,
+      error: errorAddNewUser,
+    },
+  ] = useAddNewUserMutation();
 
   const [theme] = useState<Theme>(
-        () => (localStorage.getItem('notes-theme') as Theme) || 'system'
-      )
+    () => (localStorage.getItem("notes-theme") as Theme) || "system"
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,57 +69,85 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   });
 
   useEffect(() => {
+    //@ts-ignore
+    let handler;
+
     if (isSuccessAddNewUser) {
       toast({
-        title: 'Account created successfully!',
-        description: `You've signed up for an account using ${userEmail}`
-      })
-      setErrMsg("")
-      window.location.reload()
-      navigate("/")
+        title: "Account created successfully!",
+        description: `You've successfully signed up for an account.`,
+      });
+      setErrMsg("");
+
+      handler = setTimeout(() => {
+        navigate('/')
+      }, 500)
     }
-    
+
     if (isErrorAddNewUser) {
       //@ts-ignore
-      setErrMsg(errorAddNewUser.data?.message || 'Oops! Something went wrong! Please try again.');
+      setErrMsg(errorAddNewUser.data?.message || "Oops! Something went wrong! Please try again.");
     }
-  }, [isSuccessAddNewUser, isErrorAddNewUser])
+
+    return () => {
+      //@ts-ignore
+      clearTimeout(handler)
+    }
+
+  }, [isSuccessAddNewUser, isErrorAddNewUser]);
 
   useEffect(() => {
+    //@ts-ignore
+    let handler;
+
     if (isSuccessLogin) {
       toast({
-        title: 'Login successfully!',
-        description: `You are currently logged in as ${userEmail}`
-      })
-      setErrMsg("")
-      navigate("/")
+        title: "Login successfully!",
+        description: `You've successfully logged in.`,
+      });
+      setErrMsg("");
+      
+      handler = setTimeout(() => {
+        navigate('/')
+      }, 500)
     }
-    
+
     if (isErrorLogin) {
       //@ts-ignore
-      setErrMsg(errorLogin.data?.message || 'Oops! Something went wrong! Please try again.');
+      setErrMsg(errorLogin.data?.message || "Oops! Something went wrong! Please try again.");
     }
-  }, [isSuccessLogin, isErrorLogin])
+
+    return () => {
+      //@ts-ignore
+      clearTimeout(handler)
+    }
+  }, [isSuccessLogin, isErrorLogin]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (isLogin) {
-        const { accessToken } = await login({ email: values.email, password: values.password }).unwrap()
-        dispatch(setCredentials({ accessToken }))
-        setUserEmail(values?.email)
+        const { accessToken } = await login({
+          email: values.email,
+          password: values.password,
+        }).unwrap();
+        dispatch(setCredentials({ accessToken }));
       } else {
-        const { accessToken } = await addNewUser({ email: values.email, password: values.password }).unwrap()
-        dispatch(setCredentials({ accessToken }))
+        const { accessToken } = await addNewUser({
+          email: values.email,
+          password: values.password,
+        }).unwrap();
+        dispatch(setCredentials({ accessToken }));
       }
-  } catch (err: any) {
-      console.log(err)
-  }
-  }
-
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
 
   return (
     <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] max-sm:px-4 p-[48px]">
-      <LogoSVG color={(theme === "system" || theme === "dark") ? "#fff" : "#0E121B"} />
+      <LogoSVG
+        color={theme === "system" || theme === "dark" ? "#fff" : "#0E121B"}
+      />
 
       <h1 className="font-bold text-2xl text-center tracking-[-0.5px] text-primaryText mt-5 mb-2">
         {title}
@@ -133,9 +175,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
                   <Input
                     type="email"
                     placeholder="email@example.com"
-                    className={`${
-                      fieldState.error && "border-lightRed"
-                    }`}
+                    className={`${fieldState.error && "border-lightRed"}`}
                     {...field}
                   />
                 </FormControl>
@@ -151,27 +191,29 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
                 <FormLabel className="text-primaryText font-medium text-sm tracking-[-0.2px] flex items-center justify-between">
                   Password{" "}
                   {isLogin && (
-                  <Link
-                    to="/forgot-password"
-                    className="text-lighterGray dark:text-[#99A0AE] font-normal text-xs underline"
-                  >
-                    Forgot
-                  </Link>
+                    <Link
+                      to="/forgot-password"
+                      className="text-lighterGray dark:text-[#99A0AE] font-normal text-xs underline"
+                    >
+                      Forgot
+                    </Link>
                   )}
                 </FormLabel>
                 <FormControl>
                   <Input
                     type={showPassord ? "text" : "password"}
-                    className={`${
-                      fieldState.error && "border-lightRed"
-                    }`}
+                    className={`${fieldState.error && "border-lightRed"}`}
                     {...field}
                   />
                 </FormControl>
 
                 <EyeIcon
                   onClick={() => setShowPassword((prev) => !prev)}
-                  color={(theme === "system" || theme === "dark") ? "#CACFD8" : "#525866"}
+                  color={
+                    theme === "system" || theme === "dark"
+                      ? "#CACFD8"
+                      : "#525866"
+                  }
                   size={18}
                   className={`absolute top-[32px] right-4 cursor-pointer ${
                     !showPassord ? "block" : "hidden"
@@ -180,7 +222,11 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
                 <EyeOffIcon
                   onClick={() => setShowPassword((prev) => !prev)}
-                  color={(theme === "system" || theme === "dark") ? "#CACFD8" : "#525866"}
+                  color={
+                    theme === "system" || theme === "dark"
+                      ? "#CACFD8"
+                      : "#525866"
+                  }
                   size={18}
                   className={`absolute top-[32px] right-4 cursor-pointer ${
                     showPassord ? "block" : "hidden"
@@ -188,9 +234,17 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
                 />
 
                 {!isLogin && (
-                    <FormDescription className="text-lighterGray dark:text-[#99A0AE] flex items-center gap-1">
-                    <InfoIcon color={(theme === "system" || theme === "dark") ? "#99A0AE" : "#525866"} size={16} /> <span>At least 8 characters</span>
-                    </FormDescription>
+                  <FormDescription className="text-lighterGray dark:text-[#99A0AE] flex items-center gap-1">
+                    <InfoIcon
+                      color={
+                        theme === "system" || theme === "dark"
+                          ? "#99A0AE"
+                          : "#525866"
+                      }
+                      size={16}
+                    />{" "}
+                    <span>At least 8 characters</span>
+                  </FormDescription>
                 )}
 
                 <FormMessage className="text-lightRed" />
@@ -205,8 +259,8 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
             {isLoadingLogin || isLoadingNewUser ? (
               <span className="italic">Loading...</span>
             ) : (
-            <span>{isLogin ? "Login" : "Sign up"}</span>
-          )}
+              <span>{isLogin ? "Login" : "Sign up"}</span>
+            )}
           </Button>
         </form>
       </Form>
@@ -220,9 +274,19 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       {/* <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" /> */}
 
       {isLogin ? (
-        <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">No account yet? <Link to="/create" className="text-primaryText">Sign Up</Link></small>
+        <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">
+          No account yet?{" "}
+          <Link to="/create" className="text-primaryText">
+            Sign Up
+          </Link>
+        </small>
       ) : (
-        <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">Already have an account? <Link to="/login" className="text-primaryText">Login</Link></small>
+        <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">
+          Already have an account?{" "}
+          <Link to="/login" className="text-primaryText">
+            Login
+          </Link>
+        </small>
       )}
     </section>
   );

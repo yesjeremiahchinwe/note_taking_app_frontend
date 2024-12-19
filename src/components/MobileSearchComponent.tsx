@@ -12,7 +12,7 @@ interface Props {
   setSearchQuery: (searchQuery: string) => void
 }
 
-const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
+const MobileSearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
   const [theme] = useState<Theme>(
         () => (localStorage.getItem('notes-theme') as Theme) || 'system'
       )
@@ -91,7 +91,9 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
                 })}
               </div>
             ) : (
-              <p>Note not found</p>
+              <div className="h-full mt-6 flex items-center justify-center">
+                <p>Note not found</p>
+              </div>
             )}
           </div>
           )}
@@ -99,4 +101,4 @@ const SearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
   )
 }
 
-export default SearchComponent
+export default MobileSearchComponent

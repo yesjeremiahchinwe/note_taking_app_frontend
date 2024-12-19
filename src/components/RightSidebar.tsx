@@ -63,7 +63,7 @@ const RightSidebar = () => {
       : notes?.find(
           (note: Note) =>
             note?.title.toLowerCase().split(" ").join("-") === noteTitle
-        );
+        ) as Note
 
   const [
     markNoteAsArchived,
@@ -137,7 +137,7 @@ const RightSidebar = () => {
           notes?.length ? "border-darkerGray" : "border-transparent"
         }`}
       >
-        {note && (
+        {(note && notes && notes?.length > 0 ) && (
           <div>
             {location.pathname.includes("archived") ? (
               <Button

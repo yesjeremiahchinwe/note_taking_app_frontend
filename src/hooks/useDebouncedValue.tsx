@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import useSearch from "./useSearch"
 
 const useDebouncedValue = (inputValue: string, delay: number) => {
     const [debouncedValue, setDebouncedValue] = useState("")
+    const { setSearchTerm } = useSearch()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -19,7 +21,8 @@ const useDebouncedValue = (inputValue: string, delay: number) => {
         let handler: any
 
         if (inputValue) {
-            localStorage.setItem("searchTerm", inputValue)
+            // localStorage.setItem("searchTerm", inputValue)
+            setSearchTerm(inputValue)
             
             handler = setTimeout(() => {
                 navigate("/search")

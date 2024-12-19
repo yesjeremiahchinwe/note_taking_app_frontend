@@ -1,4 +1,14 @@
-# Note Taking App (Front End) built with React.js + Typescript
+# Note Taking App built with React.js + Typescript
+## Launched my first full-stack project in 21 days
+### For the backend code, kindly visit my repo 'note_taking_app_backend'
+
+## Screenshots
+
+![Dark Mode](/public/images/screenshot_dark-min.png)
+![Light Mode](/public/images/screenshot_light-min.png)
+
+- Live Site URL: [Vercel](https://note-taking-app-frontend-pearl.vercel.app/)
+- Watch a Live Demo: [Google Drive](https://drive.google.com/file/d/1MMGJVpFFdQ9FF2Wb7XYUDcN3QM4zrQb0/view?usp=drive_link)
 
 ## Built with
 
