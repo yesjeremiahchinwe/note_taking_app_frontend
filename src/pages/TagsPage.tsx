@@ -4,18 +4,18 @@ import RightSidebar from "@/components/RightSidebar"
 import { Outlet } from "react-router-dom"
 import useTitle from "@/hooks/useTitle";
 import AllNotes from "@/components/AllNotes";
-import useSearch from "@/hooks/useSearch";
+import { useState } from "react";
 
 const TagsPage = () => {
   useTitle("Tags")
-  const { searchTerm, setSearchTerm } = useSearch()
+  const [searchQuery, setSearchQuery] = useState("")
 
   return (
     <>
     <NotesWithTag />
 
     <section className="hidden lg:flex flex-col w-full bg-background rounded-t-md lg:rounded-t-none">
-    <Header searchQuery={searchTerm} setSearchQuery={setSearchTerm} />
+    <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
     <article className="flex rounded-t-[1.25rem] lg:rounded-t-none bg-background flex-col lg:flex-row min-h-screen items-start justify-between lg:pr-[2rem] lg:pl-6 w-full">
      <AllNotes />
