@@ -212,7 +212,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
         className={`${
           note && location.pathname === "/" && tagQueryParam === null && noteQueryParam === null
             ? "hidden lg:flex"
-            : !note
+            : !note && location.pathname === "/"
             ? "flex"
             : tagQueryParam && noteQueryParam
             ? "flex lg:hidden"
