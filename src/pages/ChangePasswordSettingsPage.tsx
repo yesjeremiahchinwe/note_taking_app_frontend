@@ -146,7 +146,7 @@ const ChangePasswordSettingsPage = () => {
                       : "#525866"
                   }
                   size={18}
-                  className={`absolute top-[28px] right-4 cursor-pointer ${
+                  className={`absolute top-[37px] right-4 cursor-pointer ${
                     !showPassord.oldPassword ? "block" : "hidden"
                   }`}
                 />
@@ -164,7 +164,7 @@ const ChangePasswordSettingsPage = () => {
                       : "#525866"
                   }
                   size={18}
-                  className={`absolute top-[28px] right-4 cursor-pointer ${
+                  className={`absolute top-[37px] right-4 cursor-pointer ${
                     showPassord.oldPassword ? "block" : "hidden"
                   }`}
                 />
@@ -202,7 +202,7 @@ const ChangePasswordSettingsPage = () => {
                       : "#525866"
                   }
                   size={18}
-                  className={`absolute top-[28px] right-4 cursor-pointer ${
+                  className={`absolute top-[37px] right-4 cursor-pointer ${
                     !showPassord.newPassword ? "block" : "hidden"
                   }`}
                 />
@@ -220,7 +220,7 @@ const ChangePasswordSettingsPage = () => {
                       : "#525866"
                   }
                   size={18}
-                  className={`absolute top-[28px] right-4 cursor-pointer ${
+                  className={`absolute top-[37px] right-4 cursor-pointer ${
                     showPassord.newPassword ? "block" : "hidden"
                   }`}
                 />
@@ -270,7 +270,7 @@ const ChangePasswordSettingsPage = () => {
                       : "#525866"
                   }
                   size={18}
-                  className={`absolute top-[28px] right-4 cursor-pointer ${
+                  className={`absolute top-[37px] right-4 cursor-pointer ${
                     !showPassord.confirmNewPassword ? "block" : "hidden"
                   }`}
                 />
@@ -288,7 +288,7 @@ const ChangePasswordSettingsPage = () => {
                       : "#525866"
                   }
                   size={18}
-                  className={`absolute top-[28px] right-4 cursor-pointer ${
+                  className={`absolute top-[37px] right-4 cursor-pointer ${
                     showPassord.confirmNewPassword ? "block" : "hidden"
                   }`}
                 />

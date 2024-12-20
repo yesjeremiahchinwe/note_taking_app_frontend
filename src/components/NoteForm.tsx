@@ -95,7 +95,7 @@ const NoteForm = ({
 
         <article className="w-full flex items-center gap-[3rem] mb-2 px-1 pt-3">
           <div className="flex flex-col gap-[1rem]">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 h-8">
               <IconTag
                 color={
                   (theme === "system" || theme === "dark") ? "#FFF" : "#2B303B"
@@ -107,7 +107,7 @@ const NoteForm = ({
             </div>
 
             {location.pathname.includes("archived") && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 h-8">
                 <IconStatus
                   color={
                     (theme === "system" || theme === "dark") ? "#FFF" : "#2B303B"
@@ -119,13 +119,13 @@ const NoteForm = ({
               </div>
             )}
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 h-8">
               <IconClock
                 color={
                   (theme === "system" || theme === "dark") ? "#FFF" : "#2B303B"
                 }
               />{" "}
-              <span className="text-lightText mt-[5px] font-normal text-sm tracking-[-0.2px]">
+              <span className="text-lightText font-normal text-sm tracking-[-0.2px]">
                 Last edited
               </span>
             </div>
@@ -142,18 +142,18 @@ const NoteForm = ({
               type="text"
               className={`h-8 w-full flex flex-wrap md:text-[1.75rem] px-2 -ml-2 font-normal tracking-[-0.5px] placeholder:text-lightText placeholder:text-sm md:text-base border-none shadow-none`}
               value={noteTags}
-              placeholder="Add tags separated by commas (e.g. Work, Planning)"
+              placeholder="Add tags separated by commas (e.g. Work,Planning)"
               onChange={(e) => setNoteTags(e.target.value)}
               disabled={location.pathname.includes("archived")}
             />
 
             {location.pathname.includes("archived") && (
-              <p className="text-lightText -mt-[2px] font-normal text-sm tracking-[-0.2px]">
+              <p className="text-lightText font-normal text-sm tracking-[-0.2px] h-8 pt-2">
                 Archived
               </p>
             )}
 
-            <p className="text-lightText font-normal text-sm tracking-[-0.2px] pt-1">
+            <p className="text-lightText font-normal text-sm tracking-[-0.2px] pt-1 h-8">
               {isNewNote ? "Not yet saved" : note?.updatedAt?.split("T")[0]}
             </p>
           </div>
