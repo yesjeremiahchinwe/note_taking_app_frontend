@@ -69,8 +69,6 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   });
 
   useEffect(() => {
-    //@ts-ignore
-    let handler;
 
     if (isSuccessAddNewUser) {
       toast({
@@ -90,8 +88,6 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   }, [isSuccessAddNewUser, isErrorAddNewUser]);
 
   useEffect(() => {
-    //@ts-ignore
-    let handler;
 
     if (isSuccessLogin) {
       toast({
