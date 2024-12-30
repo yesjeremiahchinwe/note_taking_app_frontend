@@ -79,19 +79,12 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       });
       setErrMsg("");
 
-      handler = setTimeout(() => {
-        navigate('/')
-      }, 500)
+      navigate('/')
     }
 
     if (isErrorAddNewUser) {
       //@ts-ignore
       setErrMsg(errorAddNewUser.data?.message || "Oops! Something went wrong! Please try again.");
-    }
-
-    return () => {
-      //@ts-ignore
-      clearTimeout(handler)
     }
 
   }, [isSuccessAddNewUser, isErrorAddNewUser]);
@@ -106,10 +99,8 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         description: `You've successfully logged in.`,
       });
       setErrMsg("");
-      
-      handler = setTimeout(() => {
-        navigate('/')
-      }, 500)
+
+      navigate('/')
     }
 
     if (isErrorLogin) {
@@ -117,10 +108,6 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       setErrMsg(errorLogin.data?.message || "Oops! Something went wrong! Please try again.");
     }
 
-    return () => {
-      //@ts-ignore
-      clearTimeout(handler)
-    }
   }, [isSuccessLogin, isErrorLogin]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
