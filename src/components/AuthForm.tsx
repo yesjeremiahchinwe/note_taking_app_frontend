@@ -17,8 +17,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useLoginMutation } from "@/store/auth/authApiSlice";
-import { useAddNewUserMutation } from "@/store/users/usersApiSlice";
+import { useLoginMutation, useAddNewUserMutation } from "@/store/auth/authApiSlice";
 import { setCredentials } from "@/store/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "@/hooks/use-toast";
@@ -35,7 +34,8 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const [showPassord, setShowPassword] = useState<boolean>(false);
   const [errMsg, setErrMsg] = useState<string>("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
+
   const [
     login,
     {
@@ -69,14 +69,12 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   });
 
   useEffect(() => {
-
     if (isSuccessAddNewUser) {
       toast({
         title: "Account created successfully!",
         description: `You've successfully signed up for an account.`,
       });
       setErrMsg("");
-
       navigate('/')
     }
 
@@ -88,14 +86,12 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   }, [isSuccessAddNewUser, isErrorAddNewUser]);
 
   useEffect(() => {
-
     if (isSuccessLogin) {
       toast({
         title: "Login successfully!",
         description: `You've successfully logged in.`,
       });
       setErrMsg("");
-
       navigate('/')
     }
 
@@ -109,17 +105,17 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (isLogin) {
-        const { accessToken } = await login({
+        const { accessToken, id } = await login({
           email: values.email,
           password: values.password,
         }).unwrap();
-        dispatch(setCredentials({ accessToken }));
+        dispatch(setCredentials({ accessToken, id }));
       } else {
-        const { accessToken } = await addNewUser({
+        const { accessToken, id } = await addNewUser({
           email: values.email,
           password: values.password,
         }).unwrap();
-        dispatch(setCredentials({ accessToken }));
+        dispatch(setCredentials({ accessToken, id }));
       }
     } catch (err: any) {
       console.log(err);
@@ -252,9 +248,9 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
       <p className="text-lighterGray font-normal text-sm tracking-[-0.2px] py-2">Or log in with:</p>
 
-      <Button size="lg" className="w-full bg-transparent borrounded-[12px] text-primaryText font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-[#0E121B] duration-500"><img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" /> Google</Button> */}
+      <Button type="button" onClick={loginWithGoogle} size="lg" className="w-full bg-transparent borrounded-[12px] text-primaryText font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-[#0E121B] duration-500"><img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" /> Google</Button>
 
-      {/* <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" /> */}
+      <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" /> */}
 
       {isLogin ? (
         <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">

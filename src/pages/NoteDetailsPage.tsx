@@ -22,7 +22,8 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { Theme } from "@/providers/theme-provider";
 import LoadiingState from "@/components/HomeLoader";
-import useAuth from "@/hooks/useAuth";
+import { useSelector } from "react-redux";
+import { selectCurrentId } from "@/store/auth/authSlice";
 
 interface NotesProp {
   notes?: Note[];
@@ -36,7 +37,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
   const noteQueryParam = searchParams.get("note");
   const tagQueryParam = searchParams.get("tag");
   const { title } = useParams();
-  const { userId } = useAuth();
+  const userId = useSelector(selectCurrentId)
 
   const note: Note = (
     title
@@ -184,7 +185,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
         title: noteTitle?.trim(),
         tags: noteTags?.trim(),
         content: noteContent?.trim(),
-        userId,
+        userId
       };
 
       if (!note || location.pathname.includes("/new")) {

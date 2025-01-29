@@ -6,6 +6,8 @@ import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
 import { Note } from "@/lib/types";
 import { Link } from "react-router-dom";
 import useDebouncedValue from "@/hooks/useDebouncedValue";
+import { useSelector } from "react-redux";
+import { selectCurrentId } from "@/store/auth/authSlice";
 
 interface Props {
   searchQuery: string,
@@ -13,6 +15,7 @@ interface Props {
 }
 
 const MobileSearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
+  const userId = useSelector(selectCurrentId)
   const [theme] = useState<Theme>(
         () => (localStorage.getItem('notes-theme') as Theme) || 'system'
       )
@@ -24,7 +27,7 @@ const MobileSearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
 
   const {
       data: notes,
-  } = useGetNotesQuery('notesList', {
+  } = useGetNotesQuery(userId, {
       pollingInterval: 15000,
       refetchOnFocus: true,
       refetchOnMountOrArgChange: true

@@ -4,10 +4,11 @@ import { RootState } from "../store"
 const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_REACT_APP_API_BASE_URL,
     prepareHeaders: (headers, { getState }) => {
-        const token = (getState() as RootState).auth.token
+        const accessToken = (getState() as RootState).auth.token
+        console.log(accessToken)
 
-        if (token) {
-         headers.set("Authorization", `Bearer ${token}`)
+        if (accessToken) {
+         headers.set("Authorization", `Bearer ${accessToken}`)
         }
 
         return headers

@@ -5,7 +5,6 @@ import Layout from "@/components/Layout";
 import Home from "@/components/Home";
 import LoadingState from "@/components/HomeLoader";
 import RequireAuth from "@/components/RequireLogin";
-import Prefetch from "@/components/Prefetch";
 import {
   useGetArchivedNotesQuery,
   useGetNotesQuery,
@@ -19,6 +18,8 @@ import SearchPage from "@/pages/SearchPage";
 import TagsPage from "./pages/TagsPage";
 import ArchivedNotesPage from "@/pages/ArchivedNotesPage";
 import NotFoundPage from "@/pages/NotFoundPage";
+import { useSelector } from "react-redux";
+import { selectCurrentId } from "./store/auth/authSlice";
 
 const NoteDetailsPage = lazy(() => import("@/pages/NoteDetailsPage"));
 const ColorThemeSettings = lazy(() => import("@/pages/ColorThemeSettingsPage"));
@@ -28,25 +29,25 @@ const ChangePasswordSettings = lazy(
 );
 
 function App() {
-  const {
-    data: notes,
-    isLoading: isLoadingGetNotes,
-  } = useGetNotesQuery("notesList", {
-    pollingInterval: 3000,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true
-  });
+  const userId = useSelector(selectCurrentId)
 
-  const {
-    data: archivedNotes,
-    isLoading: isLoadingArchiveNote
-  } = useGetArchivedNotesQuery("archivedNotesList", {
-    pollingInterval: 3000,
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: notes, isLoading: isLoadingGetNotes } = useGetNotesQuery(
+    userId,
+    {
+      pollingInterval: 3000,
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    }
+  );
+
+  const { data: archivedNotes, isLoading: isLoadingArchiveNote } =
+    useGetArchivedNotesQuery(userId, {
+      pollingInterval: 3000,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+      refetchOnMountOrArgChange: true,
+    });
 
   return (
     <Suspense fallback={<LoadingState message="Please wait" />}>
@@ -61,91 +62,89 @@ function App() {
         {/* -------------- Home and Main application routes ---------------- */}
         <Route element={<RequireAuth />}>
           <Route path="/" element={<Layout />}>
-            <Route element={<Prefetch />}>
-              <Route element={<Home />}>
-                <Route
-                  index
-                  element={
-                    <NoteDetailsPage
-                      notes={notes}
-                      isLoading={isLoadingGetNotes}
-                    />
-                  }
-                />
-                <Route
-                  path=":title"
-                  element={
-                    <NoteDetailsPage
-                      notes={notes}
-                      isLoading={isLoadingGetNotes}
-                    />
-                  }
-                />
-                <Route
-                  path="new"
-                  element={
-                    <NoteDetailsPage
-                      notes={notes}
-                      isLoading={isLoadingGetNotes}
-                    />
-                  }
-                />
-              </Route>
+            <Route element={<Home />}>
+              <Route
+                index
+                element={
+                  <NoteDetailsPage
+                    notes={notes}
+                    isLoading={isLoadingGetNotes}
+                  />
+                }
+              />
+              <Route
+                path=":title"
+                element={
+                  <NoteDetailsPage
+                    notes={notes}
+                    isLoading={isLoadingGetNotes}
+                  />
+                }
+              />
+              <Route
+                path="new"
+                element={
+                  <NoteDetailsPage
+                    notes={notes}
+                    isLoading={isLoadingGetNotes}
+                  />
+                }
+              />
+            </Route>
 
-              <Route path="archived" element={<ArchivedNotesPage />}>
-                <Route
-                  index
-                  element={
-                    <NoteDetailsPage
-                      notes={archivedNotes}
-                      isLoading={isLoadingArchiveNote}
-                    />
-                  }
-                />
-                <Route
-                  path=":title"
-                  element={
-                    <NoteDetailsPage
-                      notes={archivedNotes}
-                      isLoading={isLoadingArchiveNote}
-                    />
-                  }
-                />
-              </Route>
+            <Route path="archived" element={<ArchivedNotesPage />}>
+              <Route
+                index
+                element={
+                  <NoteDetailsPage
+                    notes={archivedNotes}
+                    isLoading={isLoadingArchiveNote}
+                  />
+                }
+              />
+              <Route
+                path=":title"
+                element={
+                  <NoteDetailsPage
+                    notes={archivedNotes}
+                    isLoading={isLoadingArchiveNote}
+                  />
+                }
+              />
+            </Route>
 
-              <Route path="tags" element={<TagsPage />}>
-                <Route
-                  index
-                  element={
-                    <NoteDetailsPage
-                      notes={notes}
-                      isLoading={isLoadingGetNotes}
-                    />
-                  }
-                />
-              </Route>
+            <Route path="tags" element={<TagsPage />}>
+              <Route
+                index
+                element={
+                  <NoteDetailsPage
+                    notes={notes}
+                    isLoading={isLoadingGetNotes}
+                  />
+                }
+              />
+            </Route>
 
-              <Route path="search" element={<SearchPage />}>
-                <Route
-                  index
-                  element={
-                    <NoteDetailsPage
-                      notes={notes}
-                      isLoading={isLoadingGetNotes}
-                    />
-                  }
-                />
-              </Route>
+            <Route path="search" element={<SearchPage />}>
+              <Route
+                index
+                element={
+                  <NoteDetailsPage
+                    notes={notes}
+                    isLoading={isLoadingGetNotes}
+                  />
+                }
+              />
+            </Route>
 
-              <Route path="settings" element={<SettingsPage />}>
-                <Route index element={<ColorThemeSettings />} />
-                <Route path="color-theme" element={<ColorThemeSettings />} />
-                <Route path="font-theme" element={<FontThemeSettings />} />
-                <Route
-                  path="change-password"
-                  element={<ChangePasswordSettings />}
-                />
-              </Route>
+            <Route path="settings" element={<SettingsPage />}>
+              <Route index element={<ColorThemeSettings />} />
+              <Route path="color-theme" element={<ColorThemeSettings />} />
+              <Route path="font-theme" element={<FontThemeSettings />} />
+              <Route
+                path="change-password"
+                element={<ChangePasswordSettings />}
+              />
             </Route>
           </Route>
         </Route>

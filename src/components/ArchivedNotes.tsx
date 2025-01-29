@@ -9,6 +9,8 @@ import { Note } from "@/lib/types";
 import { useGetArchivedNotesQuery } from "@/store/notes/notesApiSlice";
 import { PlusIcon } from "lucide-react";
 import LoadiingState from "./HomeLoader";
+import { useSelector } from "react-redux";
+import { selectCurrentId } from "@/store/auth/authSlice";
 
 const ArchivedNotes = () => {
   const location = useLocation();
@@ -17,9 +19,9 @@ const ArchivedNotes = () => {
 
   const tagQueryParam = searchParams.get("tag");
   const noteQueryParam = searchParams.get("note");
+  const userId = useSelector(selectCurrentId)
 
-  const { data: notes, isLoading } = useGetArchivedNotesQuery(
-    "archivedNotesList",
+  const { data: notes, isLoading } = useGetArchivedNotesQuery(userId,
     {
       pollingInterval: 3000,
       refetchOnFocus: true,

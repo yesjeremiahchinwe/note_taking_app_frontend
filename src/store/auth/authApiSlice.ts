@@ -1,8 +1,26 @@
 import { apiSlice } from "../api/apiSlice"
-import { logOut, setCredentials } from "./authSlice"
+import { logOut } from "./authSlice"
 
 export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
+        addNewUser: builder.mutation({
+            query: credentials => ({
+                url: "/auth/register",
+                method: "POST",
+                body: {
+                    ...credentials
+                }
+            }),
+
+            async onQueryStarted({ queryFulfilled }) {
+                try {
+                     await queryFulfilled
+                } catch (err) {
+                    console.log(err)
+                }
+            }
+        }),
+        
         login: builder.mutation({
             query: credentials => ({
                 url: "/auth/login",
@@ -18,7 +36,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 }
             }
         }),
-
 
         sendLogout: builder.mutation({
             query: () => ({
@@ -71,32 +88,15 @@ export const authApiSlice = apiSlice.injectEndpoints({
                     console.log(err)
                 }
             }
-        }),
-
-        refresh: builder.mutation({
-            query: () => ({
-                url: "/auth/refresh",
-                method: "GET"
-            }),
-
-            async onQueryStarted({ dispatch, queryFulfilled }) {
-                try {
-                    const { data } = await queryFulfilled
-                    const { accessToken } = data
-                    dispatch(setCredentials({ accessToken }))
-                } catch (err) {
-                    console.log(err)
-                }
-            }
         })
     })
 })
 
 
 export const {
+    useAddNewUserMutation,
     useLoginMutation,
     useSendLogoutMutation,
     useForgotPasswordMutation,
-    useResetPasswordMutation,
-    useRefreshMutation
+    useResetPasswordMutation
 } = authApiSlice

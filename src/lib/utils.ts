@@ -12,3 +12,4 @@ export function flattenAndRemoveDuplicates(arr: any) {
 
   return uniqueArray
 }
+

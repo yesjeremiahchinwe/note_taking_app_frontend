@@ -21,7 +21,6 @@ const SettingsOptions = () => {
       persistor.flush().then(() => {
           return persistor.purge()
       })
-
       toast({
         title: "Logged out successfully!."
       })

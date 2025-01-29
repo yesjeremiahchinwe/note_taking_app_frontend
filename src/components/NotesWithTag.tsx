@@ -5,8 +5,11 @@ import { useState } from "react";
 import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
 import LoadiingState from "./HomeLoader";
 import { flattenAndRemoveDuplicates } from "@/lib/utils";
+import { useSelector } from "react-redux";
+import { selectCurrentId } from "@/store/auth/authSlice";
 
 const NotesWithTag = () => {
+  const userId = useSelector(selectCurrentId)
   const [theme] = useState<Theme>(
             () => (localStorage.getItem('notes-theme') as Theme) || 'system'
           )
@@ -15,7 +18,7 @@ const NotesWithTag = () => {
       data: notes,
       isLoading,
       isError
-  } = useGetNotesQuery('notesList', {
+  } = useGetNotesQuery(userId, {
       pollingInterval: 15000,
       refetchOnFocus: true,
       refetchOnMountOrArgChange: true

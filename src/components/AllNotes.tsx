@@ -11,12 +11,14 @@ import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
 import { PlusIcon } from "lucide-react";
 import useDebouncedValue from "@/hooks/useDebouncedValue";
 import LoadiingState from "./HomeLoader";
+import { useSelector } from "react-redux";
+import { selectCurrentId } from "@/store/auth/authSlice";
 
 const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { title } = useParams()
+  const { title } = useParams();
   const debouncedSearchTerm = useDebouncedValue(
     searchQuery as string,
     500
@@ -24,12 +26,13 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
 
   const tagQueryParam = searchParams.get("tag");
   const noteQueryParam = searchParams.get("note");
+  const userId = useSelector(selectCurrentId)
 
-  const { data: notes, isLoading } = useGetNotesQuery("notesList", {
+  const { data: notes, isLoading } = useGetNotesQuery(userId, {
     pollingInterval: 3000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true
+    refetchOnReconnect: true,
   });
 
   const allNotes: Note[] | undefined =
@@ -96,64 +99,66 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
           <LoadiingState message="Loading notes" className="h-full" />
         )}
 
-        {(notes && notes?.length > 0) && (
-        <div className="overflow-y-auto max-h-[90vh] custom_scroll_bar">
-          {allNotes?.map((note: Note, index: number) => {
-            const formatNoteTitle = note.title
-              .toLowerCase()
-              .split(" ")
-              .join("-");
+        {notes && notes?.length > 0 && (
+          <div className="overflow-y-auto max-h-[90vh] custom_scroll_bar">
+            {allNotes?.map((note: Note, index: number) => {
+              const formatNoteTitle = note.title
+                .toLowerCase()
+                .split(" ")
+                .join("-");
 
-            return (
-              <article
-                key={note.title}
-                className={`bg-transparent mb-2 rounded-md p-3 ${
-                  index === allNotes?.length - 1
-                    ? "border-b-0"
-                    : "border-b-[1px] border-darkerGray"
-                } ${
-                  location.pathname === formatNoteTitle
-                    ? "lg:bg-lightGray lg:border-b-0"
-                    : formatNoteTitle === noteQueryParam && index > 0
-                    ? "lg:bg-lightGray lg:border-b-0"
-                    : note.title.toLowerCase().split(" ").join("-") ===
-                      (title as string)
-                    ? "lg:bg-lightGray lg:border-b-0"
-                    : location.pathname === "/" && index === 0
-                    ? "lg:bg-lightGray lg:border-b-0"
-                    : location.pathname === "/tags" && index === 0
-                    ? "lg:bg-lightGray lg:border-b-0"
-                    : "bg-transparent lg:border-b-[1px] border-darkerGray"
-                }`}
-              >
-                <h2 className="text-xl font-semibold tracking-[-0.3px] text-primaryText">
-                  {tagQueryParam ? (
-                    <Link to={`/?tag=${tagQueryParam}&note=${formatNoteTitle}`}>
-                      {note.title}
-                    </Link>
-                  ) : (
-                    <Link to={`/${formatNoteTitle}`}>{note.title}</Link>
-                  )}
-                </h2>
+              return (
+                <article
+                  key={note.title}
+                  className={`bg-transparent mb-2 rounded-md p-3 ${
+                    index === allNotes?.length - 1
+                      ? "border-b-0"
+                      : "border-b-[1px] border-darkerGray"
+                  } ${
+                    location.pathname === formatNoteTitle
+                      ? "lg:bg-lightGray lg:border-b-0"
+                      : formatNoteTitle === noteQueryParam && index > 0
+                      ? "lg:bg-lightGray lg:border-b-0"
+                      : note.title.toLowerCase().split(" ").join("-") ===
+                        (title as string)
+                      ? "lg:bg-lightGray lg:border-b-0"
+                      : location.pathname === "/" && index === 0
+                      ? "lg:bg-lightGray lg:border-b-0"
+                      : location.pathname === "/tags" && index === 0
+                      ? "lg:bg-lightGray lg:border-b-0"
+                      : "bg-transparent lg:border-b-[1px] border-darkerGray"
+                  }`}
+                >
+                  <h2 className="text-xl font-semibold tracking-[-0.3px] text-primaryText">
+                    {tagQueryParam ? (
+                      <Link
+                        to={`/?tag=${tagQueryParam}&note=${formatNoteTitle}`}
+                      >
+                        {note.title}
+                      </Link>
+                    ) : (
+                      <Link to={`/${formatNoteTitle}`}>{note.title}</Link>
+                    )}
+                  </h2>
 
-                <div className="flex flex-wrap items-center gap-[8px] mt-3">
-                  {note?.tags?.split(",").map((tag) => (
-                    <p
-                      key={tag}
-                      className="py-[2px] px-[6px] text-sm rounded-md bg-tagsBg"
-                    >
-                      {tag}
-                    </p>
-                  ))}
-                </div>
+                  <div className="flex flex-wrap items-center gap-[8px] mt-3">
+                    {note?.tags?.split(",").map((tag) => (
+                      <p
+                        key={tag}
+                        className="py-[2px] px-[6px] text-sm rounded-md bg-tagsBg"
+                      >
+                        {tag}
+                      </p>
+                    ))}
+                  </div>
 
-                <small className="text-lightText block mt-4 font-medium text-xs tracking-[-0.2px]">
-                  {note?.updatedAt?.split("T")[0]}
-                </small>
-              </article>
-            );
-          })}
-        </div>
+                  <small className="text-lightText block mt-4 font-medium text-xs tracking-[-0.2px]">
+                    {note?.updatedAt?.split("T")[0]}
+                  </small>
+                </article>
+              );
+            })}
+          </div>
         )}
       </section>
 

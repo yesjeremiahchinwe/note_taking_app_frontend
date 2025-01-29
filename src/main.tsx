@@ -13,13 +13,13 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <ThemeProvider defaultTheme="system" storageKey="notes-theme">
-      <FontProvider defaultFont="sans-serif" storageKey="notes-font">
-        <PersistGate loading={null} persistor={persistor}>
+        <FontProvider defaultFont="sans-serif" storageKey="notes-font">
           <BrowserRouter>
-            <App />
+            <PersistGate loading={null} persistor={persistor}>
+              <App />
+            </PersistGate>
           </BrowserRouter>
-        </PersistGate>
-      </FontProvider>
+        </FontProvider>
       </ThemeProvider>
     </Provider>
   </StrictMode>

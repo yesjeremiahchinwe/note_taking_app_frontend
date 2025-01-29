@@ -10,8 +10,8 @@ createEntityAdapter({
 export const notesApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getNotes: builder.query<Note[], string>({
-            query: () => ({
-                url: '/notes',
+            query: (userId) => ({
+                url: `/notes/${userId}`,
                 validateStatus: (response: any, result: any) => {
                     return response.status === 200 && !result.isError
                 }
@@ -35,8 +35,8 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         }),
 
         getArchivedNotes: builder.query<Note[], string>({
-            query: () => ({
-                url: '/notes/archived',
+            query: (userId) => ({
+                url: `/notes/archived/${userId}`,
                 validateStatus: (response: any, result: any) => {
                     return response.status === 200 && !result.isError
                 }

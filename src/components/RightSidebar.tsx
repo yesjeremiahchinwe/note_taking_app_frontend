@@ -19,6 +19,8 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { ArchiveRestore, RefreshCcwIcon, TrashIcon } from "lucide-react";
 import { Theme } from "@/providers/theme-provider";
+import { useSelector } from "react-redux";
+import { selectCurrentId } from "@/store/auth/authSlice";
 
 const RightSidebar = () => {
   const location = useLocation();
@@ -29,19 +31,20 @@ const RightSidebar = () => {
     deleteNote: false,
   });
 
+  const userId = useSelector(selectCurrentId)
   const [searchParams] = useSearchParams();
   const noteQueryParam = searchParams.get("note");
   const [theme] = useState<Theme>(
     () => (localStorage.getItem("notes-theme") as Theme) || "system"
   );
 
-  const { data: notes } = useGetNotesQuery("notesList", {
+  const { data: notes } = useGetNotesQuery(userId, {
     pollingInterval: 15000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
-  const { data: archivedNotes } = useGetArchivedNotesQuery("notesList", {
+  const { data: archivedNotes } = useGetArchivedNotesQuery(userId, {
     pollingInterval: 3000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
