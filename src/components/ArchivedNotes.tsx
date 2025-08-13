@@ -62,7 +62,6 @@ const ArchivedNotes = () => {
           ) : (
             "Archived Notes"
           )}
-          s
         </h2>
 
         {tagQueryParam ? (
