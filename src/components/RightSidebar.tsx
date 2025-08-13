@@ -138,7 +138,7 @@ const RightSidebar = () => {
           <div>
             {location.pathname.includes("archived") ? (
               <Button
-                className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full"
+                className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent text-primaryText border-grayBorder mb-3 w-full"
                 size="lg"
                 onClick={() => onRestoreNote()}
                 disabled={isLoadingRestoreNote || !note}

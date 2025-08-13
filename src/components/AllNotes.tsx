@@ -82,15 +82,23 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
 
         {tagQueryParam !== null && (
           <p className="text-sm text-lightText mb-4">
-            All notes with with the "{tagQueryParam}" tag are shown here.
+            All notes with with the <strong>"{tagQueryParam}"</strong> tag are shown here.
           </p>
         )}
 
-        {((!notes?.length && !isLoading) || !allNotes?.length) && (
+        {((!notes?.length && !isLoading) || !allNotes?.length) && location.pathname !== "/search" && (
           <div className="bg-lightGray p-2 mt-8 mb-4 rounded-md">
             <p className="flex items-center justify-center text-sm text-lightText">
               You don&apos;t have a note yet. Start a new note to capture your
               thoughts and ideas.
+            </p>
+          </div>
+        )}
+        
+        {((!notes?.length && !isLoading) || !allNotes?.length) && (
+          <div className="bg-lightGray p-2 mt-8 mb-4 rounded-md">
+            <p className="flex items-center justify-center text-sm text-lightText">
+              You don&apos;t have a note with "<strong>{searchQuery}</strong>"
             </p>
           </div>
         )}
@@ -122,7 +130,9 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
                       : note.title.toLowerCase().split(" ").join("-") ===
                         (title as string)
                       ? "lg:bg-lightGray lg:border-b-0"
-                      : location.pathname === "/" && index === 0
+                      : location.pathname === "/" && index === 0 && !tagQueryParam
+                      ? "lg:bg-lightGray lg:border-b-0"
+                      : location.pathname === "/" && index === 0 && noteQueryParam === note.title.toLowerCase().split(" ").join("-")
                       ? "lg:bg-lightGray lg:border-b-0"
                       : location.pathname === "/tags" && index === 0
                       ? "lg:bg-lightGray lg:border-b-0"

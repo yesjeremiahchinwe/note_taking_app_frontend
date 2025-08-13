@@ -6,8 +6,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { IconArchive, IconDelete } from "@/lib/icons";
-import { Theme } from "@/providers/theme-provider";
-import { useState } from "react";
 
 interface ModalProps {
   title: string;
@@ -26,9 +24,6 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   children,
 }) => {
-  const [theme] = useState<Theme>(
-            () => (localStorage.getItem('notes-theme') as Theme) || 'system'
-          )
   const onChange = (open: boolean) => {
     if (!open) {
       onClose();
@@ -41,8 +36,8 @@ export const Modal: React.FC<ModalProps> = ({
         <div className="flex items-start gap-5 p-6 pr-0 pb-0">
           <div className="min-w-[50px] bg-lightGray dark:bg-grayBorder h-[45px] flex justify-center items-center rounded-[8px]">
             {isDeleteModal 
-            ? <IconDelete color={(theme === "system" || theme === "dark") ? "#E0E4EA" : "#2B303B"} /> 
-            : <IconArchive color={(theme === "system" || theme === "dark") ? "#E0E4EA" : "#2B303B"}  />
+            ? <IconDelete color="currentColor" /> 
+            : <IconArchive color="currentColor"  />
             }
           </div>
 

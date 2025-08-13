@@ -17,11 +17,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useLoginMutation, useAddNewUserMutation } from "@/store/auth/authApiSlice";
+import {
+  useLoginMutation,
+  useAddNewUserMutation,
+} from "@/store/auth/authApiSlice";
 import { setCredentials } from "@/store/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "@/hooks/use-toast";
-import { Theme } from "@/providers/theme-provider";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please provide a valid email address" }),
@@ -34,7 +36,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const [showPassord, setShowPassword] = useState<boolean>(false);
   const [errMsg, setErrMsg] = useState<string>("");
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [
     login,
@@ -56,10 +58,6 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
     },
   ] = useAddNewUserMutation();
 
-  const [theme] = useState<Theme>(
-    () => (localStorage.getItem("notes-theme") as Theme) || "system"
-  );
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -75,14 +73,16 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         description: `You've successfully signed up for an account.`,
       });
       setErrMsg("");
-      navigate('/')
+      navigate("/");
     }
 
     if (isErrorAddNewUser) {
-      //@ts-ignore
-      setErrMsg(errorAddNewUser.data?.message || "Oops! Something went wrong! Please try again.");
+      setErrMsg(
+        //@ts-ignore
+        errorAddNewUser.data?.message ||
+          "Oops! Something went wrong! Please try again."
+      );
     }
-
   }, [isSuccessAddNewUser, isErrorAddNewUser]);
 
   useEffect(() => {
@@ -92,14 +92,16 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         description: `You've successfully logged in.`,
       });
       setErrMsg("");
-      navigate('/')
+      navigate("/");
     }
 
     if (isErrorLogin) {
-      //@ts-ignore
-      setErrMsg(errorLogin.data?.message || "Oops! Something went wrong! Please try again.");
+      setErrMsg(
+        //@ts-ignore
+        errorLogin.data?.message ||
+          "Oops! Something went wrong! Please try again."
+      );
     }
-
   }, [isSuccessLogin, isErrorLogin]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -124,9 +126,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
   return (
     <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] max-sm:px-4 p-[48px]">
-      <LogoSVG
-        color={theme === "system" || theme === "dark" ? "#fff" : "#0E121B"}
-      />
+      <LogoSVG color="currentColor" />
 
       <h1 className="font-bold text-2xl text-center tracking-[-0.5px] text-primaryText mt-5 mb-2">
         {title}
@@ -169,14 +169,14 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
               <FormItem className="relative">
                 <FormLabel className="text-primaryText font-medium text-sm tracking-[-0.2px] flex items-center justify-between">
                   Password{" "}
-                  {isLogin && (
+                  {/* {isLogin && (
                     <Link
                       to="/forgot-password"
                       className="text-lighterGray dark:text-[#99A0AE] font-normal text-xs underline"
                     >
                       Forgot
                     </Link>
-                  )}
+                  )} */}
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -188,40 +188,25 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
                 <EyeIcon
                   onClick={() => setShowPassword((prev) => !prev)}
-                  color={
-                    theme === "system" || theme === "dark"
-                      ? "#CACFD8"
-                      : "#525866"
-                  }
+                  color="currentColor"
                   size={18}
-                  className={`absolute top-[32px] right-4 cursor-pointer ${
+                  className={`absolute top-[24px] right-4 cursor-pointer ${
                     !showPassord ? "block" : "hidden"
                   }`}
                 />
 
                 <EyeOffIcon
                   onClick={() => setShowPassword((prev) => !prev)}
-                  color={
-                    theme === "system" || theme === "dark"
-                      ? "#CACFD8"
-                      : "#525866"
-                  }
+                  color="currentColor"
                   size={18}
-                  className={`absolute top-[32px] right-4 cursor-pointer ${
+                  className={`absolute top-[24px] right-4 cursor-pointer ${
                     showPassord ? "block" : "hidden"
                   }`}
                 />
 
                 {!isLogin && (
                   <FormDescription className="text-lighterGray dark:text-[#99A0AE] flex items-center gap-1">
-                    <InfoIcon
-                      color={
-                        theme === "system" || theme === "dark"
-                          ? "#99A0AE"
-                          : "#525866"
-                      }
-                      size={16}
-                    />{" "}
+                    <InfoIcon color="currentColor" size={16} />{" "}
                     <span>At least 8 characters</span>
                   </FormDescription>
                 )}
