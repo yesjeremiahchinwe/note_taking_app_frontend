@@ -43,7 +43,7 @@ const Header = ({ searchQuery, setSearchQuery }: Props) => {
 
         <div className="flex items-center gap-6 w-[40%] text-primaryText">
           <div className="w-full relative">
-            <IconSearch color="currentColor" className="absolute left-4 top-3" />
+            <IconSearch color="gray" className="absolute left-4 top-3" />
             <Input
               ref={inputRef}
               type="text"
