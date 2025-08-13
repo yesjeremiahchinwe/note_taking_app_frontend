@@ -1,8 +1,7 @@
 import { IconSearch, IconSettings } from "@/lib/icons";
 import { Input } from "./ui/input";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { Theme } from "@/providers/theme-provider";
+import { useEffect, useRef } from "react";
 
 interface Props {
   searchQuery: string,
@@ -14,9 +13,6 @@ const Header = ({ searchQuery, setSearchQuery }: Props) => {
   const [searchParams] = useSearchParams()
   const tagQueryParam = searchParams.get("tag")
   const inputRef = useRef<HTMLInputElement>(null)
-  const [theme] = useState<Theme>(
-      () => (localStorage.getItem('notes-theme') as Theme) || 'system'
-    )
 
   const headingText =
     location.pathname === "/"
@@ -45,9 +41,9 @@ const Header = ({ searchQuery, setSearchQuery }: Props) => {
           : headingText}
         </h1>
 
-        <div className="flex items-center gap-6 w-[40%]">
+        <div className="flex items-center gap-6 w-[40%] text-primaryText">
           <div className="w-full relative">
-            <IconSearch color={(theme === "system" || theme === "dark") ? "#717784" : "#0E121B"} className="absolute left-4 top-3" />
+            <IconSearch color="currentColor" className="absolute left-4 top-3" />
             <Input
               ref={inputRef}
               type="text"
@@ -59,7 +55,7 @@ const Header = ({ searchQuery, setSearchQuery }: Props) => {
           </div>
 
           <Link to="/settings">
-            <IconSettings color={(theme === "system" || theme === "dark") ? "#717784" : "#0E121B"} />
+            <IconSettings color="currentColor" />
           </Link>
         </div>
       </div>

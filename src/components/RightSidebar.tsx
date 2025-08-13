@@ -18,7 +18,6 @@ import {
 } from "@/store/notes/notesApiSlice";
 import { toast } from "@/hooks/use-toast";
 import { ArchiveRestore, RefreshCcwIcon, TrashIcon } from "lucide-react";
-import { Theme } from "@/providers/theme-provider";
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "@/store/auth/authSlice";
 
@@ -31,12 +30,9 @@ const RightSidebar = () => {
     deleteNote: false,
   });
 
-  const userId = useSelector(selectCurrentId)
+  const userId = useSelector(selectCurrentId);
   const [searchParams] = useSearchParams();
   const noteQueryParam = searchParams.get("note");
-  const [theme] = useState<Theme>(
-    () => (localStorage.getItem("notes-theme") as Theme) || "system"
-  );
 
   const { data: notes } = useGetNotesQuery(userId, {
     pollingInterval: 15000,
@@ -48,7 +44,7 @@ const RightSidebar = () => {
     pollingInterval: 3000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true
+    refetchOnReconnect: true,
   });
 
   const noteTitle = (noteQueryParam ?? title) as string;
@@ -63,15 +59,13 @@ const RightSidebar = () => {
           (note: Note) =>
             note?.title.toLowerCase().split(" ").join("-") === noteTitle
         )
-      : notes?.find(
+      : (notes?.find(
           (note: Note) =>
             note?.title.toLowerCase().split(" ").join("-") === noteTitle
-        ) as Note
+        ) as Note);
 
-  const [
-    markNoteAsArchived,
-    { isLoading: isLoadingArchiveNote },
-  ] = useMarkNoteAsArchivedMutation();
+  const [markNoteAsArchived, { isLoading: isLoadingArchiveNote }] =
+    useMarkNoteAsArchivedMutation();
   const [deleteNote, { isLoading: isLoadingDeleteNote }] =
     useDeleteNoteMutation();
   const [restoreArchivedNote, { isLoading: isLoadingRestoreNote }] =
@@ -106,7 +100,7 @@ const RightSidebar = () => {
         title: "Note restored successfully!",
         description: "Your note is now under your 'All Notes' tab",
       });
-      navigate('/')
+      navigate("/");
     } catch (err: any) {
       toast({
         title: "Oops! Couldn't restore note",
@@ -140,7 +134,7 @@ const RightSidebar = () => {
           notes?.length ? "border-darkerGray" : "border-transparent"
         }`}
       >
-        {(note && notes && notes?.length > 0 ) && (
+        {note && notes && notes?.length > 0 && (
           <div>
             {location.pathname.includes("archived") ? (
               <Button
@@ -150,11 +144,9 @@ const RightSidebar = () => {
                 disabled={isLoadingRestoreNote || !note}
               >
                 <RefreshCcwIcon
-              size={24}
-                color={
-                  (theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"
-                }
-              />
+                  size={24}
+                  color="currentColor"
+                />
                 <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
                   {isLoadingRestoreNote ? "Restoring..." : "Restore Note"}
                 </span>
@@ -162,7 +154,7 @@ const RightSidebar = () => {
             ) : (
               <Button
                 disabled={!note}
-                className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full"
+                className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder mb-3 w-full text-primaryText"
                 size="lg"
                 onClick={() =>
                   setIsOpen((prev) => ({
@@ -171,12 +163,8 @@ const RightSidebar = () => {
                   }))
                 }
               >
-                <ArchiveRestore
-                  color={
-                    theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
-                  }
-                />
-                <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
+                <ArchiveRestore color="currentColor" />
+                <span className="ml-1 shadow-none tracking-[-0.2px]">
                   Archive Note
                 </span>
               </Button>
@@ -184,18 +172,14 @@ const RightSidebar = () => {
 
             <Button
               disabled={!note}
-              className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder w-full"
+              className="py-6 bg-transparent border-[1px] rounded-md hover:scale-[1.02] duration-500 hover:bg-transparent border-grayBorder w-full text-primaryText"
               size="lg"
               onClick={() =>
                 setIsOpen((prev) => ({ ...prev, deleteNote: !prev.deleteNote }))
               }
             >
-              <TrashIcon
-                color={
-                  theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
-                }
-              />
-              <span className="ml-1 text-primaryText shadow-none tracking-[-0.2px]">
+              <TrashIcon color="currentColor" />
+              <span className="ml-1 shadow-none tracking-[-0.2px]">
                 Delete Note
               </span>
             </Button>

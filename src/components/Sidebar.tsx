@@ -48,9 +48,7 @@ const Sidebar = () => {
         <div className="pt-4 px-4 sm:px-[1.5rem]">
           <Link to="/">
             <LogoSVG
-              color={
-                theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
-              }
+              color="currentColor"
             />
           </Link>
         </div>
@@ -60,9 +58,7 @@ const Sidebar = () => {
         <div className="min-h-[81px] pt-6 px-[1.85rem]">
           <Link to="/">
             <LogoSVG
-              color={
-                theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
-              }
+              color="currentColor"
             />
           </Link>
         </div>
