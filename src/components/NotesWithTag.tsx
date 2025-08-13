@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 import { IconTag } from "@/lib/icons";
-import { Theme } from "@/providers/theme-provider";
-import { useState } from "react";
 import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
 import LoadiingState from "./HomeLoader";
 import { flattenAndRemoveDuplicates } from "@/lib/utils";
@@ -10,10 +8,6 @@ import { selectCurrentId } from "@/store/auth/authSlice";
 
 const NotesWithTag = () => {
   const userId = useSelector(selectCurrentId)
-  const [theme] = useState<Theme>(
-            () => (localStorage.getItem('notes-theme') as Theme) || 'system'
-          )
-
   const {
       data: notes,
       isLoading,
@@ -55,7 +49,7 @@ const NotesWithTag = () => {
             to={`/?tag=${tag}`}
             className="flex items-center text-primaryText gap-3 font-medium text-base tracking-[-0.2px]"
           >
-            <IconTag color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"} /> <span>{tag}</span>
+            <IconTag color="currentColor" /> <span>{tag}</span>
           </Link>
         </li>
         ))}

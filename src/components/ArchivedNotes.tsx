@@ -1,4 +1,3 @@
-import { Button } from "./ui/button";
 import {
   Link,
   useLocation,
@@ -11,6 +10,7 @@ import { PlusIcon } from "lucide-react";
 import LoadiingState from "./HomeLoader";
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "@/store/auth/authSlice";
+import CustomButton from "./CustomButton";
 
 const ArchivedNotes = () => {
   const location = useLocation();
@@ -45,13 +45,12 @@ const ArchivedNotes = () => {
         } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 h-screen overflow-auto lg:border-r-[1px] border-darkerGray w-full custom_scroll_bar`}
       >
         <div className="max-w-[96%] mx-auto">
-          <Button
-            className="hidden lg:flex py-6 rounded-lg bg-skyBlue hover:bg-skyBlue text-white  hover:scale-[1.02] duration-500 w-full mb-5 "
-            size="lg"
+          <CustomButton
+            className="hidden lg:flex mb-5"
             onClick={() => navigate("/new")}
-          >
-            &#x2b; <span>Create New Note</span>
-          </Button>
+            buttonText="Create New Note"
+            icon="/images/icon-plus.svg"
+          ></CustomButton>
         </div>
 
         <h2 className="block lg:hidden px-1 pb-5 font-bold text-2xl tracking-[-0.5px]">
@@ -68,7 +67,7 @@ const ArchivedNotes = () => {
 
         {tagQueryParam ? (
           <p className="text-sm text-lightText mb-4">
-            All archived notes with with the "{tagQueryParam}" tag are shown
+            All archived notes with with the <strong>"{tagQueryParam}"</strong> tag are shown
             here.
           </p>
         ) : (

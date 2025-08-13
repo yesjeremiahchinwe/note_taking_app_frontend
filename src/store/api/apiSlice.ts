@@ -5,7 +5,6 @@ const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_REACT_APP_API_BASE_URL,
     prepareHeaders: (headers, { getState }) => {
         const accessToken = (getState() as RootState).auth.token
-        console.log(accessToken)
 
         if (accessToken) {
          headers.set("Authorization", `Bearer ${accessToken}`)

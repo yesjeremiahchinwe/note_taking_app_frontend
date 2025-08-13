@@ -6,21 +6,16 @@ import {
   IconTag,
 } from "@/lib/icons";
 import { flattenAndRemoveDuplicates } from "@/lib/utils";
-import { Theme } from "@/providers/theme-provider";
 import { selectCurrentId } from "@/store/auth/authSlice";
 import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const [theme] = useState<Theme>(
-    () => (localStorage.getItem("notes-theme") as Theme) || "system"
-  );
 
-  const userId = useSelector(selectCurrentId)
+  const userId = useSelector(selectCurrentId);
   const tagQueryParam = searchParams.get("tag");
 
   const { data: notes } = useGetNotesQuery(userId, {
@@ -47,9 +42,7 @@ const Sidebar = () => {
       <section className="flex lg:hidden w-full min-h-[60px] bg-lightGray text-primaryText lg:bg-transparent">
         <div className="pt-4 px-4 sm:px-[1.5rem]">
           <Link to="/">
-            <LogoSVG
-              color="currentColor"
-            />
+            <LogoSVG color="currentColor" />
           </Link>
         </div>
       </section>
@@ -57,9 +50,7 @@ const Sidebar = () => {
       <aside className="md:basis-[35%] xl:basis-[25%] min-h-screen hidden lg:flex flex-col border-r-[1px] border-darkerGray">
         <div className="min-h-[81px] pt-6 px-[1.85rem]">
           <Link to="/">
-            <LogoSVG
-              color="currentColor"
-            />
+            <LogoSVG color="currentColor" />
           </Link>
         </div>
 
@@ -75,13 +66,7 @@ const Sidebar = () => {
                 to="/"
               >
                 <IconHome
-                  color={`${
-                    location.pathname === "/"
-                      ? "#335CFF"
-                      : theme === "system" || theme === "dark"
-                      ? "#717784"
-                      : "#0E121B"
-                  }`}
+                  color={location.pathname === "/" ? "#335CFF" : "currentColor"}
                 />{" "}
                 <span className="">All Notes</span>{" "}
                 <IconChevronRight
@@ -92,9 +77,7 @@ const Sidebar = () => {
                       ? "flex"
                       : "hidden"
                   }`}
-                  color={
-                    theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
-                  }
+                  color="currentColor"
                 />
               </Link>
             </li>
@@ -110,13 +93,11 @@ const Sidebar = () => {
                 to="/archived"
               >
                 <IconArchive
-                  color={`${
+                  color={
                     location.pathname.includes("/archived")
                       ? "#335CFF"
-                      : theme === "system" || theme === "dark"
-                      ? "#717784"
-                      : "#0E121B"
-                  }`}
+                      : "currentColor"
+                  }
                 />{" "}
                 <span className="">Archived Notes</span>
                 <IconChevronRight
@@ -126,9 +107,7 @@ const Sidebar = () => {
                       ? "flex"
                       : "hidden"
                   }`}
-                  color={
-                    theme === "system" || theme === "dark" ? "#FFF" : "#0E121B"
-                  }
+                  color="currentColor"
                 />
               </Link>
             </li>
@@ -160,9 +139,7 @@ const Sidebar = () => {
                         location.pathname.includes("/archived") &&
                         tagQueryParam === tag
                           ? "#335CFF"
-                          : theme === "system" || theme === "dark"
-                          ? "#717784"
-                          : "#0E121B"
+                          : "currentColor"
                       }`}
                     />{" "}
                     <span>{tag}</span>
@@ -173,11 +150,7 @@ const Sidebar = () => {
                           ? "flex"
                           : "hidden"
                       }`}
-                      color={
-                        theme === "system" || theme === "dark"
-                          ? "#FFF"
-                          : "#0E121B"
-                      }
+                      color="currentColor"
                     />
                   </Link>
                 ) : (
@@ -194,9 +167,7 @@ const Sidebar = () => {
                       color={`${
                         location.pathname === "/" && tagQueryParam === tag
                           ? "#335CFF"
-                          : theme === "system" || theme === "dark"
-                          ? "#717784"
-                          : "#0E121B"
+                          : "currentColor"
                       }`}
                     />{" "}
                     <span>{tag}</span>
@@ -206,11 +177,7 @@ const Sidebar = () => {
                           ? "flex"
                           : "hidden"
                       }`}
-                      color={
-                        theme === "system" || theme === "dark"
-                          ? "#FFF"
-                          : "#0E121B"
-                      }
+                      color="currentColor"
                     />
                   </Link>
                 )}
