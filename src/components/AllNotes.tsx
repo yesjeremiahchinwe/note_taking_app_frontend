@@ -13,6 +13,7 @@ import useDebouncedValue from "@/hooks/useDebouncedValue";
 import LoadiingState from "./HomeLoader";
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "@/store/auth/authSlice";
+import { useMemo } from "react";
 
 const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
   const location = useLocation();
@@ -29,27 +30,26 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
   const userId = useSelector(selectCurrentId)
 
   const { data: notes, isLoading } = useGetNotesQuery(userId, {
-    pollingInterval: 3000,
+    pollingInterval: 0,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
   });
 
-  const allNotes: Note[] | undefined =
-    notes?.length && tagQueryParam
-      ? notes?.filter((note: Note) =>
-          note?.tags?.includes(tagQueryParam as string)
-        )
-      : location.pathname === "/tags"
-      ? notes
-      : debouncedSearchTerm && notes?.length
-      ? notes?.filter(
-          (note: Note) =>
-            note?.title?.toLowerCase().includes(debouncedSearchTerm) ||
-            note?.tags?.toLowerCase().includes(debouncedSearchTerm) ||
-            note?.content?.toLowerCase().includes(debouncedSearchTerm)
-        )
-      : notes;
+  const allNotes = useMemo(() => {
+  if (!notes?.length) return [];
+  if (tagQueryParam) return notes.filter(note => note?.tags?.includes(tagQueryParam));
+  if (location.pathname === "/tags") return notes;
+  if (debouncedSearchTerm) {
+    return notes.filter(note =>
+      note.title?.toLowerCase().includes(debouncedSearchTerm) ||
+      note.tags?.toLowerCase().includes(debouncedSearchTerm) ||
+      note.content?.toLowerCase().includes(debouncedSearchTerm)
+    );
+  }
+  return notes;
+}, [notes, tagQueryParam, location.pathname, debouncedSearchTerm]);
+
 
   return (
     <>

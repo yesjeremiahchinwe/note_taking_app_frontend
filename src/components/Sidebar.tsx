@@ -19,7 +19,7 @@ const Sidebar = () => {
   const tagQueryParam = searchParams.get("tag");
 
   const { data: notes } = useGetNotesQuery(userId, {
-    pollingInterval: 15000,
+    pollingInterval: 0,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });

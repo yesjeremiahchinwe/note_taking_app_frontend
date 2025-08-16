@@ -35,13 +35,13 @@ const RightSidebar = () => {
   const noteQueryParam = searchParams.get("note");
 
   const { data: notes } = useGetNotesQuery(userId, {
-    pollingInterval: 15000,
+    pollingInterval: 0,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
   const { data: archivedNotes } = useGetArchivedNotesQuery(userId, {
-    pollingInterval: 3000,
+    pollingInterval: 0,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,

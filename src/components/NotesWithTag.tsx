@@ -13,7 +13,7 @@ const NotesWithTag = () => {
       isLoading,
       isError
   } = useGetNotesQuery(userId, {
-      pollingInterval: 15000,
+      pollingInterval: 0,
       refetchOnFocus: true,
       refetchOnMountOrArgChange: true
   })

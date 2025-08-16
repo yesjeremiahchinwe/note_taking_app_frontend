@@ -34,7 +34,7 @@ function App() {
   const { data: notes, isLoading: isLoadingGetNotes } = useGetNotesQuery(
     userId,
     {
-      pollingInterval: 3000,
+      pollingInterval: 0,
       refetchOnFocus: true,
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
@@ -43,7 +43,7 @@ function App() {
 
   const { data: archivedNotes, isLoading: isLoadingArchiveNote } =
     useGetArchivedNotesQuery(userId, {
-      pollingInterval: 3000,
+      pollingInterval: 0,
       refetchOnFocus: true,
       refetchOnReconnect: true,
       refetchOnMountOrArgChange: true,
