@@ -23,7 +23,7 @@ const ArchivedNotes = () => {
 
   const { data: notes, isLoading } = useGetArchivedNotesQuery(userId,
     {
-      pollingInterval: 3000,
+      pollingInterval: 0,
       refetchOnFocus: true,
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true
