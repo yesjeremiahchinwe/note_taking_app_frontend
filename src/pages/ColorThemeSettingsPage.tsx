@@ -39,7 +39,7 @@ const ColorThemeSettingsPage = () => {
     });
 
     setTheme(data.theme);
-  }
+  };
 
   return (
     <section
@@ -55,10 +55,7 @@ const ColorThemeSettingsPage = () => {
         to="/settings"
         className="flex lg:hidden items-center gap-1 pt-3 ml-[-0.5rem]"
       >
-        <ChevronLeftIcon
-          color={theme === "system" || theme === "dark" ? "#525866" : "#CACFD8"}
-        />{" "}
-        <span>Settings</span>
+        <ChevronLeftIcon color="currentColor" /> <span>Settings</span>
       </Link>
 
       <h2 className="text-primaryText pt-5 lg:pt-0 font-bold lg:font-semibold text-2xl lg:text-base  tracking-[-0.5px] lg:tracking-[-0.3px]">
@@ -81,7 +78,7 @@ const ColorThemeSettingsPage = () => {
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
-                    defaultValue="dark"
+                    defaultValue="system"
                     className="flex flex-col gap-4 mt-6 lg:mt-[2rem]"
                   >
                     <FormItem>

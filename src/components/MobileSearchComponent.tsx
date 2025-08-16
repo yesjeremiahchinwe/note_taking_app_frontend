@@ -1,7 +1,5 @@
 import { IconSearch } from "@/lib/icons";
 import { Input } from "./ui/input";
-import { Theme } from "@/providers/theme-provider";
-import { useState } from "react";
 import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
 import { Note } from "@/lib/types";
 import { Link } from "react-router-dom";
@@ -16,9 +14,6 @@ interface Props {
 
 const MobileSearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
   const userId = useSelector(selectCurrentId)
-  const [theme] = useState<Theme>(
-        () => (localStorage.getItem('notes-theme') as Theme) || 'system'
-      )
 
   const debouncedSearchTerm = useDebouncedValue(
     searchQuery as string,
@@ -42,7 +37,7 @@ const MobileSearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
   return (
     <section className="block lg:hidden px-[1.85rem] pt-3 mt-3 pb-[6rem] min-h-screen">
          <div className="w-full relative">
-            <IconSearch color={(theme === "system" || theme === "dark") ? "#717784" : "#0E121B"} className="absolute left-4 top-[0.8rem]" />
+            <IconSearch color="currentColor" className="absolute left-4 top-[0.8rem]" />
             <Input
               type="text"
               className="py-6 pl-[3rem] text-base pr-5"
