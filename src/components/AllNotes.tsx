@@ -10,7 +10,7 @@ import { selectCurrentId } from "@/store/auth/authSlice";
 import { useMemo } from "react";
 import NoteCard from "./NoteCard";
 
-const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
+const AllNotes = ({ searchQuery }: { searchQuery: string }) => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -36,9 +36,9 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
     if (debouncedSearchTerm) {
       return notes.filter(
         (note) =>
-          note.title?.toLowerCase().includes(debouncedSearchTerm) ||
-          note.tags?.toLowerCase().includes(debouncedSearchTerm) ||
-          note.content?.toLowerCase().includes(debouncedSearchTerm)
+          note.title?.trim().toLowerCase().includes(debouncedSearchTerm) ||
+          note.tags?.trim().toLowerCase().includes(debouncedSearchTerm) ||
+          note.content?.trim().toLowerCase().includes(debouncedSearchTerm)
       );
     }
 
@@ -93,8 +93,8 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
 
         {((!notes?.length && !isLoading) || !allNotes?.length) && (
           <div className="bg-lightGray p-2 mt-8 mb-4 rounded-md">
-            <p className="flex items-center justify-center text-sm text-lightText">
-              You don&apos;t have a note with "<strong>{searchQuery}</strong>"
+            <p className="flex items-center justify-center text-sm text-lightText flex-wrap">
+              You don&apos;t have a note with <span className="flex-nowrap">"<strong>{searchQuery}</strong>"</span>
             </p>
           </div>
         )}

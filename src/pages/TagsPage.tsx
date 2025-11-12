@@ -9,7 +9,9 @@ import { useState } from "react";
 const TagsPage = () => {
   useTitle("Tags");
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(
+    () => (sessionStorage.getItem("searchTerm") as string) || ""
+  );
 
   return (
     <>
@@ -19,7 +21,7 @@ const TagsPage = () => {
         <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         <article className="flex rounded-t-[1.25rem] lg:rounded-t-none bg-background flex-col lg:flex-row min-h-screen items-start justify-between lg:pr-[2rem] lg:pl-6 w-full">
-          <AllNotes />
+          <AllNotes searchQuery={searchQuery} />
 
           <div className="basis-full w-full pb-5 lg:basis-[50%] lg:p-5">
             <Outlet />

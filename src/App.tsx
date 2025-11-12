@@ -9,18 +9,18 @@ import {
   useGetArchivedNotesQuery,
   useGetNotesQuery,
 } from "@/store/notes/notesApiSlice";
-import LoginPage from "@/pages/LoginPage";
-import SignUpPage from "@/pages/SignUpPage";
-import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
-import ResetPasswordPage from "@/pages/ResetPasswordPage";
-import SettingsPage from "@/pages/SettingsPage";
-import SearchPage from "@/pages/SearchPage";
-import TagsPage from "./pages/TagsPage";
-import NotFoundPage from "@/pages/NotFoundPage";
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "./store/auth/authSlice";
 import NoteDetailsPage from "./pages/NoteDetailsPage";
 
+const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
+const LoginPage = lazy(() => import("@/pages/LoginPage"));
+const ResetPasswordPage = lazy(() => import("@/pages/ResetPasswordPage"));
+const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
+const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
+const SearchPage = lazy(() => import("@/pages/SearchPage"));
+const TagsPage = lazy(() => import("@/pages/TagsPage"));
+const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
 const ColorThemeSettings = lazy(() => import("@/pages/ColorThemeSettingsPage"));
 const FontThemeSettings = lazy(() => import("@/pages/FontThemeSettingsPage"));
 const ArchivedNotesPage = lazy(() => import("@/pages/ArchivedNotesPage"));
