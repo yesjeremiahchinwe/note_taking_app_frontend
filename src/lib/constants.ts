@@ -1,8 +1,53 @@
-import { useLocation } from "react-router-dom"
-import { MobileNavLink } from "./types"
-import { IconArchive, IconHome, IconSearch, IconSettings, IconTag } from "./icons"
+import { useLocation } from "react-router-dom";
+import { MobileNavLink } from "./types";
+import {
+  IconArchive,
+  IconHome,
+  IconSearch,
+  IconSettings,
+  IconTag,
+} from "./icons";
 
-export const tags: string[] = ['Cooking', 'Dev', 'Fitness', 'Health', 'Personal', 'React', 'Recipes', 'Shopping', 'Travel', 'TypeScript']
+export const MobileNavLinks = () => {
+  const location = useLocation();
+
+  const mobileLinks: MobileNavLink[] = [
+    {
+      text: "Home",
+      path: "/",
+      isActive: location.pathname === "/",
+      Icon: IconHome,
+    },
+    {
+      text: "Search",
+      path: "/search",
+      isActive: location.pathname === "/search",
+      Icon: IconSearch,
+    },
+    {
+      text: "Archived",
+      path: "/archived",
+      isActive: location.pathname === "/archived",
+      Icon: IconArchive,
+    },
+    {
+      text: "Tags",
+      path: "/tags",
+      isActive: location.pathname === "/tags",
+      Icon: IconTag,
+    },
+    {
+      text: "Settings",
+      path: "/settings",
+      isActive: location.pathname === "/settings",
+      Icon: IconSettings,
+    },
+  ];
+
+  return mobileLinks;
+};
+
+// export const tags: string[] = ['Cooking', 'Dev', 'Fitness', 'Health', 'Personal', 'React', 'Recipes', 'Shopping', 'Travel', 'TypeScript']
 
 // export const notes: Note[] = [
 //     {
@@ -76,42 +121,3 @@ export const tags: string[] = ['Cooking', 'Dev', 'Fitness', 'Health', 'Personal'
 //         isArchived: false
 //     }
 // ]
-
-export const MobileNavLinks = () => {
-    const location = useLocation()
-
-    const mobileLinks: MobileNavLink[] = [
-        {
-            text: 'Home',
-            path: '/',
-            isActive: location.pathname === "/",
-            Icon: IconHome
-        },
-        {
-            text: 'Search',
-            path: '/search',
-            isActive: location.pathname === "/search",
-            Icon: IconSearch
-        },
-        {
-            text: 'Archived',
-            path: '/archived',
-            isActive: location.pathname === "/archived",
-            Icon: IconArchive
-        },
-        {
-            text: 'Tags',
-            path: '/tags',
-            isActive: location.pathname === "/tags",
-            Icon: IconTag
-        },
-        {
-            text: 'Settings',
-            path: '/settings',
-            isActive: location.pathname === "/settings",
-            Icon: IconSettings
-        },
-    ]
-
-    return mobileLinks
-}

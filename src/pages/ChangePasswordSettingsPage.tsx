@@ -18,19 +18,7 @@ import { ChevronLeftIcon, EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useUpdateUserPasswordMutation } from "@/store/users/usersApiSlice";
 import { toast } from "@/hooks/use-toast";
-import { Theme } from "@/providers/theme-provider";
-
-const formSchema = z.object({
-  oldPassword: z.string().trim().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-  newPassword: z.string().trim().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-  confirmNewPassword: z.string().trim().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-});
+import { changePasswordFormValidationSchema } from "@/lib/formValidations";
 
 const ChangePasswordSettingsPage = () => {
   useTitle("Change Pasword");
@@ -40,22 +28,20 @@ const ChangePasswordSettingsPage = () => {
     newPassword: false,
     confirmNewPassword: false,
   });
+
   const [errMsg, setErrMsg] = useState("");
   const [updateUserPassword, { isLoading, isSuccess, isError, error }] =
     useUpdateUserPasswordMutation();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof changePasswordFormValidationSchema>>({
+    resolver: zodResolver(changePasswordFormValidationSchema),
     defaultValues: {
       oldPassword: "",
       newPassword: "",
       confirmNewPassword: "",
     },
   });
-  const navigate = useNavigate()
-  const [theme] = useState<Theme>(
-    () => (localStorage.getItem("notes-theme") as Theme) || "system"
-  );
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isError) {
@@ -66,18 +52,20 @@ const ChangePasswordSettingsPage = () => {
         title: `Oops! ${error?.data?.message}`,
       });
     }
-  }, [isError])
+  }, [isError]);
 
   useEffect(() => {
     if (isSuccess) {
       toast({
         title: "Password updated successfully!",
       });
-      navigate("/settings")
+      navigate("/settings");
     }
-  }, [isSuccess])
+  }, [isSuccess]);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof changePasswordFormValidationSchema>
+  ) => {
     try {
       await updateUserPassword({
         oldPassword: values.oldPassword,
@@ -85,7 +73,7 @@ const ChangePasswordSettingsPage = () => {
         confirmNewPassword: values.confirmNewPassword,
       });
     } catch (err: any) {
-      console.log(err)
+      console.log(err);
     }
   };
 
@@ -103,10 +91,7 @@ const ChangePasswordSettingsPage = () => {
         to="/settings"
         className="flex lg:hidden items-center gap-1 pt-3 ml-[-0.5rem]"
       >
-        <ChevronLeftIcon
-          color={theme === "system" || theme === "dark" ? "#525866" : "#CACFD8"}
-        />{" "}
-        <span>Settings</span>
+        <ChevronLeftIcon color="currentColor" /> <span>Settings</span>
       </Link>
 
       <h2 className="text-primaryText pt-5 lg:pt-0 font-bold lg:font-semibold text-2xl lg:text-base  tracking-[-0.5px] lg:tracking-[-0.3px]">
@@ -140,11 +125,7 @@ const ChangePasswordSettingsPage = () => {
                       oldPassword: !prev.oldPassword,
                     }))
                   }
-                  color={
-                    theme === "system" || theme === "dark"
-                      ? "#CACFD8"
-                      : "#525866"
-                  }
+                  color="currentColor"
                   size={18}
                   className={`absolute top-[37px] right-4 cursor-pointer ${
                     !showPassord.oldPassword ? "block" : "hidden"
@@ -158,11 +139,7 @@ const ChangePasswordSettingsPage = () => {
                       oldPassword: !prev.oldPassword,
                     }))
                   }
-                  color={
-                    theme === "system" || theme === "dark"
-                      ? "#CACFD8"
-                      : "#525866"
-                  }
+                  color="currentColor"
                   size={18}
                   className={`absolute top-[37px] right-4 cursor-pointer ${
                     showPassord.oldPassword ? "block" : "hidden"
@@ -196,11 +173,7 @@ const ChangePasswordSettingsPage = () => {
                       newPassword: !prev.newPassword,
                     }))
                   }
-                  color={
-                    theme === "system" || theme === "dark"
-                      ? "#CACFD8"
-                      : "#525866"
-                  }
+                  color="currentColor"
                   size={18}
                   className={`absolute top-[37px] right-4 cursor-pointer ${
                     !showPassord.newPassword ? "block" : "hidden"
@@ -214,11 +187,7 @@ const ChangePasswordSettingsPage = () => {
                       newPassword: !prev.newPassword,
                     }))
                   }
-                  color={
-                    theme === "system" || theme === "dark"
-                      ? "#CACFD8"
-                      : "#525866"
-                  }
+                  color="currentColor"
                   size={18}
                   className={`absolute top-[37px] right-4 cursor-pointer ${
                     showPassord.newPassword ? "block" : "hidden"
@@ -227,11 +196,7 @@ const ChangePasswordSettingsPage = () => {
 
                 <FormDescription className="text flex items-center gap-1">
                   <InfoIcon
-                    color={
-                      theme === "system" || theme === "dark"
-                        ? "#99A0AE"
-                        : "#525866"
-                    }
+                    color="currentColor"
                     size={16}
                   />{" "}
                   <span>At least 8 characters</span>
@@ -264,11 +229,7 @@ const ChangePasswordSettingsPage = () => {
                       confirmNewPassword: !prev.confirmNewPassword,
                     }))
                   }
-                  color={
-                    theme === "system" || theme === "dark"
-                      ? "#CACFD8"
-                      : "#525866"
-                  }
+                  color="currentColor"
                   size={18}
                   className={`absolute top-[37px] right-4 cursor-pointer ${
                     !showPassord.confirmNewPassword ? "block" : "hidden"
@@ -282,11 +243,7 @@ const ChangePasswordSettingsPage = () => {
                       confirmNewPassword: !prev.confirmNewPassword,
                     }))
                   }
-                  color={
-                    theme === "system" || theme === "dark"
-                      ? "#CACFD8"
-                      : "#525866"
-                  }
+                  color="currentColor"
                   size={18}
                   className={`absolute top-[37px] right-4 cursor-pointer ${
                     showPassord.confirmNewPassword ? "block" : "hidden"

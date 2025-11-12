@@ -1,37 +1,24 @@
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react";
 
 const useDebouncedValue = (inputValue: string, delay: number) => {
-    const [debouncedValue, setDebouncedValue] = useState("")
-    const navigate = useNavigate()
+  const [debouncedValue, setDebouncedValue] = useState("");
 
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(inputValue)
-        }, delay)
+  useEffect(() => {
+    let handler: any;
 
-        return () => {
-            clearTimeout(handler)
-        }
-    }, [inputValue, delay])
+    if (inputValue?.trim()) {
+      handler = setTimeout(() => {
+        localStorage.setItem("searchTerm", inputValue.trim());
+        setDebouncedValue(inputValue.trim());
+      }, delay);
+    }
 
-    useEffect(() => {
-        let handler: any
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [inputValue, delay]);
 
-        if (inputValue) {
-            localStorage.setItem("searchTerm", inputValue)
-            
-            handler = setTimeout(() => {
-                navigate("/search")
-            }, delay)
-        }
+  return debouncedValue;
+};
 
-        return () => {
-            clearTimeout(handler)
-        }
-    }, [inputValue])
-
-  return debouncedValue
-}
-
-export default useDebouncedValue
+export default useDebouncedValue;

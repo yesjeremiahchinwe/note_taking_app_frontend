@@ -8,17 +8,15 @@ import { selectCurrentId } from "@/store/auth/authSlice";
 
 const NotesWithTag = () => {
   const userId = useSelector(selectCurrentId)
+
   const {
       data: notes,
       isLoading,
       isError
-  } = useGetNotesQuery(userId, {
-      pollingInterval: 0,
-      refetchOnFocus: true,
-      refetchOnMountOrArgChange: true
-  })
+  } = useGetNotesQuery(userId)
 
-  // Fetch all tags (string), and convert each tag in that string into array element - resulting to array of arrays 
+  // Fetch all tags (string), and 
+  // convert each tag in that string into array element - resulting to array of arrays 
     const allTags: string[][] = notes?.map((note) => note.tags?.split(",")) as string[][]
   
     const listOfTags = flattenAndRemoveDuplicates(allTags)

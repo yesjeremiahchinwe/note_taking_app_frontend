@@ -9,45 +9,33 @@ import {
   useGetArchivedNotesQuery,
   useGetNotesQuery,
 } from "@/store/notes/notesApiSlice";
-import LoginPage from "@/pages/LoginPage";
-import SignUpPage from "@/pages/SignUpPage";
-import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
-import ResetPasswordPage from "@/pages/ResetPasswordPage";
-import SettingsPage from "@/pages/SettingsPage";
-import SearchPage from "@/pages/SearchPage";
-import TagsPage from "./pages/TagsPage";
-import ArchivedNotesPage from "@/pages/ArchivedNotesPage";
-import NotFoundPage from "@/pages/NotFoundPage";
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "./store/auth/authSlice";
+import NoteDetailsPage from "./pages/NoteDetailsPage";
 
-const NoteDetailsPage = lazy(() => import("@/pages/NoteDetailsPage"));
+const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
+const LoginPage = lazy(() => import("@/pages/LoginPage"));
+const ResetPasswordPage = lazy(() => import("@/pages/ResetPasswordPage"));
+const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
+const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
+const SearchPage = lazy(() => import("@/pages/SearchPage"));
+const TagsPage = lazy(() => import("@/pages/TagsPage"));
+const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
 const ColorThemeSettings = lazy(() => import("@/pages/ColorThemeSettingsPage"));
 const FontThemeSettings = lazy(() => import("@/pages/FontThemeSettingsPage"));
+const ArchivedNotesPage = lazy(() => import("@/pages/ArchivedNotesPage"));
 const ChangePasswordSettings = lazy(
   () => import("@/pages/ChangePasswordSettingsPage")
 );
 
 function App() {
-  const userId = useSelector(selectCurrentId)
+  const userId = useSelector(selectCurrentId);
 
-  const { data: notes, isLoading: isLoadingGetNotes } = useGetNotesQuery(
-    userId,
-    {
-      pollingInterval: 0,
-      refetchOnFocus: true,
-      refetchOnMountOrArgChange: true,
-      refetchOnReconnect: true,
-    }
-  );
+  const { data: notes, isLoading: isLoadingGetNotes } =
+    useGetNotesQuery(userId);
 
   const { data: archivedNotes, isLoading: isLoadingArchiveNote } =
-    useGetArchivedNotesQuery(userId, {
-      pollingInterval: 0,
-      refetchOnFocus: true,
-      refetchOnReconnect: true,
-      refetchOnMountOrArgChange: true,
-    });
+    useGetArchivedNotesQuery(userId);
 
   return (
     <Suspense fallback={<LoadingState message="Please wait" />}>
@@ -56,7 +44,6 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/create" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-
         <Route path="/:userId/reset-password" element={<ResetPasswordPage />} />
 
         {/* -------------- Home and Main application routes ---------------- */}

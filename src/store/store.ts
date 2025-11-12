@@ -27,13 +27,14 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"]
-      },
+      }
     }).concat(apiSlice.middleware),
 
   devTools: false,
 });
 
 setupListeners(store.dispatch);
+
 export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;

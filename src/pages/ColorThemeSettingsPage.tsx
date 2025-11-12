@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { toast } from "@/hooks/use-toast";
 import {
   Form,
@@ -19,21 +18,18 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useTheme } from "@/providers/theme-provider";
 import { cn } from "@/lib/utils";
 import { ChevronLeftIcon } from "lucide-react";
-
-const FormSchema = z.object({
-  theme: z.enum(["dark", "light", "system"], {
-    required_error: "You need to select a theme.",
-  }),
-});
+import { changeColorThemeFormValidationSchema } from "@/lib/formValidations";
 
 const ColorThemeSettingsPage = () => {
   useTitle("Choose Color Theme");
+
   const { theme, setTheme } = useTheme();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+
+  const form = useForm<z.infer<typeof changeColorThemeFormValidationSchema>>({
+    resolver: zodResolver(changeColorThemeFormValidationSchema),
   });
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = (data: z.infer<typeof changeColorThemeFormValidationSchema>) => {
     toast({
       title: `You switched to ${data.theme} theme`,
     });

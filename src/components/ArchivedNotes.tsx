@@ -11,6 +11,7 @@ import LoadiingState from "./HomeLoader";
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "@/store/auth/authSlice";
 import CustomButton from "./CustomButton";
+import { useMemo } from "react";
 
 const ArchivedNotes = () => {
   const location = useLocation();
@@ -19,23 +20,17 @@ const ArchivedNotes = () => {
 
   const tagQueryParam = searchParams.get("tag");
   const noteQueryParam = searchParams.get("note");
-  const userId = useSelector(selectCurrentId)
+  const userId = useSelector(selectCurrentId);
 
-  const { data: notes, isLoading } = useGetArchivedNotesQuery(userId,
-    {
-      pollingInterval: 0,
-      refetchOnFocus: true,
-      refetchOnMountOrArgChange: true,
-      refetchOnReconnect: true
-    }
-  );
+  const { data: notes, isLoading } = useGetArchivedNotesQuery(userId);
 
-  const allNotes: Note[] | undefined =
-    tagQueryParam && location.pathname.includes("archived")
+  const allNotes: Note[] | undefined = useMemo(() => {
+    return tagQueryParam && location.pathname.includes("archived")
       ? notes?.filter((note: Note) =>
           note.tags.includes(tagQueryParam as string)
         )
       : notes;
+  }, [tagQueryParam, location.pathname, notes]);
 
   return (
     <>
@@ -66,8 +61,8 @@ const ArchivedNotes = () => {
 
         {tagQueryParam ? (
           <p className="text-sm text-lightText mb-4">
-            All archived notes with with the <strong>"{tagQueryParam}"</strong> tag are shown
-            here.
+            All archived notes with with the <strong>"{tagQueryParam}"</strong>{" "}
+            tag are shown here.
           </p>
         ) : (
           <p className="text-sm text-lightText mb-4">

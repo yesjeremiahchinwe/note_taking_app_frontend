@@ -139,7 +139,6 @@ export const {
 
 // returns the query result object
 export const selectNotesResult = notesApiSlice.endpoints.getNotes.select("notesList")
-console.log(selectNotesResult)
 
 
 // creates memoized selector

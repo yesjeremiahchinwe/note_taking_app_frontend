@@ -7,6 +7,7 @@ import { Outlet } from "react-router-dom"
 
 const ArchivedNotesPage = () => {
   useTitle("Archive Notes")
+  
   const [searchQuery, setSearchQuery] = useState("")
 
   return (

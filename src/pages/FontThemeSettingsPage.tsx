@@ -1,7 +1,7 @@
 import {
   IconFontMonospace,
   IconFontSansSerif,
-  IconFontSerif
+  IconFontSerif,
 } from "@/lib/icons";
 import { Button } from "../components/ui/button";
 import { Link } from "react-router-dom";
@@ -22,28 +22,18 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import { useFont } from "@/providers/font-provider";
-import { Theme } from "@/providers/theme-provider";
-import { useState } from "react";
 import { ChevronLeftIcon } from "lucide-react";
-
-const FormSchema = z.object({
-  font: z.enum(["sans-serif", "serif", "monospace"], {
-    required_error: "You need to select a notification type.",
-  }),
-});
+import { changeFontThemeFormValidationSchema } from "@/lib/formValidations";
 
 const FontThemeSettingsPage = () => {
   useTitle("Choose Font Theme");
-  const [theme] = useState<Theme>(
-                () => (localStorage.getItem('notes-theme') as Theme) || 'system'
-              )
 
   const { font, setFont } = useFont();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof changeFontThemeFormValidationSchema>>({
+    resolver: zodResolver(changeFontThemeFormValidationSchema),
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(data: z.infer<typeof changeFontThemeFormValidationSchema>) {
     setFont(data.font);
     toast({
       title: `You switched to ${data.font} font theme`,
@@ -60,12 +50,11 @@ const FontThemeSettingsPage = () => {
           : "block"
       }`}
     >
-      <Link to="/settings" className="flex lg:hidden items-center gap-1 pt-3 ml-[-0.5rem]">
-      <ChevronLeftIcon
-            color={
-              theme === "system" || theme === "dark" ? "#525866" : "#CACFD8"
-            }
-          /> <span>Settings</span>
+      <Link
+        to="/settings"
+        className="flex lg:hidden items-center gap-1 pt-3 ml-[-0.5rem]"
+      >
+        <ChevronLeftIcon color="currentColor" /> <span>Settings</span>
       </Link>
 
       <h2 className="text-primaryText pt-5 lg:pt-0 font-bold lg:font-semibold text-2xl lg:text-base  tracking-[-0.5px] lg:tracking-[-0.3px]">
@@ -103,7 +92,7 @@ const FontThemeSettingsPage = () => {
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-[40px] h-[40px] rounded-[12px] bg-grayBorder border-[1px] border-grayBorder flex items-center justify-center">
-                            <IconFontSansSerif color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"}  />
+                            <IconFontSansSerif color="currentColor" />
                           </div>
 
                           <div>
@@ -119,7 +108,8 @@ const FontThemeSettingsPage = () => {
                         <FormControl>
                           <RadioGroupItem
                             className={cn(
-                              font === "sans-serif" || field.value === "sans-serif"
+                              font === "sans-serif" ||
+                                field.value === "sans-serif"
                                 ? "border-[4.5px] border-skyBlue"
                                 : "border-[#9a9da1]"
                             )}
@@ -142,7 +132,7 @@ const FontThemeSettingsPage = () => {
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-[40px] h-[40px] rounded-[12px] bg-grayBorder border-[1px] border-grayBorder flex items-center justify-center">
-                            <IconFontSerif color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"}  />
+                            <IconFontSerif color="currentColor" />
                           </div>
 
                           <div>
@@ -181,7 +171,7 @@ const FontThemeSettingsPage = () => {
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-[40px] h-[40px] rounded-[12px] bg-grayBorder border-[1px] border-grayBorder flex items-center justify-center">
-                            <IconFontMonospace color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"}  />
+                            <IconFontMonospace color="currentColor" />
                           </div>
 
                           <div>
@@ -197,7 +187,8 @@ const FontThemeSettingsPage = () => {
                         <FormControl>
                           <RadioGroupItem
                             className={cn(
-                              font === "monospace" || field.value === "monospace"
+                              font === "monospace" ||
+                                field.value === "monospace"
                                 ? "border-[4.5px] border-skyBlue"
                                 : "border-[#9a9da1]"
                             )}

@@ -5,7 +5,9 @@ import Header from "./Header";
 import RightSidebar from "./RightSidebar";
 
 const Home = () => {
-  const [searchQuery, setSearchQuery] = useState("")
+   const [searchQuery, setSearchQuery] = useState(
+    () => (sessionStorage.getItem("searchTerm") as string) || ""
+  );
 
   return (
     <main className="flex flex-col w-full rounded-t-md lg:rounded-t-none h-screen">

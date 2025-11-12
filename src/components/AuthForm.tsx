@@ -24,13 +24,7 @@ import {
 import { setCredentials } from "@/store/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "@/hooks/use-toast";
-
-const formSchema = z.object({
-  email: z.string().email({ message: "Please provide a valid email address" }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-});
+import { loginAndSignUpFormValidationSchema } from "@/lib/formValidations";
 
 const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const [showPassord, setShowPassword] = useState<boolean>(false);
@@ -58,8 +52,8 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
     },
   ] = useAddNewUserMutation();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginAndSignUpFormValidationSchema>>({
+    resolver: zodResolver(loginAndSignUpFormValidationSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -104,7 +98,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
     }
   }, [isSuccessLogin, isErrorLogin]);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof loginAndSignUpFormValidationSchema>) => {
     try {
       if (isLogin) {
         const { accessToken, id } = await login({
