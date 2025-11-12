@@ -13,18 +13,17 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation();
+
   const [searchParams] = useSearchParams();
 
   const userId = useSelector(selectCurrentId);
+
   const tagQueryParam = searchParams.get("tag");
 
-  const { data: notes } = useGetNotesQuery(userId, {
-    pollingInterval: 0,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: notes } = useGetNotesQuery(userId);
 
-  // Fetch all tags (string), and convert each tag in that string into array element - resulting to array of arrays
+  // Fetch all tags (string), and 
+  // convert each tag in that string into array element - resulting to array of arrays
   const allTags: string[][] = notes?.map((note) =>
     note.tags?.split(",")
   ) as string[][];

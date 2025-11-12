@@ -15,34 +15,27 @@ import { z } from "zod";
 import useTitle from "@/hooks/useTitle";
 import { useForgotPasswordMutation } from "@/store/auth/authApiSlice";
 import { toast } from "@/hooks/use-toast";
-import { Theme } from "@/providers/theme-provider";
-import { useEffect, useState } from "react";
-
-const formSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .email({ message: "Please provide a valid email address" }),
-});
+import { useEffect } from "react";
+import { forgotPasswordFormValidationSchema } from "@/lib/formValidations";
 
 const ForgotPasswordPage = () => {
   useTitle("Forgot Password");
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  
+  const form = useForm<z.infer<typeof forgotPasswordFormValidationSchema>>({
+    resolver: zodResolver(forgotPasswordFormValidationSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  const [forgotPassword, { isLoading, isSuccess, isError, error }] = useForgotPasswordMutation();
-  const [theme] = useState<Theme>(
-          () => (localStorage.getItem('notes-theme') as Theme) || 'system'
-        )
+  const [forgotPassword, { isLoading, isSuccess, isError, error }] =
+    useForgotPasswordMutation();
+
   useEffect(() => {
     if (isSuccess) {
       toast({
         title: "Sent successfully!",
-        description: 'A password reset link has been sent to your email'
+        description: "A password reset link has been sent to your email",
       });
     }
 
@@ -50,12 +43,17 @@ const ForgotPasswordPage = () => {
       toast({
         title: "Oops! Something went wrong!",
         //@ts-ignore
-        description: `${error.data?.message || error?.message || "Try again please!"}`,
+        description: `${
+          //@ts-ignore
+          error.data?.message || error?.message || "Try again please!"
+        }`,
       });
     }
-  }, [isSuccess, isError])
+  }, [isSuccess, isError]);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof forgotPasswordFormValidationSchema>
+  ) => {
     try {
       await forgotPassword({ email: values.email });
     } catch (err: any) {
@@ -68,9 +66,7 @@ const ForgotPasswordPage = () => {
   return (
     <main className="bg-lightGray dark:bg-tagsBg flex justify-center items-center min-h-screen w-full px-4">
       <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] max-sm:px-4 p-[48px]">
-        <LogoSVG
-          color={(theme === "system" || theme === "dark") ? "#FFF" : "#0E121B"}
-        />
+        <LogoSVG color="currentColor" />
         <h1 className="font-bold text-2xl text-center tracking-[-0.5px] text-primaryText mt-5 mb-2">
           Forgotten your password?
         </h1>
@@ -95,9 +91,7 @@ const ForgotPasswordPage = () => {
                     <Input
                       type="email"
                       placeholder="email@example.com"
-                      className={`${
-                        fieldState.error && "border-lightRed"
-                      }`}
+                      className={`${fieldState.error && "border-lightRed"}`}
                       {...field}
                     />
                   </FormControl>

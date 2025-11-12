@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const SettingsPage = () => {
   useTitle("Settings")
+  
   const [searchQuery, setSearchQuery] = useState("")
   
   return (

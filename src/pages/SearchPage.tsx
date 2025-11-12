@@ -8,6 +8,7 @@ import SearchComponent from "@/components/MobileSearchComponent";
 
 const SearchPage = () => {
   useTitle("Search for Note");
+  
   const [searchQuery, setSearchQuery] = useState(
     () => (sessionStorage.getItem("searchTerm") as string) || ""
   );

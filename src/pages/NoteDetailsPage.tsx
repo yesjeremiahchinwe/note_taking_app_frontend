@@ -7,82 +7,105 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { FormEvent, useEffect, useState } from "react";
+import React, {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import DeleteModal from "@/components/modals/DeleteNoteModal";
 import ArchiveNoteModal from "@/components/modals/ArchiveNoteModal";
 import NoteForm from "@/components/NoteForm";
-import { ArchiveRestore, ChevronLeftIcon, RefreshCcwIcon, Trash2Icon } from "lucide-react";
 import {
-  useDeleteNoteMutation,
-  useMarkNoteAsArchivedMutation,
+  ArchiveRestore,
+  ChevronLeftIcon,
+  RefreshCcwIcon,
+  Trash2Icon,
+} from "lucide-react";
+import {
   useAddNewNoteMutation,
   useUpdateNoteMutation,
-  useRestoreArchivedNoteMutation,
 } from "@/store/notes/notesApiSlice";
 import { toast } from "@/hooks/use-toast";
-import { Theme } from "@/providers/theme-provider";
 import LoadiingState from "@/components/HomeLoader";
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "@/store/auth/authSlice";
+import useNotes from "@/hooks/useNotes";
 
 interface NotesProp {
   notes?: Note[];
   isLoading?: boolean;
 }
 
-const NoteDetails = ({ notes, isLoading }: NotesProp) => {
+const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const noteQueryParam = searchParams.get("note");
   const tagQueryParam = searchParams.get("tag");
+  const userId = useSelector(selectCurrentId);
   const { title } = useParams();
-  const userId = useSelector(selectCurrentId)
 
-  const note: Note = (
-    title
-      ? notes?.find(
-          (note: Note) =>
-            note.title.toLowerCase().split(" ").join("-") === title
-        )
-      : noteQueryParam
-      ? notes?.find(
-          (note: Note) =>
-            note.title.toLowerCase().split(" ").join("-") === noteQueryParam
-        )
-      : tagQueryParam
-      ? notes?.filter((note: Note) =>
-          note.tags.includes(tagQueryParam as string)
-        )[0]
-      : tagQueryParam && location.pathname.includes("archived")
-      ? notes?.filter((note: Note) =>
-          note.tags.includes(tagQueryParam as string)
-        )[0]
-      : notes?.length && notes[0]
-  ) as Note;
+  const foundNote: Note = useMemo(() => {
+    return (
+      title
+        ? notes?.find(
+            (note: Note) =>
+              note.title.toLowerCase().split(" ").join("-") === title
+          )
+        : noteQueryParam
+        ? notes?.find(
+            (note: Note) =>
+              note.title.toLowerCase().split(" ").join("-") === noteQueryParam
+          )
+        : tagQueryParam
+        ? notes?.filter((note: Note) =>
+            note.tags.includes(tagQueryParam as string)
+          )[0]
+        : tagQueryParam && location.pathname.includes("archived")
+        ? notes?.filter((note: Note) =>
+            note.tags.includes(tagQueryParam as string)
+          )[0]
+        : notes?.length && notes[0]
+    ) as Note;
+  }, [notes, title, noteQueryParam, tagQueryParam, location.pathname]);
 
-  const [isOpen, setIsOpen] = useState({
-    archiveNote: false,
-    deleteNote: false,
-  });
+  const {
+    onArchiveNote,
+    onDeleteNote,
+    onRestoreNote,
+    isLoadingArchiveNote,
+    isLoadingDeleteNote,
+    isLoadingRestoreNote,
+    isOpen,
+    setIsOpen,
+  } = useNotes(foundNote);
+
   const [isOpenAlert, setIsOpenAlert] = useState(false);
-  const [noteTitle, setNoteTitle] = useState(note?.title || "");
-  const [noteTags, setNoteTags] = useState(note?.tags || "");
-  const [noteContent, setNoteContent] = useState(note?.content || "");
+  const [noteTitle, setNoteTitle] = useState(foundNote?.title || "");
+  const [noteTags, setNoteTags] = useState(foundNote?.tags || "");
+  const [noteContent, setNoteContent] = useState(foundNote?.content || "");
 
-  const [theme] = useState<Theme>(
-    () => (localStorage.getItem("notes-theme") as Theme) || "system"
-  );
+  const [
+    addNewNote,
+    {
+      isLoading: isLoadingAddNote,
+      isSuccess: isSuccessAddNewNote,
+      isError: isErrorAddNewNote,
+      error: errorAddNewNote,
+    },
+  ] = useAddNewNoteMutation();
 
-  const [deleteNote, { isLoading: isLoadingDeleteNote }] =
-    useDeleteNoteMutation();
-  const [markNoteAsArchived, { isLoading: isLoadingMarkedNote }] =
-    useMarkNoteAsArchivedMutation();
-  const [addNewNote, { isLoading: isLoadingAddNote, isSuccess: isSuccessAddNewNote, isError: isErrorAddNewNote, error: errorAddNewNote }] =
-    useAddNewNoteMutation();
-  const [updateNote, { isLoading: isLoadingUpdate, isSuccess: isSuccessUpdateNote, isError: isErrorUpdateNote , error: errorUpdateNote}] = useUpdateNoteMutation();
-  const [restoreArchivedNote, { isLoading: isLoadingRestoreNote }] =
-    useRestoreArchivedNoteMutation();
+  const [
+    updateNote,
+    {
+      isLoading: isLoadingUpdate,
+      isSuccess: isSuccessUpdateNote,
+      isError: isErrorUpdateNote,
+      error: errorUpdateNote,
+    },
+  ] = useUpdateNoteMutation();
 
   useEffect(() => {
     if (isSuccessAddNewNote) {
@@ -90,18 +113,24 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
       setNoteTags("");
       setNoteContent("");
       toast({
-      title: "Note created successfully!",
-    });
-    navigate("/");
+        title: "Note created successfully!",
+      });
+      navigate("/");
     }
 
     if (isErrorAddNewNote) {
       toast({
         //@ts-ignore
-        title: `${errorAddNewNote.data?.message || errorAddNewNote?.message || "Oops! Failed to create note"}`,
+        title: `${
+          //@ts-ignore
+          errorAddNewNote.data?.message ||
+          //@ts-ignore
+          errorAddNewNote?.message ||
+          "Oops! Failed to create note"
+        }`,
       });
     }
-  }, [isSuccessAddNewNote, isErrorAddNewNote])
+  }, [isSuccessAddNewNote, isErrorAddNewNote]);
 
   useEffect(() => {
     if (isSuccessUpdateNote) {
@@ -114,10 +143,16 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
     if (isErrorUpdateNote) {
       toast({
         //@ts-ignore
-        title: `${errorUpdateNote.data?.message || errorUpdateNote?.message || "Oops! Failed to update note"}`,
+        title: `${
+          //@ts-ignore
+          errorUpdateNote.data?.message ||
+          //@ts-ignore
+          errorUpdateNote?.message ||
+          "Oops! Failed to update note"
+        }`,
       });
     }
-  }, [isSuccessUpdateNote, isErrorUpdateNote])
+  }, [isSuccessUpdateNote, isErrorUpdateNote]);
 
   const goBackToPreviousPage = location.pathname.includes("archived")
     ? "/archived"
@@ -127,76 +162,28 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
 
   const isArchivedPage = location.pathname.includes("/archived");
 
-  const onDeleteNote = async () => {
-    try {
-      await deleteNote({ id: note?._id });
-      setIsOpen((prev) => ({ ...prev, deleteNote: false }));
-      toast({
-        title: "Note deleted successfully!",
-      });
-      navigate("/");
-    } catch (err: any) {
-      toast({
-        title: "Oops! Couldn't delete note",
-        description: `Error message: ${err?.message || err?.data?.message}`,
-      });
-    }
-  };
+  const onSubmit = useCallback(() => {
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-  const onArchiveNote = async () => {
-    try {
-      await markNoteAsArchived({ id: note?._id });
-      setIsOpen((prev) => ({ ...prev, archiveNote: false }));
-      toast({
-        title: "Note archived successfully!",
-      });
-      navigate("/");
-    } catch (err: any) {
-      toast({
-        title: "Oops! Couldn't archive note",
-        description: `Error message: ${err?.message || err?.data?.message}`,
-      });
-    }
-  };
+      try {
+        const values = {
+          title: noteTitle?.trim(),
+          tags: noteTags?.trim(),
+          content: noteContent?.trim(),
+          userId,
+        };
 
-  const onRestoreNote = async () => {
-    try {
-      await restoreArchivedNote({ id: note?._id });
-      setIsOpen((prev) => ({ ...prev, archiveNote: false }));
-      toast({
-        title: "Note restored successfully!",
-        description: "Your note is now under your 'All Notes' tab",
-      });
-      navigate("/");
-    } catch (err: any) {
-      toast({
-        title: "Oops! Couldn't restore note",
-        description: `Error message: ${err?.message || err?.data?.message}`,
-      });
-    }
-  };
-
-
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const values = {
-        title: noteTitle?.trim(),
-        tags: noteTags?.trim(),
-        content: noteContent?.trim(),
-        userId
-      };
-
-      if (!note || location.pathname.includes("/new")) {
-        await addNewNote({ ...values });
-      } else {
-        await updateNote({ ...values, id: note?._id });
+        if (!foundNote || location.pathname.includes("/new")) {
+          await addNewNote({ ...values });
+        } else {
+          await updateNote({ ...values, id: foundNote?._id });
+        }
+      } catch (err: any) {
+        console.log(err);
       }
-    } catch (err: any) {
-      console.log(err)
-    }
-  };
+    };
+  }, []);
 
   if (isLoading) {
     return (
@@ -211,9 +198,12 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
       {/* ------------ Note Details Header --------------- */}
       <div
         className={`${
-          note && location.pathname === "/" && tagQueryParam === null && noteQueryParam === null
+          foundNote &&
+          location.pathname === "/" &&
+          tagQueryParam === null &&
+          noteQueryParam === null
             ? "hidden lg:flex"
-            : !note && location.pathname === "/"
+            : !foundNote && location.pathname === "/"
             ? "flex"
             : tagQueryParam && noteQueryParam
             ? "flex lg:hidden"
@@ -226,11 +216,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
           to={goBackToPreviousPage}
           className="flex items-center gap-1 pl-[14px] text-primaryText"
         >
-          <ChevronLeftIcon
-            color={
-              theme === "system" || theme === "dark" ? "#525866" : "#CACFD8"
-            }
-          />
+          <ChevronLeftIcon color="currentColor" />
           <span className="text-lighterGray font-normal tracking-[-0.2px] text-sm">
             Go Back
           </span>
@@ -244,24 +230,17 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
               setIsOpen((prev) => ({ ...prev, deleteNote: !prev.deleteNote }))
             }
           >
-            <Trash2Icon size={24} color={
-                  (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"
-                } />
+            <Trash2Icon size={24} color="currentColor" />
           </Button>
 
           {isArchivedPage ? (
             <Button
-            size="icon"
+              size="icon"
               onClick={() => onRestoreNote()}
               disabled={isLoadingRestoreNote}
               className="bg-transparent dark:bg-transparent hover:bg-transparent"
             >
-              <RefreshCcwIcon
-              size={24}
-                color={
-                  (theme === "system" || theme === "dark") ? "#717784" : "#0E121B"
-                }
-              />
+              <RefreshCcwIcon size={24} color="currentColor" />
             </Button>
           ) : (
             <Button
@@ -274,7 +253,7 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
                 }))
               }
             >
-              <ArchiveRestore size={20} color={(theme === "system" || theme === "dark") ? "#717784" : "#0E121B"} />
+              <ArchiveRestore size={20} color="currentColor" />
             </Button>
           )}
 
@@ -299,18 +278,18 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
       {/* -------------- Note Body ------------------ */}
       <section
         className={`${
-          note && location.pathname === "/" && noteQueryParam === null
+          foundNote && location.pathname === "/" && noteQueryParam === null
             ? "hidden lg:block"
             : location.pathname === "/archived"
             ? "hidden lg:block"
-            : !note
+            : !foundNote
             ? "block"
             : "block"
         } pt-4 mx-[20px] lg:px-0 lg:mx-0 lg:pt-0 border-t-[1px] border-darkerGray lg:border-t-0`}
       >
         <NoteForm
-          isNewNote={location.pathname.includes("/new") || !note}
-          note={note}
+          isNewNote={location.pathname.includes("/new") || !foundNote}
+          note={foundNote}
           noteTitle={noteTitle}
           setNoteTitle={setNoteTitle}
           noteTags={noteTags}
@@ -336,10 +315,10 @@ const NoteDetails = ({ notes, isLoading }: NotesProp) => {
         isOpen={isOpen.archiveNote}
         onClose={() => setIsOpen((prev) => ({ ...prev, archiveNote: false }))}
         onConfirm={() => onArchiveNote()}
-        loading={isLoadingMarkedNote}
+        loading={isLoadingArchiveNote}
       />
     </>
   );
-};
+});
 
-export default NoteDetails;
+export default NoteDetailsPage;

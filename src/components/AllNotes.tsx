@@ -1,10 +1,4 @@
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-  useParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Note } from "@/lib/types";
 import CustomButton from "@/components/CustomButton";
 import { useGetNotesQuery } from "@/store/notes/notesApiSlice";
@@ -14,12 +8,12 @@ import LoadiingState from "./HomeLoader";
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "@/store/auth/authSlice";
 import { useMemo } from "react";
+import NoteCard from "./NoteCard";
 
 const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { title } = useParams();
   const debouncedSearchTerm = useDebouncedValue(
     searchQuery as string,
     500
@@ -27,29 +21,29 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
 
   const tagQueryParam = searchParams.get("tag");
   const noteQueryParam = searchParams.get("note");
-  const userId = useSelector(selectCurrentId)
+  const userId = useSelector(selectCurrentId);
 
-  const { data: notes, isLoading } = useGetNotesQuery(userId, {
-    pollingInterval: 0,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true,
-  });
+  const { data: notes, isLoading } = useGetNotesQuery(userId);
 
   const allNotes = useMemo(() => {
-  if (!notes?.length) return [];
-  if (tagQueryParam) return notes.filter(note => note?.tags?.includes(tagQueryParam));
-  if (location.pathname === "/tags") return notes;
-  if (debouncedSearchTerm) {
-    return notes.filter(note =>
-      note.title?.toLowerCase().includes(debouncedSearchTerm) ||
-      note.tags?.toLowerCase().includes(debouncedSearchTerm) ||
-      note.content?.toLowerCase().includes(debouncedSearchTerm)
-    );
-  }
-  return notes;
-}, [notes, tagQueryParam, location.pathname, debouncedSearchTerm]);
+    if (!notes?.length) return [];
 
+    if (tagQueryParam)
+      return notes.filter((note) => note?.tags?.includes(tagQueryParam));
+
+    if (location.pathname === "/tags") return notes;
+
+    if (debouncedSearchTerm) {
+      return notes.filter(
+        (note) =>
+          note.title?.toLowerCase().includes(debouncedSearchTerm) ||
+          note.tags?.toLowerCase().includes(debouncedSearchTerm) ||
+          note.content?.toLowerCase().includes(debouncedSearchTerm)
+      );
+    }
+
+    return notes;
+  }, [notes, tagQueryParam, location.pathname, debouncedSearchTerm]);
 
   return (
     <>
@@ -82,19 +76,21 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
 
         {tagQueryParam !== null && (
           <p className="text-sm text-lightText mb-4">
-            All notes with with the <strong>"{tagQueryParam}"</strong> tag are shown here.
+            All notes with with the <strong>"{tagQueryParam}"</strong> tag are
+            shown here.
           </p>
         )}
 
-        {((!notes?.length && !isLoading) || !allNotes?.length) && location.pathname !== "/search" && (
-          <div className="bg-lightGray p-2 mt-8 mb-4 rounded-md">
-            <p className="flex items-center justify-center text-sm text-lightText">
-              You don&apos;t have a note yet. Start a new note to capture your
-              thoughts and ideas.
-            </p>
-          </div>
-        )}
-        
+        {((!notes?.length && !isLoading) || !allNotes?.length) &&
+          location.pathname !== "/search" && (
+            <div className="bg-lightGray p-2 mt-8 mb-4 rounded-md">
+              <p className="flex items-center justify-center text-sm text-lightText">
+                You don&apos;t have a note yet. Start a new note to capture your
+                thoughts and ideas.
+              </p>
+            </div>
+          )}
+
         {((!notes?.length && !isLoading) || !allNotes?.length) && (
           <div className="bg-lightGray p-2 mt-8 mb-4 rounded-md">
             <p className="flex items-center justify-center text-sm text-lightText">
@@ -109,65 +105,16 @@ const AllNotes = ({ searchQuery }: { searchQuery?: string }) => {
 
         {notes && notes?.length > 0 && (
           <div className="overflow-y-auto max-h-[90vh] custom_scroll_bar">
-            {allNotes?.map((note: Note, index: number) => {
-              const formatNoteTitle = note.title
-                .toLowerCase()
-                .split(" ")
-                .join("-");
-
-              return (
-                <article
-                  key={note.title}
-                  className={`bg-transparent mb-2 rounded-md p-3 ${
-                    index === allNotes?.length - 1
-                      ? "border-b-0"
-                      : "border-b-[1px] border-darkerGray"
-                  } ${
-                    location.pathname === formatNoteTitle
-                      ? "lg:bg-lightGray lg:border-b-0"
-                      : formatNoteTitle === noteQueryParam && index > 0
-                      ? "lg:bg-lightGray lg:border-b-0"
-                      : note.title.toLowerCase().split(" ").join("-") ===
-                        (title as string)
-                      ? "lg:bg-lightGray lg:border-b-0"
-                      : location.pathname === "/" && index === 0 && !tagQueryParam
-                      ? "lg:bg-lightGray lg:border-b-0"
-                      : location.pathname === "/" && index === 0 && noteQueryParam === note.title.toLowerCase().split(" ").join("-")
-                      ? "lg:bg-lightGray lg:border-b-0"
-                      : location.pathname === "/tags" && index === 0
-                      ? "lg:bg-lightGray lg:border-b-0"
-                      : "bg-transparent lg:border-b-[1px] border-darkerGray"
-                  }`}
-                >
-                  <h2 className="text-xl font-semibold tracking-[-0.3px] text-primaryText">
-                    {tagQueryParam ? (
-                      <Link
-                        to={`/?tag=${tagQueryParam}&note=${formatNoteTitle}`}
-                      >
-                        {note.title}
-                      </Link>
-                    ) : (
-                      <Link to={`/${formatNoteTitle}`}>{note.title}</Link>
-                    )}
-                  </h2>
-
-                  <div className="flex flex-wrap items-center gap-[8px] mt-3">
-                    {note?.tags?.split(",").map((tag) => (
-                      <p
-                        key={tag}
-                        className="py-[2px] px-[6px] text-sm rounded-md bg-tagsBg"
-                      >
-                        {tag}
-                      </p>
-                    ))}
-                  </div>
-
-                  <small className="text-lightText block mt-4 font-medium text-xs tracking-[-0.2px]">
-                    {note?.updatedAt?.split("T")[0]}
-                  </small>
-                </article>
-              );
-            })}
+            {allNotes?.map((note: Note, index: number) => (
+              <NoteCard
+                key={note._id}
+                note={note}
+                index={index}
+                isLastNote={index === allNotes?.length - 1}
+                noteQueryParam={noteQueryParam}
+                tagQueryParam={tagQueryParam}
+              />
+            ))}
           </div>
         )}
       </section>
