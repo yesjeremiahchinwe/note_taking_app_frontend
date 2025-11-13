@@ -228,7 +228,15 @@ const NoteForm = React.memo(
         />
       </>
     );
-  }
+  }, (prevProps, nextProps) => (
+    prevProps.note.title === nextProps.note.title &&
+    prevProps.noteTitle === nextProps.noteTitle &&
+    prevProps.noteTags === nextProps.noteTags &&
+    prevProps.noteContent === nextProps.noteContent &&
+    prevProps.isLoadingAddNote === nextProps.isLoadingAddNote &&
+    prevProps.isLoadingUpdate === nextProps.isLoadingUpdate &&
+    prevProps.isOpenAlert === nextProps.isOpenAlert
+  )
 );
 
 export default NoteForm;
