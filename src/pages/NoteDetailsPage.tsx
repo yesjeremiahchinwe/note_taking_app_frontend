@@ -9,7 +9,6 @@ import {
 import { Link } from "react-router-dom";
 import React, {
   FormEvent,
-  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -163,28 +162,26 @@ const NoteDetailsPage = React.memo(
 
     const isArchivedPage = location.pathname.includes("/archived");
 
-    const onSubmit = useCallback(() => {
-      async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-        try {
-          const values = {
-            title: noteTitle?.trim(),
-            tags: noteTags?.trim(),
-            content: noteContent?.trim(),
-            userId,
-          };
+      try {
+        const values = {
+          title: noteTitle?.trim(),
+          tags: noteTags?.trim(),
+          content: noteContent?.trim(),
+          userId,
+        };
 
-          if (!foundNote || location.pathname.includes("/new")) {
-            await addNewNote({ ...values });
-          } else {
-            await updateNote({ ...values, id: foundNote?._id });
-          }
-        } catch (err: any) {
-          console.log(err);
+        if (!foundNote || location.pathname.includes("/new")) {
+          await addNewNote({ ...values });
+        } else {
+          await updateNote({ ...values, id: foundNote?._id });
         }
-      };
-    }, []);
+      } catch (err: any) {
+        console.log(err);
+      }
+    };
 
     if (isLoading) {
       return (
