@@ -38,7 +38,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <section className="flex lg:hidden w-full min-h-[60px] bg-lightGray text-primaryText lg:bg-transparent">
+      <section className="flex lg:hidden fixed top-0 w-full h-[60px] bg-lightGray text-primaryText lg:bg-transparent">
         <div className="pt-4 px-4 sm:px-[1.5rem]">
           <Link to="/">
             <LogoSVG color="currentColor" />
@@ -126,7 +126,7 @@ const Sidebar = () => {
                 {location.pathname.includes("archived") ? (
                   <Link
                     to={`/archived/?tag=${tag}`}
-                    className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-sm tracking-[-0.2px] ${
+                    className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-sm tracking-[-0.2px] hover:bg-lightGray ${
                       location.pathname.includes("/archived") &&
                       tagQueryParam === tag
                         ? "bg-lightGray"
@@ -147,7 +147,7 @@ const Sidebar = () => {
                         location.pathname.includes("/archived") &&
                         tagQueryParam === tag
                           ? "flex"
-                          : "hidden"
+                          : "hidden hover:flex"
                       }`}
                       color="currentColor"
                     />
@@ -155,7 +155,7 @@ const Sidebar = () => {
                 ) : (
                   <Link
                     to={`/?tag=${tag}`}
-                    className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-sm tracking-[-0.2px] 
+                    className={`flex items-center gap-3 py-3 pl-1 pr-2 rounded-[8px] text-lightText font-medium text-sm tracking-[-0.2px] hover:bg-lightGray 
                     ${
                       location.pathname === "/" && tagQueryParam === tag
                         ? "bg-lightGray"
@@ -174,7 +174,7 @@ const Sidebar = () => {
                       className={`ml-auto ${
                         location.pathname === "/" && tagQueryParam === tag
                           ? "flex"
-                          : "hidden"
+                          : "hidden hover:flex"
                       }`}
                       color="currentColor"
                     />

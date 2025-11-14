@@ -9,7 +9,6 @@ import {
 import { Link } from "react-router-dom";
 import React, {
   FormEvent,
-  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -163,28 +162,26 @@ const NoteDetailsPage = React.memo(
 
     const isArchivedPage = location.pathname.includes("/archived");
 
-    const onSubmit = useCallback(() => {
-      async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-        try {
-          const values = {
-            title: noteTitle?.trim(),
-            tags: noteTags?.trim(),
-            content: noteContent?.trim(),
-            userId,
-          };
+      try {
+        const values = {
+          title: noteTitle?.trim(),
+          tags: noteTags?.trim(),
+          content: noteContent?.trim(),
+          userId,
+        };
 
-          if (!foundNote || location.pathname.includes("/new")) {
-            await addNewNote({ ...values });
-          } else {
-            await updateNote({ ...values, id: foundNote?._id });
-          }
-        } catch (err: any) {
-          console.log(err);
+        if (!foundNote || location.pathname.includes("/new")) {
+          await addNewNote({ ...values });
+        } else {
+          await updateNote({ ...values, id: foundNote?._id });
         }
-      };
-    }, []);
+      } catch (err: any) {
+        console.log(err);
+      }
+    };
 
     if (isLoading) {
       return (
@@ -211,7 +208,7 @@ const NoteDetailsPage = React.memo(
               : location.pathname === "/archived"
               ? "hidden lg:flex"
               : "flex"
-          } lg:hidden items-center justify-between w-full py-3`}
+          } lg:hidden items-center justify-between fixed top-0 bg-background w-full pt-4 mt-[60px]`}
         >
           <Link
             to={goBackToPreviousPage}
@@ -226,7 +223,7 @@ const NoteDetailsPage = React.memo(
           <div className="flex items-center">
             <Button
               size="icon"
-              className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none mr-2"
+              className="bg-transparent dark:bg-transparent hover:bg-transparent text-primaryText dark:text-lighterGray shadow-none border-none mr-2"
               onClick={() =>
                 setIsOpen((prev) => ({ ...prev, deleteNote: !prev.deleteNote }))
               }
@@ -246,7 +243,7 @@ const NoteDetailsPage = React.memo(
             ) : (
               <Button
                 size="icon"
-                className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none"
+                className="bg-transparent dark:bg-transparent hover:bg-transparent text-primaryText dark:text-lighterGray shadow-none border-none"
                 onClick={() =>
                   setIsOpen((prev) => ({
                     ...prev,
@@ -268,7 +265,7 @@ const NoteDetailsPage = React.memo(
                   isLoadingUpdate
                 }
                 type="submit"
-                className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none text-skyBlue dark:text-lighterGray"
+                className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none text-skyBlue disabled:cursor-not-allowed dark:text-lighterGray"
               >
                 {isLoadingAddNote || isLoadingUpdate
                   ? "Saving..."
@@ -280,7 +277,7 @@ const NoteDetailsPage = React.memo(
 
         {/* -------------- Note Body ------------------ */}
         <section
-          className={`${
+          className={`mt-32 lg:mt-0 ${
             foundNote && location.pathname === "/" && noteQueryParam === null
               ? "hidden lg:block"
               : location.pathname === "/archived"
@@ -288,7 +285,7 @@ const NoteDetailsPage = React.memo(
               : !foundNote
               ? "block"
               : "block"
-          } pt-4 mx-[20px] lg:px-0 lg:mx-0 lg:pt-0 border-t-[1px] border-darkerGray lg:border-t-0`}
+          } pt-2 mx-[18px] lg:px-0 lg:mx-0 lg:pt-0 border-t-[1px] border-darkerGray lg:border-t-0`}
         >
           <NoteForm
             isNewNote={location.pathname.includes("/new") || !foundNote}
