@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentId } from "./store/auth/authSlice";
 import NoteDetailsPage from "./pages/NoteDetailsPage";
 import ProtectedPublicRoutes from "./components/ProtectedPublicRoutes";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));

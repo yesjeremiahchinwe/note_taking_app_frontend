@@ -66,8 +66,7 @@ const NoteCard = React.memo(
         </small>
       </article>
     );
-  },
-  (prevProps, nextProps) => prevProps.note.title === nextProps.note.title
+  }
 );
 
 export default NoteCard;

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-toastify";
 import {
   Form,
   FormControl,
@@ -30,9 +30,7 @@ const ColorThemeSettingsPage = () => {
   });
 
   const onSubmit = (data: z.infer<typeof changeColorThemeFormValidationSchema>) => {
-    toast({
-      title: `You switched to ${data.theme} theme`,
-    });
+    toast(`You switched to ${data.theme} theme`);
 
     setTheme(data.theme);
   };

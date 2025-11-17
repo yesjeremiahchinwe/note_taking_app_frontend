@@ -23,7 +23,7 @@ import {
 } from "@/store/auth/authApiSlice";
 import { setCredentials } from "@/store/auth/authSlice";
 import { useDispatch } from "react-redux";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-toastify";
 import { loginAndSignUpFormValidationSchema } from "@/lib/formValidations";
 
 const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
@@ -62,10 +62,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
   useEffect(() => {
     if (isSuccessAddNewUser) {
-      toast({
-        title: "Account created successfully!",
-        description: `You've successfully signed up for an account.`,
-      });
+      toast("Account created successfully!");
       setErrMsg("");
       navigate("/");
     }
@@ -81,10 +78,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
   useEffect(() => {
     if (isSuccessLogin) {
-      toast({
-        title: "Login successfully!",
-        description: `You've successfully logged in.`,
-      });
+      toast("Login successfully!");
       setErrMsg("");
       navigate("/");
     }
