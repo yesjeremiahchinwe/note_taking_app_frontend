@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
-import { Toaster } from "./ui/toaster";
 import useTitle from "@/hooks/useTitle";
 
 const Layout = () => {
@@ -14,7 +13,6 @@ const Layout = () => {
       <Outlet />
     </div>
     <Footer />
-    <Toaster />
   </div>
 )
 }

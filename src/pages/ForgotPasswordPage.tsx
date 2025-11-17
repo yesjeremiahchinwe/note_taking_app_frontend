@@ -14,13 +14,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import useTitle from "@/hooks/useTitle";
 import { useForgotPasswordMutation } from "@/store/auth/authApiSlice";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { forgotPasswordFormValidationSchema } from "@/lib/formValidations";
 
 const ForgotPasswordPage = () => {
   useTitle("Forgot Password");
-  
+
   const form = useForm<z.infer<typeof forgotPasswordFormValidationSchema>>({
     resolver: zodResolver(forgotPasswordFormValidationSchema),
     defaultValues: {
@@ -33,21 +33,12 @@ const ForgotPasswordPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast({
-        title: "Sent successfully!",
-        description: "A password reset link has been sent to your email",
-      });
+      toast("A password reset link has been sent to your email");
     }
 
     if (isError) {
-      toast({
-        title: "Oops! Something went wrong!",
-        //@ts-ignore
-        description: `${
-          //@ts-ignore
-          error.data?.message || error?.message || "Try again please!"
-        }`,
-      });
+      //@ts-ignore
+      toast(error.data?.message || error?.message || "Try again please!");
     }
   }, [isSuccess, isError]);
 
@@ -57,9 +48,7 @@ const ForgotPasswordPage = () => {
     try {
       await forgotPassword({ email: values.email });
     } catch (err: any) {
-      toast({
-        title: `Oops! ${err?.message || err?.data?.message}`,
-      });
+      toast(`Oops! ${err?.message || err?.data?.message}`);
     }
   };
 

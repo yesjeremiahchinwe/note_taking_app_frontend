@@ -9,7 +9,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useSendLogoutMutation } from "@/store/auth/authApiSlice";
 import { useEffect } from "react";
 import { persistor } from "@/store/store";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-toastify";
 
 const SettingsOptions = () => {
   const location = useLocation();
@@ -23,20 +23,15 @@ const SettingsOptions = () => {
       persistor.flush().then(() => {
         return persistor.purge();
       });
-      toast({
-        title: "Logged out successfully!.",
-      });
-      window.location.reload()
+      toast("Logged out successfully!");
+      window.location.reload();
     }
 
     if (isError) {
-      toast({
-        title: `${
-          //@ts-ignore
-          error?.data?.message ||
-          "Oops! Something went wrong. Please try again."
-        }`,
-      });
+      toast(
+        //@ts-ignore
+        error?.data?.message || "Oops! Something went wrong. Please try again."
+      );
     }
   }, [isSuccess, isError]);
 
@@ -44,7 +39,7 @@ const SettingsOptions = () => {
     try {
       await sendLogout({});
     } catch (err: any) {
-      console.log(err?.message);
+      toast.error(err?.data?.message || "Error occured");
     }
   };
 

@@ -43,6 +43,7 @@ const AllNotes = ({ searchQuery }: { searchQuery: string }) => {
     }
 
     return notes;
+    
   }, [notes, tagQueryParam, location.pathname, debouncedSearchTerm]);
 
   return (
@@ -100,7 +101,7 @@ const AllNotes = ({ searchQuery }: { searchQuery: string }) => {
         )}
 
         {isLoading && (
-          <LoadiingState message="Loading notes" className="h-full" />
+          <LoadiingState message="Loading notes" className="h-fit" />
         )}
 
         {notes && notes?.length > 0 && (

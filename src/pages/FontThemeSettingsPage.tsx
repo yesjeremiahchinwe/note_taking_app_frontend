@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-toastify";
 import {
   Form,
   FormControl,
@@ -35,9 +35,7 @@ const FontThemeSettingsPage = () => {
 
   function onSubmit(data: z.infer<typeof changeFontThemeFormValidationSchema>) {
     setFont(data.font);
-    toast({
-      title: `You switched to ${data.font} font theme`,
-    });
+    toast(`You switched to ${data.font} font theme`);
   }
 
   return (

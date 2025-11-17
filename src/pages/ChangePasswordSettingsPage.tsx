@@ -17,7 +17,7 @@ import { z } from "zod";
 import { ChevronLeftIcon, EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useUpdateUserPasswordMutation } from "@/store/users/usersApiSlice";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-toastify";
 import { changePasswordFormValidationSchema } from "@/lib/formValidations";
 
 const ChangePasswordSettingsPage = () => {
@@ -47,18 +47,14 @@ const ChangePasswordSettingsPage = () => {
     if (isError) {
       //@ts-ignore
       setErrMsg(error.data?.message || error?.message);
-      toast({
-        //@ts-ignore
-        title: `Oops! ${error?.data?.message}`,
-      });
+      //@ts-ignore
+      toast(`Oops! ${error?.data?.message}`);
     }
   }, [isError]);
 
   useEffect(() => {
     if (isSuccess) {
-      toast({
-        title: "Password updated successfully!",
-      });
+      toast("Password updated successfully!");
       navigate("/settings");
     }
   }, [isSuccess]);
@@ -195,10 +191,7 @@ const ChangePasswordSettingsPage = () => {
                 />
 
                 <FormDescription className="text flex items-center gap-1">
-                  <InfoIcon
-                    color="currentColor"
-                    size={16}
-                  />{" "}
+                  <InfoIcon color="currentColor" size={16} />{" "}
                   <span>At least 8 characters</span>
                 </FormDescription>
 

@@ -3,7 +3,7 @@ import {
   useMarkNoteAsArchivedMutation,
   useRestoreArchivedNoteMutation,
 } from "@/store/notes/notesApiSlice";
-import { toast } from "./use-toast";
+import { toast } from "react-toastify";
 import {
   useLocation,
   useNavigate
@@ -31,19 +31,14 @@ const useNotes = (foundNote: Note) => {
     try {
       await deleteNote({ id: foundNote?._id });
       setIsOpen((prev) => ({ ...prev, deleteNote: false }));
-      toast({
-        title: "Note deleted successfully!",
-      });
+      toast("Note deleted successfully!");
       if (location.pathname.includes("/archived")) {
         navigate("/archived");
       } else {
         navigate("/");
       }
     } catch (err: any) {
-      toast({
-        title: "Oops! Couldn't delete note",
-        description: `Error message: ${err?.message || err?.data?.message}`,
-      });
+      toast(`Error message: ${err?.message || err?.data?.message}`);
     }
   };
 
@@ -51,15 +46,10 @@ const useNotes = (foundNote: Note) => {
     try {
       await markNoteAsArchived({ id: foundNote?._id });
       setIsOpen((prev) => ({ ...prev, archiveNote: false }));
-      toast({
-        title: "Note archived successfully!",
-      });
+      toast("Note archived successfully!");
       navigate("/");
     } catch (err: any) {
-      toast({
-        title: "Oops! Couldn't archive note",
-        description: `Error message: ${err?.message || err?.data?.message}`,
-      });
+      toast(`Error message: ${err?.message || err?.data?.message}`);
     }
   };
 
@@ -67,16 +57,10 @@ const useNotes = (foundNote: Note) => {
     try {
       await restoreArchivedNote({ id: foundNote?._id });
       setIsOpen((prev) => ({ ...prev, archiveNote: false }));
-      toast({
-        title: "Note restored successfully!",
-        description: "Your note is now under your 'All Notes' tab",
-      });
+      toast("Note restored successfully!");
       navigate("/");
     } catch (err: any) {
-      toast({
-        title: "Oops! Couldn't restore note",
-        description: `Error message: ${err?.message || err?.data?.message}`,
-      });
+      toast(`Error message: ${err?.message || err?.data?.message}`);
     }
   };
 

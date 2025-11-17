@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import { Note } from "@/lib/types";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import DeleteModal from "./modals/DeleteNoteModal";
 import ArchiveNoteModal from "./modals/ArchiveNoteModal";
 import {
@@ -16,10 +16,6 @@ import useNotes from "@/hooks/useNotes";
 const RightSidebar = () => {
   const location = useLocation();
   const { title } = useParams();
-  const [isOpen, setIsOpen] = useState({
-    archiveNote: false,
-    deleteNote: false,
-  });
 
   const userId = useSelector(selectCurrentId);
   const [searchParams] = useSearchParams();
@@ -54,6 +50,8 @@ const RightSidebar = () => {
     isLoadingArchiveNote,
     isLoadingDeleteNote,
     isLoadingRestoreNote,
+    isOpen,
+    setIsOpen
   } = useNotes(foundNote as Note);
 
   return (

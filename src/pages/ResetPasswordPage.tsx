@@ -18,7 +18,7 @@ import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import useTitle from "@/hooks/useTitle";
 import { useResetPasswordMutation } from "@/store/auth/authApiSlice";
 import { useParams } from "react-router-dom";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-toastify";
 import { resetPasswordFormValidationSchema } from "@/lib/formValidations";
 
 const ResetPasswordPage = () => {
@@ -49,14 +49,9 @@ const ResetPasswordPage = () => {
         newPassword: values.newPassword,
         confirmNewPassword: values.confirmNewPassword,
       });
-      toast({
-        title: "Password reset successfully!",
-        description: `You've successfully reset your password.`,
-      });
+      toast(`You've successfully reset your password.`);
     } catch (err: any) {
-      toast({
-        title: `Oops! ${err?.message || err?.data?.message}`,
-      });
+      toast(`Oops! ${err?.message || err?.data?.message}`);
     }
   };
 
