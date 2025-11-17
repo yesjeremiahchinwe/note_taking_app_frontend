@@ -62,7 +62,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
   useEffect(() => {
     if (isSuccessAddNewUser) {
-      toast("Account created successfully!");
+      toast.success("Account created successfully!");
       setErrMsg("");
       navigate("/");
     }
@@ -78,7 +78,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
 
   useEffect(() => {
     if (isSuccessLogin) {
-      toast("Login successfully!");
+      toast.success("Login successfully!");
       setErrMsg("");
       navigate("/");
     }

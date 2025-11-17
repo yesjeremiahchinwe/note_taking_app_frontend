@@ -30,7 +30,7 @@ const ColorThemeSettingsPage = () => {
   });
 
   const onSubmit = (data: z.infer<typeof changeColorThemeFormValidationSchema>) => {
-    toast(`You switched to ${data.theme} theme`);
+    toast.success(`You switched to ${data.theme} theme`);
 
     setTheme(data.theme);
   };

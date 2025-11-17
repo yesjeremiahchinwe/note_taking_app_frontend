@@ -49,9 +49,9 @@ const ResetPasswordPage = () => {
         newPassword: values.newPassword,
         confirmNewPassword: values.confirmNewPassword,
       });
-      toast(`You've successfully reset your password.`);
+      toast.success(`You've successfully reset your password.`);
     } catch (err: any) {
-      toast(`Oops! ${err?.message || err?.data?.message}`);
+      toast.success(`Oops! ${err?.message || err?.data?.message}`);
     }
   };
 

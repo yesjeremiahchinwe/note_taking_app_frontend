@@ -110,15 +110,15 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
         setNoteTitle("");
         setNoteTags("");
         setNoteContent("");
-        toast(response?.data?.message || "Note created successfully!");
+        toast.success(response?.data?.message || "Note created successfully!");
         navigate("/");
       } else {
         const response = await updateNote({ ...values, id: foundNote?._id });
-        toast(response?.data?.message || "Note updated successfully!");
+        toast.success(response?.data?.message || "Note updated successfully!");
         navigate("/");
       }
     } catch (err: any) {
-      toast(err?.error?.data?.message || "Something went wrong");
+      toast.error(err?.error?.data?.message || "Something went wrong");
     }
   };
 
