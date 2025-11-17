@@ -1,4 +1,4 @@
-import AuthForm from "@/components/AuthForm"
+import AuthForm from "@/components/forms/AuthForm"
 import useTitle from "@/hooks/useTitle";
 
 const LoginPage = () => {

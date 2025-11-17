@@ -1,6 +1,6 @@
 import { LogoSVG } from "@/lib/icons";
 import { AuthFormProp } from "@/lib/types";
-import { Button } from "../components/ui/button";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,

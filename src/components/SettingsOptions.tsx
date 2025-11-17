@@ -5,7 +5,7 @@ import {
   IconLogout,
   IconSun,
 } from "@/lib/icons";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSendLogoutMutation } from "@/store/auth/authApiSlice";
 import { useEffect } from "react";
 import { persistor } from "@/store/store";
@@ -13,7 +13,6 @@ import { toast } from "@/hooks/use-toast";
 
 const SettingsOptions = () => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const [sendLogout, { isLoading, isSuccess, isError, error }] =
     useSendLogoutMutation();
@@ -27,7 +26,7 @@ const SettingsOptions = () => {
       toast({
         title: "Logged out successfully!.",
       });
-      navigate("/login");
+      window.location.reload()
     }
 
     if (isError) {
@@ -53,7 +52,7 @@ const SettingsOptions = () => {
     <section
       className={`${
         location.pathname === "/settings" ? "block" : "hidden lg:block"
-      } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen h-screen overflow-auto lg:border-r-[1px] border-darkerGray w-full`}
+      } basis-full lg:basis-[25%] lg:pr-4 pt-20 lg:pt-4 pb-[4rem] px-4 lg:px-0 lg:max-h-screen h-screen overflow-auto lg:border-r-[1px] border-darkerGray w-full`}
     >
       <h2 className="block lg:hidden px-1 pb-5 font-bold text-2xl tracking-[-0.5px]">
         Settings

@@ -37,7 +37,7 @@ const ArchivedNotes = () => {
       <section
         className={`${
           location.pathname === "/archived" ? "block" : "hidden lg:block"
-        } basis-full lg:basis-[25%] lg:pr-4 pt-4 pb-[4rem] px-4 lg:px-0 h-screen overflow-auto lg:border-r-[1px] border-darkerGray w-full custom_scroll_bar`}
+        } basis-full lg:basis-[25%] lg:pr-4 pt-8 lg:pt-4 pb-[4rem] px-4 lg:px-0 h-screen overflow-auto lg:border-r-[1px] border-darkerGray w-full custom_scroll_bar`}
       >
         <div className="max-w-[96%] mx-auto">
           <CustomButton

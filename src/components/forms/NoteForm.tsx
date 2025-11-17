@@ -1,12 +1,12 @@
 import { Input } from "@/components/ui/input";
-import { Button } from "../components/ui/button";
+import { Button } from "../ui/button";
 import { IconClock, IconStatus, IconTag } from "@/lib/icons";
 import { Note } from "@/lib/types";
 import useTitle from "@/hooks/useTitle";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Font } from "@/providers/font-provider";
-import AlertModal from "./modals/alert-modal";
+import AlertModal from "../modals/alert-modal";
 
 interface NoteFormProps {
   isNewNote?: boolean;

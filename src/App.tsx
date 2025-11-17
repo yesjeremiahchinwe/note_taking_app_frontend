@@ -12,6 +12,7 @@ import {
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "./store/auth/authSlice";
 import NoteDetailsPage from "./pages/NoteDetailsPage";
+import ProtectedPublicRoutes from "./components/ProtectedPublicRoutes";
 
 const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
@@ -41,10 +42,15 @@ function App() {
     <Suspense fallback={<LoadingState message="Please wait" />}>
       <Routes>
         {/* ------------ Authentication routes ---------------- */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/create" element={<SignUpPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/:userId/reset-password" element={<ResetPasswordPage />} />
+        <Route element={<ProtectedPublicRoutes />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/create" element={<SignUpPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route
+            path="/:userId/reset-password"
+            element={<ResetPasswordPage />}
+          />
+        </Route>
 
         {/* -------------- Home and Main application routes ---------------- */}
         <Route element={<RequireAuth />}>
