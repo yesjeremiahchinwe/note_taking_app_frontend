@@ -23,12 +23,12 @@ const SettingsOptions = () => {
       persistor.flush().then(() => {
         return persistor.purge();
       });
-      toast("Logged out successfully!");
+      toast.success("Logged out successfully!");
       window.location.reload();
     }
 
     if (isError) {
-      toast(
+      toast.error(
         //@ts-ignore
         error?.data?.message || "Oops! Something went wrong. Please try again."
       );

@@ -33,12 +33,12 @@ const ForgotPasswordPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast("A password reset link has been sent to your email");
+      toast.success("A password reset link has been sent to your email");
     }
 
     if (isError) {
       //@ts-ignore
-      toast(error.data?.message || error?.message || "Try again please!");
+      toast.error(error.data?.message || error?.message || "Try again please!");
     }
   }, [isSuccess, isError]);
 
@@ -48,7 +48,7 @@ const ForgotPasswordPage = () => {
     try {
       await forgotPassword({ email: values.email });
     } catch (err: any) {
-      toast(`Oops! ${err?.message || err?.data?.message}`);
+      toast.error(`Oops! ${err?.message || err?.data?.message}`);
     }
   };
 

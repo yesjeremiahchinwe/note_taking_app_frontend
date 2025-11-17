@@ -31,14 +31,14 @@ const useNotes = (foundNote: Note) => {
     try {
       await deleteNote({ id: foundNote?._id });
       setIsOpen((prev) => ({ ...prev, deleteNote: false }));
-      toast("Note deleted successfully!");
+      toast.success("Note deleted successfully!");
       if (location.pathname.includes("/archived")) {
         navigate("/archived");
       } else {
         navigate("/");
       }
     } catch (err: any) {
-      toast(`Error message: ${err?.message || err?.data?.message}`);
+      toast.error(`Error message: ${err?.message || err?.data?.message}`);
     }
   };
 
@@ -46,10 +46,10 @@ const useNotes = (foundNote: Note) => {
     try {
       await markNoteAsArchived({ id: foundNote?._id });
       setIsOpen((prev) => ({ ...prev, archiveNote: false }));
-      toast("Note archived successfully!");
+      toast.success("Note archived successfully!");
       navigate("/");
     } catch (err: any) {
-      toast(`Error message: ${err?.message || err?.data?.message}`);
+      toast.error(`Error message: ${err?.message || err?.data?.message}`);
     }
   };
 
@@ -57,10 +57,10 @@ const useNotes = (foundNote: Note) => {
     try {
       await restoreArchivedNote({ id: foundNote?._id });
       setIsOpen((prev) => ({ ...prev, archiveNote: false }));
-      toast("Note restored successfully!");
+      toast.success("Note restored successfully!");
       navigate("/");
     } catch (err: any) {
-      toast(`Error message: ${err?.message || err?.data?.message}`);
+      toast.error(`Error message: ${err?.message || err?.data?.message}`);
     }
   };
 

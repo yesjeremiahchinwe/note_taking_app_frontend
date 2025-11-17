@@ -35,7 +35,7 @@ const FontThemeSettingsPage = () => {
 
   function onSubmit(data: z.infer<typeof changeFontThemeFormValidationSchema>) {
     setFont(data.font);
-    toast(`You switched to ${data.font} font theme`);
+    toast.success(`You switched to ${data.font} font theme`);
   }
 
   return (

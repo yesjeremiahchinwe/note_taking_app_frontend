@@ -48,13 +48,13 @@ const ChangePasswordSettingsPage = () => {
       //@ts-ignore
       setErrMsg(error.data?.message || error?.message);
       //@ts-ignore
-      toast(`Oops! ${error?.data?.message}`);
+      toast.error(`Oops! ${error?.data?.message}`);
     }
   }, [isError]);
 
   useEffect(() => {
     if (isSuccess) {
-      toast("Password updated successfully!");
+      toast.success("Password updated successfully!");
       navigate("/settings");
     }
   }, [isSuccess]);
