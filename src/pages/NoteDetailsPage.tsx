@@ -15,7 +15,7 @@ import React, {
 } from "react";
 import DeleteModal from "@/components/modals/DeleteNoteModal";
 import ArchiveNoteModal from "@/components/modals/ArchiveNoteModal";
-import NoteForm from "@/components/NoteForm";
+import NoteForm from "@/components/forms/NoteForm";
 import {
   ArchiveRestore,
   ChevronLeftIcon,

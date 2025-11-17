@@ -22,7 +22,7 @@ const Sidebar = () => {
 
   const { data: notes } = useGetNotesQuery(userId);
 
-  // Fetch all tags (string), and 
+  // Fetch all tags (string), and
   // convert each tag in that string into array element - resulting to array of arrays
   const allTags: string[][] = notes?.map((note) =>
     note.tags?.split(",")

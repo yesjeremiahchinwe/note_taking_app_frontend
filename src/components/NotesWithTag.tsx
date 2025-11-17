@@ -22,7 +22,7 @@ const NotesWithTag = () => {
     const listOfTags = flattenAndRemoveDuplicates(allTags)
 
   return (
-    <section className="block lg:hidden px-[1.85rem] pt-3 pb-[6rem] min-h-screen">
+    <section className="block lg:hidden px-[1.85rem] pt-20 lg:pt-3 pb-[6rem] min-h-screen">
       <h2 className="block lg:hidden pb-5 font-bold text-2xl tracking-[-0.5px] static top-0">
         Tags
       </h2>

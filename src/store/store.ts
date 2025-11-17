@@ -3,16 +3,15 @@ import {
   persistStore,
   persistReducer
 } from "redux-persist";
-// import storage from "redux-persist/lib/storage";
 import { apiSlice } from "./api/apiSlice";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import authReducer from "./auth/authSlice";
-import sessionStorage from "redux-persist/lib/storage/session";
+import localStorage from "redux-persist/lib/storage";
 
 const persistConfig = {
   key: "root",
   version: 1,
-  storage: sessionStorage,
+  storage: localStorage,
 };
 
 const persistedReducer = persistReducer(persistConfig, authReducer);

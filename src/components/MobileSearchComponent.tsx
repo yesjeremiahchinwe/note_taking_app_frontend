@@ -29,11 +29,11 @@ const MobileSearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
         note?.title?.toLowerCase().includes(debouncedSearchTerm) ||
         note?.tags?.toLowerCase().includes(debouncedSearchTerm) ||
         note?.content?.toLowerCase().includes(debouncedSearchTerm)
-    ) as Note[];
+    ) as Note[] || notes;
   }, [notes, debouncedSearchTerm]);
 
   return (
-    <section className="block lg:hidden px-[1.85rem] pt-3 mt-3 pb-[6rem] min-h-screen">
+    <section className="block lg:hidden px-[1.85rem] pt-20 lg:pt-3 mt-3 pb-[6rem] min-h-screen">
       <div className="w-full relative">
         <IconSearch
           color="currentColor"
