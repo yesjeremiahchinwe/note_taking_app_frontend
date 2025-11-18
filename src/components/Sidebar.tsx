@@ -46,7 +46,7 @@ const Sidebar = () => {
         </div>
       </section>
 
-      <aside className="md:basis-[35%] xl:basis-[22%] min-h-screen hidden lg:flex flex-col border-r-[1px] border-darkerGray">
+      <aside className="md:basis-[35%] xl:basis-[22%] overflow-y-auto h-screen custom_scroll_bar hidden lg:flex flex-col border-r-[1px] border-darkerGray">
         <div className="min-h-[81px] pt-6 px-[1.85rem]">
           <Link to="/">
             <LogoSVG color="currentColor" />
@@ -113,16 +113,16 @@ const Sidebar = () => {
           </ul>
         </nav>
 
-        <section className="px-[1.85rem] py-3">
-          <h3 className="text-darkGray font-medium text-base leading-5 tracking-[-0.2px]">
+        <section className="py-3">
+          <h3 className="text-darkGray px-[1.85rem] font-medium text-base leading-5 tracking-[-0.2px]">
             Tags
           </h3>
 
           {!notes?.length && null}
 
-          <ul className="flex flex-col gap-1 my-4 max-h-[60vh] overflow-y-auto custom_scroll_bar">
+          <ul className="flex flex-col gap-1 my-4 pl-[1.85rem] max-h-[53vh] overflow-y-auto custom_scroll_bar">
             {listOfTags?.map((tag: any, index) => (
-              <li key={index}>
+              <li key={index} className="mr-6">
                 {location.pathname.includes("archived") ? (
                   <Link
                     to={`/archived/?tag=${tag}`}

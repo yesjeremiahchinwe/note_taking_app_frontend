@@ -144,7 +144,7 @@ body::-webkit-scrollbar {
 
 @layer utilities {
   .layout {
-    @apply bg-background flex flex-col lg:flex-row items-start h-full w-full
+    @apply bg-background flex flex-col lg:flex-row items-start h-screen w-full max-w-[1500px] mx-auto
   }
 
   .nav-link {
