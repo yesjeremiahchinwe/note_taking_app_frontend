@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { MobileNavLink } from "./types";
 import {
   IconArchive,
@@ -10,12 +10,15 @@ import {
 
 export const MobileNavLinks = () => {
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  const tagQueryParam = searchParams.get("tag");
 
   const mobileLinks: MobileNavLink[] = [
     {
       text: "Home",
       path: "/",
-      isActive: location.pathname === "/",
+      isActive: location.pathname === "/" && tagQueryParam === null,
       Icon: IconHome,
     },
     {
@@ -27,19 +30,19 @@ export const MobileNavLinks = () => {
     {
       text: "Archived",
       path: "/archived",
-      isActive: location.pathname === "/archived",
+      isActive: location.pathname.includes("/archived"),
       Icon: IconArchive,
     },
     {
       text: "Tags",
       path: "/tags",
-      isActive: location.pathname === "/tags",
+      isActive: location.pathname === "/tags" || (location.pathname === "/" && tagQueryParam !== null),
       Icon: IconTag,
     },
     {
       text: "Settings",
       path: "/settings",
-      isActive: location.pathname === "/settings",
+      isActive: location.pathname.includes("/settings"),
       Icon: IconSettings,
     },
   ];

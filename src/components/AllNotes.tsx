@@ -53,7 +53,7 @@ const AllNotes = ({ searchQuery }: { searchQuery: string }) => {
           notes?.length && location.pathname === "/" && noteQueryParam === null
             ? "block"
             : "hidden lg:block"
-        } basis-full lg:basis-[25%] lg:pr-4 pt-8 lg:pt-4 pb-[4rem] px-4 lg:px-0 min-h-screen lg:border-r-[1px] border-darkerGray w-full lg:max-h-[60vh] overflow-y-auto custom_scroll_bar`}
+        } basis-full lg:basis-[21%] lg:pr-3 pt-8 lg:pt-4 pb-[4rem] px-4 lg:px-0 min-h-screen lg:border-r-[1px] border-darkerGray w-full lg:max-h-[60vh] overflow-y-auto custom_scroll_bar`}
       >
         <div className="max-w-[96%] mx-auto">
           <CustomButton
@@ -64,9 +64,9 @@ const AllNotes = ({ searchQuery }: { searchQuery: string }) => {
           ></CustomButton>
         </div>
 
-        <h2 className="block lg:hidden px-1 pb-5 font-bold text-2xl tracking-[-0.5px]">
+        <h2 className="block lg:hidden px-1 pb-5 font-bold text-xl sm:text-2xl tracking-[-0.5px]">
           {tagQueryParam !== null ? (
-            <span className="text-lighterGray">
+            <span className="text-lighterGray block mt-12 lg:mt-0">
               Notes Tagged:{" "}
               <span className="text-primaryText">{tagQueryParam}</span>
             </span>

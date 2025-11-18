@@ -57,7 +57,7 @@ const RightSidebar = () => {
   return (
     <>
       <section
-        className={`hidden lg:block basis-[25%] py-5 pl-4 h-screen border-l-[1px] ${
+        className={`hidden lg:block basis-[20%] py-5 pl-4 h-screen border-l-[1px] ${
           notes?.length ? "border-darkerGray" : "border-transparent"
         }`}
       >

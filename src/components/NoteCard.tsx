@@ -1,4 +1,5 @@
 import { Note } from "@/lib/types";
+import { shortenText } from "@/lib/utils";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -46,7 +47,7 @@ const NoteCard = React.memo(
               {note.title}
             </Link>
           ) : (
-            <Link to={`/${formatedNoteTitle}`}>{note.title}</Link>
+            <Link to={`/${formatedNoteTitle}`}>{shortenText(note.title, 35)}</Link>
           )}
         </h2>
 

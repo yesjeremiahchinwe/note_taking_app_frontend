@@ -39,7 +39,7 @@ const Header = ({ searchQuery, setSearchQuery }: Props) => {
   return (
     <header>
       {/* ------------- Desktop View ----------------- */}
-      <div className="hidden lg:flex w-full min-h-[91px] px-[2rem] border-b-[1px] border-darkerGray items-center justify-between flex-1">
+      <div className="hidden lg:flex w-full min-h-[81px] px-[2rem] border-b-[1px] border-darkerGray items-center justify-between flex-1">
         <h1 className="font-bold text-2xl text-primaryText leading-7 basis-[40%]">
           {tagQueryParam !== null ? (
             <span className="text-lighterGray">

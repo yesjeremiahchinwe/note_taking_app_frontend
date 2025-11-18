@@ -148,6 +148,6 @@ body::-webkit-scrollbar {
   }
 
   .nav-link {
-    @apply flex items-center gap-3 py-3 px-3 font-medium text-lg leading-4 tracking-[-0.2px] text-primaryText
+    @apply flex items-center gap-3 py-3 px-3 font-medium text-base leading-5 tracking-[-0.2px] text-primaryText
   }
 }
