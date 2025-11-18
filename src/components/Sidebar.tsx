@@ -46,7 +46,7 @@ const Sidebar = () => {
         </div>
       </section>
 
-      <aside className="md:basis-[35%] xl:basis-[22%] overflow-y-auto max-h-screen custom_scroll_bar hidden lg:flex flex-col border-r-[1px] border-darkerGray">
+      <aside className="md:basis-[35%] xl:basis-[22%] overflow-y-auto h-screen custom_scroll_bar hidden lg:flex flex-col border-r-[1px] border-darkerGray">
         <div className="min-h-[81px] pt-6 px-[1.85rem]">
           <Link to="/">
             <LogoSVG color="currentColor" />
