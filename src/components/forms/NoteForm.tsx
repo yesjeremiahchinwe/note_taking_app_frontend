@@ -3,10 +3,9 @@ import { Button } from "../ui/button";
 import { IconClock, IconStatus, IconTag } from "@/lib/icons";
 import { Note } from "@/lib/types";
 import useTitle from "@/hooks/useTitle";
-import React, { FormEvent, useEffect, useRef, useState } from "react";
-import { Editor } from "@tinymce/tinymce-react";
-import { Font } from "@/providers/font-provider";
+import React, { FormEvent, useEffect, useRef } from "react";
 import AlertModal from "../modals/alert-modal";
+import TextEditor from "../TextEditor";
 
 interface NoteFormProps {
   isNewNote?: boolean;
@@ -41,9 +40,6 @@ const NoteForm = React.memo(
     setIsOpenAlert,
   }: NoteFormProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [font] = useState<Font>(
-      () => (localStorage.getItem("notes-font") as Font) || "sans-serif"
-    );
 
     useEffect(() => {
       if (isNewNote) {
@@ -71,7 +67,7 @@ const NoteForm = React.memo(
 
     return (
       <>
-        <form className="w-full flex flex-col lg:px-2" onSubmit={onSubmit}>
+        <form className="w-full flex lg:pt-2 flex-col lg:px-2" onSubmit={onSubmit}>
           <div>
             <label
               htmlFor="title"
@@ -82,7 +78,7 @@ const NoteForm = React.memo(
             <Input
               type="text"
               ref={isNewNote && !note ? inputRef : null}
-              className={`h-[50px] w-[102%] flex flex-wrap text-xl md:text-[1.7rem] font-bold placeholder:text-primaryText tracking-[-0.5px] ml-[-0.65rem] border-none shadow-none`}
+              className={`h-[50px] w-full flex flex-wrap text-xl md:text-[1.7rem] font-bold placeholder:text-primaryText tracking-[-0.5px] ml-[-0.45rem] border-none shadow-none`}
               value={noteTitle}
               placeholder="Enter note title..."
               onChange={(e) => setNoteTitle(e.target.value)}
@@ -144,7 +140,7 @@ const NoteForm = React.memo(
             </div>
           </article>
 
-          <div className="flex flex-col justify-between h-full flex-grow pb-[3rem] mb-[3rem] lg:max-h-[60vh] overflow-y-auto custom_scroll_bar">
+          <div className="flex flex-col justify-between h-full flex-grow pb-[3rem] mb-[3rem] overflow-y-auto custom_scroll_bar">
             <div className="py-4 flex-1">
               <label
                 htmlFor="title"
@@ -153,47 +149,9 @@ const NoteForm = React.memo(
                 Note Content
               </label>
 
-              <Editor
-                apiKey={
-                  import.meta.env.VITE_REACT_APP_TINYMCE_TEXT_EDITOR_API_KEY
-                }
-                onInit={(_evt, editor) => {
-                  setNoteContent(editor.getContent());
-                }}
-                value={noteContent}
-                onEditorChange={(newValue) => {
-                  setNoteContent(newValue);
-                }}
-                init={{
-                  height: 280,
-                  menubar: false,
-                  plugins: [
-                    "advlist",
-                    "autolink",
-                    "lists",
-                    "link",
-                    "image",
-                    "charmap",
-                    "preview",
-                    "anchor",
-                    "searchreplace",
-                    "visualblocks",
-                    "code",
-                    "fullscreen",
-                    "insertdatetime",
-                    "media",
-                    "table",
-                    "code",
-                    "help",
-                    "wordcount",
-                  ],
-                  toolbar:
-                    "undo redo | blocks | " +
-                    "bold italic forecolor | alignleft aligncenter " +
-                    "alignright alignjustify | bullist numlist outdent indent | " +
-                    "removeformat | help",
-                  content_style: `body { font-family:${font}; font-size:14px; }`,
-                }}
+              <TextEditor
+                noteContent={noteContent}
+                setNoteContent={setNoteContent}
               />
             </div>
 
@@ -228,6 +186,7 @@ const NoteForm = React.memo(
         />
       </>
     );
-  });
+  }
+);
 
 export default NoteForm;

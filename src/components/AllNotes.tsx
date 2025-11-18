@@ -53,9 +53,9 @@ const AllNotes = ({ searchQuery }: { searchQuery: string }) => {
           notes?.length && location.pathname === "/" && noteQueryParam === null
             ? "block"
             : "hidden lg:block"
-        } basis-full lg:basis-[21%] lg:pr-3 pt-8 lg:pt-4 pb-[4rem] px-4 lg:px-0 min-h-screen lg:border-r-[1px] border-darkerGray w-full lg:max-h-[60vh] overflow-y-auto custom_scroll_bar`}
+        } basis-full lg:basis-[21%] lg:pr-3 pt-8 lg:pt-0 pb-[4rem] px-4 lg:px-0 min-h-screen lg:border-r-[1px] relative border-darkerGray w-full lg:max-h-[60vh] overflow-y-auto custom_scroll_bar`}
       >
-        <div className="max-w-[96%] mx-auto">
+        <div className="max-w-[100%] lg:pt-4 w-full sticky top-0 bg-background mx-auto">
           <CustomButton
             className="hidden lg:flex mb-5"
             onClick={() => navigate("/new")}
@@ -105,7 +105,7 @@ const AllNotes = ({ searchQuery }: { searchQuery: string }) => {
         )}
 
         {notes && notes?.length > 0 && (
-          <div className="overflow-y-auto max-h-[90vh] custom_scroll_bar">
+          <div className="overflow-y-auto max-h-[90vh] pb-14 custom_scroll_bar">
             {allNotes?.map((note: Note, index: number) => (
               <NoteCard
                 key={note._id}

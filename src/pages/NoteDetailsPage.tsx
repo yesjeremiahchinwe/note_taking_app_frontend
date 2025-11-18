@@ -6,7 +6,6 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { Link } from "react-router-dom";
 import React, { FormEvent, useMemo, useState } from "react";
 import DeleteModal from "@/components/modals/DeleteNoteModal";
 import ArchiveNoteModal from "@/components/modals/ArchiveNoteModal";
@@ -85,12 +84,6 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
 
   const [updateNote, { isLoading: isLoadingUpdate }] = useUpdateNoteMutation();
 
-  const goBackToPreviousPage = location.pathname.includes("archived")
-    ? "/archived"
-    : tagQueryParam !== null
-    ? `/tags`
-    : "/";
-
   const isArchivedPage = location.pathname.includes("/archived");
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -104,7 +97,7 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
         userId,
       };
 
-      if (!foundNote || location.pathname.includes("/new")) {
+      if (!foundNote || location.pathname === "/new") {
         const response = await addNewNote({ ...values });
 
         setNoteTitle("");
@@ -131,7 +124,7 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
   }
 
   return (
-    <>
+    <div className="overflow-y-auto max-h-[90vh] custom_scroll_bar">
       {/* ------------ Note Details Header --------------- */}
       <div
         className={`${
@@ -149,28 +142,31 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
             : location.pathname === "/archived"
             ? "hidden lg:flex"
             : "flex"
-        } lg:hidden items-center justify-between fixed top-0 bg-background z-20 w-full pt-4 mt-[60px]`}
+        } lg:hidden items-center justify-between fixed top-0 bg-background z-20 w-full pt-4 pb-3 mt-[60px]`}
       >
-        <Link
-          to={goBackToPreviousPage}
-          className="flex items-center gap-1 pl-[14px] text-primaryText"
+        <Button
+          disabled={isLoadingAddNote || isLoadingUpdate}
+          onClick={() => navigate(-1)}
+          className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none text-skyBlue disabled:cursor-not-allowed dark:text-lighterGray"
         >
           <ChevronLeftIcon color="currentColor" />
           <span className="text-lighterGray font-normal tracking-[-0.2px] text-sm">
             Go Back
           </span>
-        </Link>
+        </Button>
 
         <div className="flex items-center">
-          <Button
-            size="icon"
-            className="bg-transparent dark:bg-transparent hover:bg-transparent text-primaryText dark:text-lighterGray shadow-none border-none mr-2"
-            onClick={() =>
-              setIsOpen((prev) => ({ ...prev, deleteNote: !prev.deleteNote }))
-            }
-          >
-            <Trash2Icon size={24} color="currentColor" />
-          </Button>
+          {location.pathname !== "/new" && (
+            <Button
+              size="icon"
+              className="bg-transparent dark:bg-transparent hover:bg-transparent text-primaryText dark:text-lighterGray shadow-none border-none mr-2"
+              onClick={() =>
+                setIsOpen((prev) => ({ ...prev, deleteNote: !prev.deleteNote }))
+              }
+            >
+              <Trash2Icon size={24} color="currentColor" />
+            </Button>
+          )}
 
           {isArchivedPage ? (
             <Button
@@ -182,18 +178,22 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
               <RefreshCcwIcon size={24} color="currentColor" />
             </Button>
           ) : (
-            <Button
-              size="icon"
-              className="bg-transparent dark:bg-transparent hover:bg-transparent text-primaryText dark:text-lighterGray shadow-none border-none"
-              onClick={() =>
-                setIsOpen((prev) => ({
-                  ...prev,
-                  archiveNote: !prev.archiveNote,
-                }))
-              }
-            >
-              <ArchiveRestore size={20} color="currentColor" />
-            </Button>
+            <>
+              {location.pathname !== "/new" && (
+                <Button
+                  size="icon"
+                  className="bg-transparent dark:bg-transparent hover:bg-transparent text-primaryText dark:text-lighterGray shadow-none border-none"
+                  onClick={() =>
+                    setIsOpen((prev) => ({
+                      ...prev,
+                      archiveNote: !prev.archiveNote,
+                    }))
+                  }
+                >
+                  <ArchiveRestore size={20} color="currentColor" />
+                </Button>
+              )}
+            </>
           )}
 
           <form onSubmit={onSubmit}>
@@ -227,7 +227,7 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
         } pt-2 mx-[18px] lg:px-0 lg:mx-0 lg:pt-0 border-t-[1px] border-darkerGray lg:border-t-0`}
       >
         <NoteForm
-          isNewNote={location.pathname.includes("/new") || !foundNote}
+          isNewNote={location.pathname === "/new" || !foundNote}
           note={foundNote}
           noteTitle={noteTitle}
           setNoteTitle={setNoteTitle}
@@ -256,7 +256,7 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
         onConfirm={() => onArchiveNote()}
         loading={isLoadingArchiveNote}
       />
-    </>
+    </div>
   );
 });
 
