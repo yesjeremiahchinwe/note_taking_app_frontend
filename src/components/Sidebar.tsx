@@ -38,7 +38,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <section className="flex lg:hidden fixed top-0 w-full h-[60px] bg-lightGray text-primaryText lg:bg-transparent">
+      <section className="flex lg:hidden fixed top-0 w-full h-[60px] bg-lightGray text-primaryText lg:bg-transparent z-40">
         <div className="pt-4 px-4 sm:px-[1.5rem]">
           <Link to="/">
             <LogoSVG color="currentColor" />
@@ -46,7 +46,7 @@ const Sidebar = () => {
         </div>
       </section>
 
-      <aside className="md:basis-[35%] xl:basis-[25%] min-h-screen hidden lg:flex flex-col border-r-[1px] border-darkerGray">
+      <aside className="md:basis-[35%] xl:basis-[22%] min-h-screen hidden lg:flex flex-col border-r-[1px] border-darkerGray">
         <div className="min-h-[81px] pt-6 px-[1.85rem]">
           <Link to="/">
             <LogoSVG color="currentColor" />

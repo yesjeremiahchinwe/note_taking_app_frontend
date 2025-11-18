@@ -33,7 +33,7 @@ const MobileSearchComponent = ({ searchQuery, setSearchQuery }: Props) => {
   }, [notes, debouncedSearchTerm]);
 
   return (
-    <section className="block lg:hidden px-[1.85rem] pt-20 lg:pt-3 mt-3 pb-[6rem] min-h-screen">
+    <section className="block lg:hidden px-[1.1rem] pt-20 lg:pt-3 mt-3 pb-[6rem] min-h-screen">
       <div className="w-full relative">
         <IconSearch
           color="currentColor"

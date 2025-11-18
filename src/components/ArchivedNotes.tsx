@@ -60,12 +60,12 @@ const ArchivedNotes = () => {
         </h2>
 
         {tagQueryParam ? (
-          <p className="text-sm text-lightText mb-4">
+          <p className="text-sm text-lightText block mt-1 lg:mt-0 mb-4">
             All archived notes with with the <strong>"{tagQueryParam}"</strong>{" "}
             tag are shown here.
           </p>
         ) : (
-          <p className="text-sm text-lightText mb-4">
+          <p className="text-sm text-lightText mt-1 lg:mt-0 mb-4">
             All your archived notes are stored here. You can restore or delete
             them anytime.
           </p>

@@ -40,7 +40,7 @@ const FontThemeSettingsPage = () => {
 
   return (
     <section
-      className={`${
+      className={`mt-16 lg:mt-0 ${
         location.pathname === "/"
           ? "hidden lg:block"
           : location.pathname === "/settings"

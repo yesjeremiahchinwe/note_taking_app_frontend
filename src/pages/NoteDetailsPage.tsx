@@ -144,10 +144,12 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
             ? "flex"
             : tagQueryParam && noteQueryParam
             ? "flex lg:hidden"
+            : tagQueryParam || location.pathname.includes("/tags")
+            ? "hidden lg:flex"
             : location.pathname === "/archived"
             ? "hidden lg:flex"
             : "flex"
-        } lg:hidden items-center justify-between fixed top-0 bg-background w-full pt-4 mt-[60px]`}
+        } lg:hidden items-center justify-between fixed top-0 bg-background z-20 w-full pt-4 mt-[60px]`}
       >
         <Link
           to={goBackToPreviousPage}
@@ -175,7 +177,7 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
               size="icon"
               onClick={() => onRestoreNote()}
               disabled={isLoadingRestoreNote}
-              className="bg-transparent dark:bg-transparent hover:bg-transparent"
+              className="bg-transparent dark:bg-transparent hover:bg-transparent text-lighterGray"
             >
               <RefreshCcwIcon size={24} color="currentColor" />
             </Button>

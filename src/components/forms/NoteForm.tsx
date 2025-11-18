@@ -82,7 +82,7 @@ const NoteForm = React.memo(
             <Input
               type="text"
               ref={isNewNote && !note ? inputRef : null}
-              className={`h-[50px] flex flex-wrap text-xl md:text-[1.7rem] font-bold placeholder:text-primaryText tracking-[-0.5px] ml-[-0.65rem] border-none shadow-none`}
+              className={`h-[50px] w-[102%] flex flex-wrap text-xl md:text-[1.7rem] font-bold placeholder:text-primaryText tracking-[-0.5px] ml-[-0.65rem] border-none shadow-none`}
               value={noteTitle}
               placeholder="Enter note title..."
               onChange={(e) => setNoteTitle(e.target.value)}
