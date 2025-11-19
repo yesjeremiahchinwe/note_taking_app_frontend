@@ -9,6 +9,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate', // auto-update SW
 
+      disable: process.env.NODE_ENV === "development", //only 
+
       includeAssets: [
         'favicon.ico',
         'robots.txt',
