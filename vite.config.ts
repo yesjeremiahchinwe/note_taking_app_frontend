@@ -1,13 +1,87 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from "path"
+import { VitePWA } from 'vite-plugin-pwa'
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  resolve: {
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate', // auto-update SW
+
+      includeAssets: [
+        'favicon.ico',
+        'robots.txt',
+        'icons/pwa-192.png',
+        'icons/pwa-512.png',
+        'icons/maskable.png'
+      ],
+
+      manifest: {
+        name: 'My Notes App',
+        short_name: 'Notes',
+        description: 'Offline-ready personal note taking app',
+        theme_color: '#ffffff',
+        background_color: '#ffffff',
+        display: 'standalone',
+        start_url: '/',
+        icons: [
+          {
+            src: 'icons/pwa-192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'icons/pwa-512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          },
+          {
+            src: 'icons/maskable.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          }
+        ]
+      },
+
+      // Workbox (runtime caching rules)
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: /\/notes/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'notes-api-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+              },
+              networkTimeoutSeconds: 3
+            }
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'google-fonts-cache',
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 365
+              }
+            }
+          }
+        ]
+      },
+
+      devOptions: {
+        enabled: true // enable PWA support during local development
+      }
+    })
+  ],
+   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
+     "@": path.resolve(__dirname, "./src"),
+     },
+   },
 })

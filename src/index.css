@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -43,20 +44,6 @@
 		--gray-border: 219, 15%, 82%;
 		--light-red: 355, 96%, 60%;
 		--dim-white: 0, 0%, 94%, 0.6;
-    
-    /* --sky-blue: "#335CFF";
-		--light-gray: "#F3F5F8";
-		--lighter-gray: "#525866";
-		--dark-gray: "#717784";
-		--darker-gray: "#E0E4EA";
-    --primary-text: "#0E121B";
-		--dark-text: "#0E121B";
-    --tags-bg: "#E0E4EA";
-		--light-text: "#2B303B";
-		--lighter-text: "#232530";
-		--gray-border: "#CACFD8";
-		--light-red: "#FB3748";
-		--dim-white: "#F0F0F099"; */
     }
 
   .dark {
@@ -99,20 +86,6 @@
 		--gray-border: 222, 11%, 36%;
 		--light-red: 355, 96%, 60%;
 		--dim-white: 0, 0%, 94%, 0.6;
-
-    /* --sky-blue: "#335CFF";
-		--light-gray: "#232530";
-		--lighter-gray: "#CACFD8";
-		--dark-gray: "#717784";
-		--darker-gray: "#232530";
-    --primary-text: "#FFFFFF";
-		--dark-text: "#0E121B";
-    --tags-bg: "#2B303B";
-		--light-text: "#E0E4EA";
-		--lighter-text: "#232530";
-		--gray-border: "#525866";
-		--light-red: "#FB3748";
-		--dim-white: "#F0F0F099"; */
   }
 }
 
