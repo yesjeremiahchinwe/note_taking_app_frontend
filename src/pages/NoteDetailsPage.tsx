@@ -6,7 +6,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import React, { FormEvent, useMemo, useState } from "react";
+import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import DeleteModal from "@/components/modals/DeleteNoteModal";
 import ArchiveNoteModal from "@/components/modals/ArchiveNoteModal";
 import NoteForm from "@/components/forms/NoteForm";
@@ -80,9 +80,63 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
   const [noteTags, setNoteTags] = useState(foundNote?.tags || "");
   const [noteContent, setNoteContent] = useState(foundNote?.content || "");
 
-  const [addNewNote, { isLoading: isLoadingAddNote }] = useAddNewNoteMutation();
+  const [
+    addNewNote,
+    {
+      isLoading: isLoadingAddNote,
+      isSuccess: isSuccessAddNote,
+      isError: isErrorAddNote,
+      error: errorAddNote,
+    },
+  ] = useAddNewNoteMutation();
 
-  const [updateNote, { isLoading: isLoadingUpdate }] = useUpdateNoteMutation();
+  const [
+    updateNote,
+    {
+      isLoading: isLoadingUpdate,
+      isSuccess: isSuccessUpdateNote,
+      isError: isErrorUpdateNote,
+      error: errorUpdateNote,
+    },
+  ] = useUpdateNoteMutation();
+
+   useEffect(() => {
+    if (isSuccessAddNote) {
+      toast.success("Note created successfully!");
+      setNoteTitle("");
+      setNoteTags("");
+      setNoteContent("");
+      navigate("/");
+    }
+    if (isErrorAddNote) {
+      //@ts-ignore
+      if (error?.status === "FETCH_ERROR") {
+        toast.error("You are offline — cannot save note");
+      } else {
+        toast.error("Failed to save note");
+      }
+    }
+  }, [isLoadingAddNote, isSuccessAddNote, isErrorAddNote, errorAddNote]);
+
+  useEffect(() => {
+    if (isSuccessUpdateNote) {
+      toast.success("Note updated successfully!");
+      navigate("/");
+    }
+    if (isErrorUpdateNote) {
+      //@ts-ignore
+      if (errorUpdateNote?.status === "FETCH_ERROR") {
+        toast.error("You are offline — cannot save note");
+      } else {
+        toast.error("Failed to save note");
+      }
+    }
+  }, [
+    isLoadingUpdate,
+    isSuccessUpdateNote,
+    isErrorUpdateNote,
+    errorUpdateNote,
+  ]);
 
   const isArchivedPage = location.pathname.includes("/archived");
 
@@ -98,17 +152,9 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
       };
 
       if (!foundNote || location.pathname === "/new") {
-        const response = await addNewNote({ ...values });
-
-        setNoteTitle("");
-        setNoteTags("");
-        setNoteContent("");
-        toast.success(response?.data?.message || "Note created successfully!");
-        navigate("/");
+        await addNewNote({ ...values });
       } else {
-        const response = await updateNote({ ...values, id: foundNote?._id });
-        toast.success(response?.data?.message || "Note updated successfully!");
-        navigate("/");
+        await updateNote({ ...values, id: foundNote?._id });
       }
     } catch (err: any) {
       toast.error(err?.error?.data?.message || "Something went wrong");

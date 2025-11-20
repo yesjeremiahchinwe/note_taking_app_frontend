@@ -148,7 +148,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={5000} />
 
       <PwaInstallPrompt />
     </Suspense>
