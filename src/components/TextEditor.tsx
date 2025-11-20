@@ -1,5 +1,34 @@
 import { editorPlugin, toolBar } from "@/lib/constants";
 import { Editor } from "@tinymce/tinymce-react";
+// Core TinyMCE
+import "tinymce/tinymce";
+
+// Theme
+import "tinymce/themes/silver/theme";
+
+// Icons
+import "tinymce/icons/default";
+
+// Content model (needed for v6)
+import "tinymce/models/dom/model";
+
+// Skins (UI styling)
+import "tinymce/skins/ui/oxide/skin.min.css";
+
+// Content CSS (for inside the editor iframe)
+import "tinymce/skins/content/default/content.min.css";
+import "tinymce/skins/content/default/content.css";
+
+// Plugins you use
+import "tinymce/plugins/advlist";
+import "tinymce/plugins/autolink";
+import "tinymce/plugins/autoresize";
+import "tinymce/plugins/lists";
+import "tinymce/plugins/link";
+import "tinymce/plugins/image";
+import "tinymce/plugins/code";
+import "tinymce/plugins/table";
+// add/remove as needed
 
 interface Props {
   height?: number;
@@ -19,6 +48,8 @@ const TextEditor = ({ noteContent, setNoteContent, height = 400 }: Props) => {
         setNoteContent(newValue);
       }}
       init={{
+        skin: false, // disable CDN skin loading
+        content_css: false, // disable CDN content CSS
         branding: false,
         height,
         menubar: "file edit view insert format tools table help",
