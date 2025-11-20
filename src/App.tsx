@@ -15,6 +15,7 @@ import NoteDetailsPage from "./pages/NoteDetailsPage";
 import ProtectedPublicRoutes from "./components/ProtectedPublicRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PwaInstallPrompt from "./components/PwaInstallPrompt";
 
 const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
@@ -148,6 +149,8 @@ function App() {
       </Routes>
 
       <ToastContainer position="top-right" autoClose={3000} />
+
+      <PwaInstallPrompt />
     </Suspense>
   );
 }
