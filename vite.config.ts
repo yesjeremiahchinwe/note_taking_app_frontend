@@ -17,6 +17,7 @@ export default defineConfig({
         "icons/pwa-192.png",
         "icons/pwa-512.png",
         "icons/maskable.png",
+        "/images/tube-spinner.svg",
       ],
 
       manifest: {
