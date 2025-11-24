@@ -16,6 +16,7 @@ import ProtectedPublicRoutes from "./components/ProtectedPublicRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PwaInstallPrompt from "./components/PwaInstallPrompt";
+import AuthCallback from "./components/AuthCallback";
 
 const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
@@ -53,6 +54,7 @@ function App() {
             path="/:userId/reset-password"
             element={<ResetPasswordPage />}
           />
+              <Route path="/auth/callback" element={<AuthCallback />} />
         </Route>
 
         {/* -------------- Home and Main application routes ---------------- */}

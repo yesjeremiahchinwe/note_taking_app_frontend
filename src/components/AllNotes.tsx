@@ -92,7 +92,7 @@ const AllNotes = ({ searchQuery }: { searchQuery: string }) => {
             </div>
           )}
 
-        {((!notes?.length && !isLoading) || !allNotes?.length) && (
+        {((!notes?.length && !isLoading) || !allNotes?.length) && searchQuery &&  (
           <div className="bg-lightGray p-2 mt-8 mb-4 rounded-md">
             <p className="flex items-center justify-center text-sm text-lightText flex-wrap">
               You don&apos;t have a note with <span className="flex-nowrap">"<strong>{searchQuery}</strong>"</span>
