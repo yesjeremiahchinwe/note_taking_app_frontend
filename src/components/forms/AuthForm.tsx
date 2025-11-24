@@ -244,7 +244,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       </Button>
       */}
 
-      <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" />
+      {/* <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" /> */}
 
       {isLogin ? (
         <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">
