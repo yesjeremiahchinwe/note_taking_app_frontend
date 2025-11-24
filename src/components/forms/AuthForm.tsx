@@ -1,5 +1,5 @@
 import { LogoSVG } from "@/lib/icons";
-import googleLogo from "/images/google-logo.png";
+// import googleLogo from "/images/google-logo.png";
 import { AuthFormProp } from "@/lib/types";
 import { Button } from "../ui/button";
 import {
@@ -26,7 +26,7 @@ import { setCredentials } from "@/store/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { loginAndSignUpFormValidationSchema } from "@/lib/formValidations";
-import { loginWithGoogle } from "@/lib/googleAuth";
+// import { loginWithGoogle } from "@/lib/googleAuth";
 
 const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const [showPassord, setShowPassword] = useState<boolean>(false);
@@ -226,15 +226,15 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         </form>
       </Form>
 
-      <div className="border-b-[1px] border-[#E0E4EA] my-5 w-full" />
+      {/* <div className="border-b-[1px] border-[#E0E4EA] my-5 w-full" /> */}
 
-      <p className="text-lighterGray font-normal text-sm tracking-[-0.2px] py-2">
+      {/* <p className="text-lighterGray font-normal text-sm tracking-[-0.2px] py-2">
         Or log in with:
-      </p>
+      </p> */}
 
+     {/* 
       <Button
         type="button"
-        // onClick={handleGoogleLogin}
         onClick={loginWithGoogle}
         size="lg"
         className="w-full bg-transparent borrounded-[12px] text-primaryText font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-[#0E121B] duration-500"
@@ -242,6 +242,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         <img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" />{" "}
         Google
       </Button>
+      */}
 
       <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" />
 
