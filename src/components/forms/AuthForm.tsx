@@ -1,4 +1,5 @@
 import { LogoSVG } from "@/lib/icons";
+import googleLogo from "/images/google-logo.png";
 import { AuthFormProp } from "@/lib/types";
 import { Button } from "../ui/button";
 import {
@@ -25,6 +26,7 @@ import { setCredentials } from "@/store/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { loginAndSignUpFormValidationSchema } from "@/lib/formValidations";
+import { loginWithGoogle } from "@/lib/googleAuth";
 
 const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   const [showPassord, setShowPassword] = useState<boolean>(false);
@@ -92,7 +94,9 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
     }
   }, [isSuccessLogin, isErrorLogin]);
 
-  const onSubmit = async (values: z.infer<typeof loginAndSignUpFormValidationSchema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof loginAndSignUpFormValidationSchema>
+  ) => {
     try {
       if (isLogin) {
         const { accessToken, id } = await login({
@@ -111,6 +115,11 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       console.log(err);
     }
   };
+
+//  const handleGoogleLogin = () => {
+//   window.location.href = `${import.meta.env.VITE_REACT_APP_API_BASE_URL}/auth/google`;
+// };
+
 
   return (
     <section className="max-w-[540px] w-full flex flex-col justify-center items-center bg-background border border-lightGray rounded-[12px] max-sm:px-4 p-[48px]">
@@ -217,13 +226,24 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         </form>
       </Form>
 
-      {/* <div className="border-b-[1px] border-[#E0E4EA] my-5 w-full" />
+      <div className="border-b-[1px] border-[#E0E4EA] my-5 w-full" />
 
-      <p className="text-lighterGray font-normal text-sm tracking-[-0.2px] py-2">Or log in with:</p>
+      <p className="text-lighterGray font-normal text-sm tracking-[-0.2px] py-2">
+        Or log in with:
+      </p>
 
-      <Button type="button" onClick={loginWithGoogle} size="lg" className="w-full bg-transparent borrounded-[12px] text-primaryText font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-[#0E121B] duration-500"><img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" /> Google</Button>
+      <Button
+        type="button"
+        // onClick={handleGoogleLogin}
+        onClick={loginWithGoogle}
+        size="lg"
+        className="w-full bg-transparent borrounded-[12px] text-primaryText font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-[#0E121B] duration-500"
+      >
+        <img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" />{" "}
+        Google
+      </Button>
 
-      <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" /> */}
+      <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" />
 
       {isLogin ? (
         <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">

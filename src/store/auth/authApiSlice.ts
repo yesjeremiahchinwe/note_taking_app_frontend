@@ -20,6 +20,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 }
             }
         }),
+
+        googleLogin: builder.query({
+            query: () => ({
+                url: "/auth/google"
+            }),
+        }),
         
         login: builder.mutation({
             query: credentials => ({
@@ -95,6 +101,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useAddNewUserMutation,
+    useGoogleLoginQuery,
     useLoginMutation,
     useSendLogoutMutation,
     useForgotPasswordMutation,
