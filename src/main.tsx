@@ -15,16 +15,16 @@ import { registerSW } from 'virtual:pwa-register'
 const updateSW = registerSW({
   onRegistered() {
     // optional: console log for debug
-    // console.log('Service worker registered:', registration)
+    // toast.error('Service worker registered:', registration)
   },
   onNeedRefresh() {
     // called when there's a new SW and page should prompt user refresh
     // you can show a toast or modal to let user update
-    // console.log('New content available — please refresh.')
+    // toast.error('New content available — please refresh.')
   },
   onOfflineReady() {
     // called when app is ready to work offline
-    // console.log('App ready to work offline')
+    // toast.error('App ready to work offline')
   }
 })
 
