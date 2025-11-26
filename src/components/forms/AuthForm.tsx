@@ -220,25 +220,23 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         </form>
       </Form>
 
-      <div className="border-b-[1px] border-[#E0E4EA] my-5 w-full" />
-
-       <p className="text-lighterGray font-normal text-sm tracking-[-0.2px] py-2">
-        Or log in with:
-      </p>
+      <div className="pt-7 pb-2 after:border-lightGray relative text-center text-sm after:absolute after:insert-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+        <span className="text-lighterGray relative z-10 px-2">
+          Or continue with
+        </span>
+      </div>
 
       <Button
         asChild
         type="button"
         size="lg"
-        className="w-full bg-transparent borrounded-[12px] text-primaryText font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-[#0E121B] duration-500"
+        className="w-full max-w-[250px] rounded-lg h-12 shadow-none border border-lightGray dark:border-lightGray bg-transparent borrounded-[12px] text-primaryText font-medium text-base tracking-[0.5px] my-3 hover:bg-transparent hover:border-darkGray dark:hover:border-lighterGray duration-500"
       >
         <a href={`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/auth/google`}>
           <img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" />{" "}
           Google
         </a>
       </Button>
-
-      {/* <div className="border-b-[1px] border-[#E0E4EA] my-3 w-full" /> */}
 
       {isLogin ? (
         <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">
