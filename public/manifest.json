@@ -1,6 +1,6 @@
 {
-  "name": "Notes",
-  "short_name": "Notes",
+  "name": "NotesFlow",
+  "short_name": "NotesFlow",
   "start_url": "/",
   "display": "fullscreen",
   "background_color": "#ffffff",

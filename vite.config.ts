@@ -21,8 +21,8 @@ export default defineConfig({
       ],
 
       manifest: {
-        name: "My Notes App",
-        short_name: "Notes",
+        name: "NotesFlow",
+        short_name: "NotesFlow",
         description: "Offline-ready personal note taking app",
         theme_color: "#ffffff",
         background_color: "#ffffff",
