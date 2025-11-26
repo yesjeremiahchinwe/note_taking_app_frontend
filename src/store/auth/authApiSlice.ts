@@ -1,4 +1,4 @@
-import { toast } from "react-toastify"
+// import { toast } from "react-toastify"
 import { apiSlice } from "../api/apiSlice"
 import { logOut } from "./authSlice"
 
@@ -17,7 +17,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 try {
                      await queryFulfilled
                 } catch (err) {
-                    toast.error("Something went wrong. Please try again.")
+                    // toast.error("Something went wrong. Please try again.")
                 }
             }
         }),
@@ -39,7 +39,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 try {
                     await queryFulfilled
                 } catch (err) {
-                    toast.error("Something went wrong. Please try again.")
+                    // toast.error("Something went wrong. Please try again.")
                 }
             }
         }),
@@ -60,7 +60,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                     }, 1000)
                     
                 } catch (err) {
-                    toast.error("Something went wrong. Please try again.")
+                    // toast.error("Something went wrong. Please try again.")
                 }
             }
         }),
@@ -76,7 +76,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 try {
                     await queryFulfilled
                 } catch (err) {
-                    toast.error("Something went wrong. Please try again.")
+                    // toast.error("Something went wrong. Please try again.")
                 }
             }
         }),
@@ -92,7 +92,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 try {
                     await queryFulfilled
                 } catch (err) {
-                    toast.error("Something went wrong. Please try again.")
+                    // toast.error("Something went wrong. Please try again.")
                 }
             }
         })
