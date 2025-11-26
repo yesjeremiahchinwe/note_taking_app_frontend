@@ -69,7 +69,7 @@ const ChangePasswordSettingsPage = () => {
         confirmNewPassword: values.confirmNewPassword,
       });
     } catch (err: any) {
-      console.log(err);
+      toast.error(err?.data?.message || "Failed to update password. Please try again.");
     }
   };
 

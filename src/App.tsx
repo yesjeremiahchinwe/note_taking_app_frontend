@@ -54,7 +54,7 @@ function App() {
             path="/:userId/reset-password"
             element={<ResetPasswordPage />}
           />
-              <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/success" element={<AuthCallback />} />
         </Route>
 
         {/* -------------- Home and Main application routes ---------------- */}

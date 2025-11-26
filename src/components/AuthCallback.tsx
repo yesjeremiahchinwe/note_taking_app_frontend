@@ -1,21 +1,30 @@
-// src/pages/AuthCallback.tsx
+import { useNavigate, useSearchParams } from "react-router-dom";
+import LoadiingState from "./HomeLoader";
 import { useEffect } from "react";
-import { account } from "../lib/appwrite";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "@/store/auth/authSlice";
 
 export default function AuthCallback() {
+  const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
+
+  const accessToken = searchParams.get("accessToken");
+  const userId = searchParams.get("id");
+
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const verifySession = async () => {
-      try {
-        await account.get(); // checks Appwrite session cookie
-        window.location.href = "/"; // redirect to your home page
-      } catch (error) {
-        console.error("Appwrite session not found", error);
-        window.location.href = "/login"; // redirect if login fails
-      }
-    };
+    if (accessToken && userId) {
+      dispatch(setCredentials({ accessToken, id: userId }));
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, [accessToken, userId]);
 
-    verifySession();
-  }, []);
-
-  return <p>Signing you in...</p>;
+  return (
+    <section className="min-h-screen flex flex-col justify-center items-center italic">
+      <LoadiingState message="Signing you in" />
+    </section>
+  );
 }
