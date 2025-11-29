@@ -14,8 +14,8 @@ export default function AuthCallback() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (accessToken && userId) {
-      dispatch(setCredentials({ accessToken, id: userId }));
+    if (accessToken || userId) {
+      dispatch(setCredentials({ accessToken, id: userId  }));
       navigate("/");
     } else {
       navigate("/login");

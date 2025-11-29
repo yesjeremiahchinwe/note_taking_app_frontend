@@ -35,10 +35,10 @@ function App() {
   const userId = useSelector(selectCurrentId);
 
   const { data: notes, isLoading: isLoadingGetNotes } =
-    useGetNotesQuery(userId);
+    useGetNotesQuery(userId as string);
 
   const { data: archivedNotes, isLoading: isLoadingArchiveNote } =
-    useGetArchivedNotesQuery(userId);
+    useGetArchivedNotesQuery(userId as string);
 
   return (
     <Suspense fallback={<LoadingState message="Please wait" />}>

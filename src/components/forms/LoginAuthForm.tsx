@@ -25,7 +25,7 @@ import { useSelector } from "react-redux";
 
 const LoginAuthForm = () => {
   const [showPassord, setShowPassword] = useState<boolean>(false);
-  const username = useSelector((state: any) => state.auth.username);
+  const username = useSelector((state: any) => state.auth.user?.username);
   const [errMsg, setErrMsg] = useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -70,11 +70,13 @@ const LoginAuthForm = () => {
     values: z.infer<typeof loginFormValidationSchema>
   ) => {
     try {
-      const { accessToken, id, username } = await login({
+      const { accessToken, data, id } = await login({
         email: values.email,
         password: values.password,
       }).unwrap();
-      dispatch(setCredentials({ accessToken, id, username }));
+      dispatch(
+        setCredentials({ accessToken, user: data?.user, id })
+      );
     } catch (err: any) {
       //@ts-ignore
       toast.error(err?.data?.message || "Failed to submit. Please try again.");

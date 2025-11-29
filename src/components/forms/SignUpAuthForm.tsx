@@ -18,8 +18,6 @@ import { z } from "zod";
 import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAddNewUserMutation } from "@/store/auth/authApiSlice";
-import { setCredentials } from "@/store/auth/authSlice";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { signUpFormValidationSchema } from "@/lib/formValidations";
 
@@ -27,7 +25,6 @@ const SignUpAuthForm = () => {
   const [showPassord, setShowPassword] = useState<boolean>(false);
   const [errMsg, setErrMsg] = useState<string>("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [
     addNewUser,
@@ -52,7 +49,7 @@ const SignUpAuthForm = () => {
     if (isSuccessAddNewUser) {
       toast.success("Account created successfully!");
       setErrMsg("");
-      navigate("/");
+      navigate("/login");
     }
 
     if (isErrorAddNewUser) {
@@ -68,12 +65,11 @@ const SignUpAuthForm = () => {
     values: z.infer<typeof signUpFormValidationSchema>
   ) => {
     try {
-      const { accessToken, id } = await addNewUser({
+      await addNewUser({
         username: values.username,
         email: values.email,
         password: values.password,
       }).unwrap();
-      dispatch(setCredentials({ accessToken, id }));
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to submit. Please try again.");
     }

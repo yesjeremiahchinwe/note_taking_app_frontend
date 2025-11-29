@@ -100,7 +100,7 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
     },
   ] = useUpdateNoteMutation();
 
-   useEffect(() => {
+  useEffect(() => {
     if (isSuccessAddNote) {
       toast.success("Note created successfully!");
       setNoteTitle("");
@@ -110,10 +110,11 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
     }
     if (isErrorAddNote) {
       //@ts-ignore
-      if (error?.status === "FETCH_ERROR") {
+      if (errorAddNote?.status === "FETCH_ERROR") {
         toast.error("You are offline — cannot save note");
       } else {
-        toast.error("Failed to save note");
+        //@ts-ignore
+        toast.error(errorAddNote?.data?.message || "Failed to save note");
       }
     }
   }, [isLoadingAddNote, isSuccessAddNote, isErrorAddNote, errorAddNote]);
