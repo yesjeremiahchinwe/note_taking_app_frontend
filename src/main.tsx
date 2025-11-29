@@ -10,7 +10,9 @@ import { ThemeProvider } from "@/providers/theme-provider.tsx";
 import { FontProvider } from "./providers/font-provider.tsx";
 
 // Import the register helper from the PWA plugin virtual module
-import { registerSW } from 'virtual:pwa-register'
+import { registerSW } from "virtual:pwa-register";
+import { ToastContainer } from "react-toastify";
+import PwaInstallPrompt from "./components/PwaInstallPrompt.tsx";
 
 const updateSW = registerSW({
   onRegistered() {
@@ -25,9 +27,8 @@ const updateSW = registerSW({
   onOfflineReady() {
     // called when app is ready to work offline
     // toast.error('App ready to work offline')
-  }
-})
-
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -38,6 +39,10 @@ createRoot(document.getElementById("root")!).render(
             <PersistGate loading={null} persistor={persistor}>
               <App />
             </PersistGate>
+
+            <ToastContainer position="top-right" autoClose={5000} />
+
+            <PwaInstallPrompt />
           </BrowserRouter>
         </FontProvider>
       </ThemeProvider>
@@ -46,4 +51,4 @@ createRoot(document.getElementById("root")!).render(
 );
 
 // optionally expose updateSW to App for manual update checks
-export { updateSW }
+export { updateSW };

@@ -13,9 +13,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentId } from "./store/auth/authSlice";
 import NoteDetailsPage from "./pages/NoteDetailsPage";
 import ProtectedPublicRoutes from "./components/ProtectedPublicRoutes";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import PwaInstallPrompt from "./components/PwaInstallPrompt";
 import AuthCallback from "./components/AuthCallback";
 
 const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
@@ -150,9 +148,6 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      <ToastContainer position="top-right" autoClose={5000} />
-
-      <PwaInstallPrompt />
     </Suspense>
   );
 }

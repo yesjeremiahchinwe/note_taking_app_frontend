@@ -1,11 +1,9 @@
 import { LogoSVG } from "@/lib/icons";
 import googleLogo from "/images/google-logo.png";
-import { AuthFormProp } from "@/lib/types";
 import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,19 +14,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  useLoginMutation,
-  useAddNewUserMutation,
-} from "@/store/auth/authApiSlice";
+import { useLoginMutation } from "@/store/auth/authApiSlice";
 import { setCredentials } from "@/store/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { loginAndSignUpFormValidationSchema } from "@/lib/formValidations";
+import { loginFormValidationSchema } from "@/lib/formValidations";
+import { useSelector } from "react-redux";
 
-const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
+const LoginAuthForm = () => {
   const [showPassord, setShowPassword] = useState<boolean>(false);
+  const username = useSelector((state: any) => state.auth.username);
   const [errMsg, setErrMsg] = useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -43,18 +40,8 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
     },
   ] = useLoginMutation();
 
-  const [
-    addNewUser,
-    {
-      isLoading: isLoadingNewUser,
-      isSuccess: isSuccessAddNewUser,
-      isError: isErrorAddNewUser,
-      error: errorAddNewUser,
-    },
-  ] = useAddNewUserMutation();
-
-  const form = useForm<z.infer<typeof loginAndSignUpFormValidationSchema>>({
-    resolver: zodResolver(loginAndSignUpFormValidationSchema),
+  const form = useForm<z.infer<typeof loginFormValidationSchema>>({
+    resolver: zodResolver(loginFormValidationSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -62,24 +49,10 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   });
 
   useEffect(() => {
-    if (isSuccessAddNewUser) {
-      toast.success("Account created successfully!");
-      setErrMsg("");
-      navigate("/");
-    }
-
-    if (isErrorAddNewUser) {
-      setErrMsg(
-        //@ts-ignore
-        errorAddNewUser.data?.message ||
-          "Oops! Something went wrong! Please try again."
-      );
-    }
-  }, [isSuccessAddNewUser, isErrorAddNewUser]);
-
-  useEffect(() => {
     if (isSuccessLogin) {
-      toast.success("Login successfully!");
+      toast.success(
+        username ? `Welcome back, ${username}!` : "Login successful!"
+      );
       setErrMsg("");
       navigate("/");
     }
@@ -94,23 +67,16 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
   }, [isSuccessLogin, isErrorLogin]);
 
   const onSubmit = async (
-    values: z.infer<typeof loginAndSignUpFormValidationSchema>
+    values: z.infer<typeof loginFormValidationSchema>
   ) => {
     try {
-      if (isLogin) {
-        const { accessToken, id } = await login({
-          email: values.email,
-          password: values.password,
-        }).unwrap();
-        dispatch(setCredentials({ accessToken, id }));
-      } else {
-        const { accessToken, id } = await addNewUser({
-          email: values.email,
-          password: values.password,
-        }).unwrap();
-        dispatch(setCredentials({ accessToken, id }));
-      }
+      const { accessToken, id, username } = await login({
+        email: values.email,
+        password: values.password,
+      }).unwrap();
+      dispatch(setCredentials({ accessToken, id, username }));
     } catch (err: any) {
+      //@ts-ignore
       toast.error(err?.data?.message || "Failed to submit. Please try again.");
     }
   };
@@ -120,13 +86,13 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
       <LogoSVG color="currentColor" />
 
       <h1 className="font-bold text-2xl text-center tracking-[-0.5px] text-primaryText mt-5 mb-2">
-        {title}
+        Welcome to NotesFlow
       </h1>
       <p className="font-normal text-sm text-center tracking-[-0.2px] text-lighterGray">
-        {description}
+        Please log in to continue
       </p>
 
-      {errMsg && <p className="text-lightRed">{errMsg}</p>}
+      {errMsg && <p className="text-lightRed pt-2">{errMsg}</p>}
 
       <Form {...form}>
         <form
@@ -181,7 +147,7 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
                   onClick={() => setShowPassword((prev) => !prev)}
                   color="currentColor"
                   size={18}
-                  className={`absolute top-[24px] right-4 cursor-pointer ${
+                  className={`absolute top-[34px] right-4 cursor-pointer ${
                     !showPassord ? "block" : "hidden"
                   }`}
                 />
@@ -190,17 +156,10 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
                   onClick={() => setShowPassword((prev) => !prev)}
                   color="currentColor"
                   size={18}
-                  className={`absolute top-[24px] right-4 cursor-pointer ${
+                  className={`absolute top-[34px] right-4 cursor-pointer ${
                     showPassord ? "block" : "hidden"
                   }`}
                 />
-
-                {!isLogin && (
-                  <FormDescription className="text-lighterGray dark:text-[#99A0AE] flex items-center gap-1">
-                    <InfoIcon color="currentColor" size={16} />{" "}
-                    <span>At least 8 characters</span>
-                  </FormDescription>
-                )}
 
                 <FormMessage className="text-lightRed" />
               </FormItem>
@@ -211,10 +170,10 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
             disabled={isLoadingLogin}
             className="bg-skyBlue text-white rounded-lg flex items-center justify-center hover:bg-[#3255e2] mx-auto w-full my-6 py-3 px-4"
           >
-            {isLoadingLogin || isLoadingNewUser ? (
+            {isLoadingLogin ? (
               <span className="italic">Loading...</span>
             ) : (
-              <span>{isLogin ? "Login" : "Sign up"}</span>
+              <span>Login</span>
             )}
           </Button>
         </form>
@@ -238,23 +197,14 @@ const AuthForm = ({ title, description, isLogin }: AuthFormProp) => {
         </a>
       </Button>
 
-      {isLogin ? (
-        <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">
-          No account yet?{" "}
-          <Link to="/create" className="text-primaryText">
-            Sign Up
-          </Link>
-        </small>
-      ) : (
-        <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">
-          Already have an account?{" "}
-          <Link to="/login" className="text-primaryText">
-            Login
-          </Link>
-        </small>
-      )}
+      <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">
+        No account yet?{" "}
+        <Link to="/create" className="text-primaryText">
+          Sign Up
+        </Link>
+      </small>
     </section>
   );
 };
 
-export default AuthForm;
+export default LoginAuthForm;

@@ -6,12 +6,13 @@ export type StateType = {
 
 const authSlice = createSlice({
     name: "auth",
-    initialState: { token: null, id: "" },
+    initialState: { token: null, id: "", username: "" },
     reducers: {
         setCredentials: (state, action) => {
-            const { accessToken, id } = action.payload
+            const { accessToken, id, username } = action.payload
             state.token = accessToken
             state.id = id
+            state.username = username
         },
 
         logOut: (state) => {
