@@ -1,4 +1,4 @@
-import AuthForm from "@/components/forms/AuthForm"
+import LoginAuthForm from "@/components/forms/LoginAuthForm";
 import useTitle from "@/hooks/useTitle";
 
 const LoginPage = () => {
@@ -6,7 +6,7 @@ const LoginPage = () => {
     
     return (
     <main className="bg-lightGray dark:bg-tagsBg flex justify-center items-center min-h-screen w-full px-4">
-        <AuthForm title="Welcome to Note" description="Please log in to continue" isLogin={true} />
+        <LoginAuthForm />
     </main>
 )
 }

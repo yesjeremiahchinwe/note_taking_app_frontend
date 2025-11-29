@@ -1,6 +1,14 @@
 import { z } from "zod";
 
-export const loginAndSignUpFormValidationSchema = z.object({
+export const loginFormValidationSchema = z.object({
+  email: z.string().email({ message: "Please provide a valid email address" }),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
+});
+
+export const signUpFormValidationSchema = z.object({
+  username: z.string().min(4, { message: "Username must be at least 4 characters log" }),
   email: z.string().email({ message: "Please provide a valid email address" }),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",

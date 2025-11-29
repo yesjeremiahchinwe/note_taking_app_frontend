@@ -13,9 +13,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentId } from "./store/auth/authSlice";
 import NoteDetailsPage from "./pages/NoteDetailsPage";
 import ProtectedPublicRoutes from "./components/ProtectedPublicRoutes";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import PwaInstallPrompt from "./components/PwaInstallPrompt";
 import AuthCallback from "./components/AuthCallback";
 
 const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
@@ -37,10 +35,10 @@ function App() {
   const userId = useSelector(selectCurrentId);
 
   const { data: notes, isLoading: isLoadingGetNotes } =
-    useGetNotesQuery(userId);
+    useGetNotesQuery(userId as string);
 
   const { data: archivedNotes, isLoading: isLoadingArchiveNote } =
-    useGetArchivedNotesQuery(userId);
+    useGetArchivedNotesQuery(userId as string);
 
   return (
     <Suspense fallback={<LoadingState message="Please wait" />}>
@@ -150,9 +148,6 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      <ToastContainer position="top-right" autoClose={5000} />
-
-      <PwaInstallPrompt />
     </Suspense>
   );
 }

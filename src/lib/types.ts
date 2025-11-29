@@ -15,9 +15,3 @@ export interface MobileNavLink {
     isActive: boolean,
     Icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
 }
-
-export interface AuthFormProp {
-    title: string,
-    description: string,
-    isLogin: boolean
-}
