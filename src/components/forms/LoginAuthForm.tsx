@@ -1,5 +1,5 @@
 import { LogoSVG } from "@/lib/icons";
-// import googleLogo from "/images/google-logo.png";
+import googleLogo from "/images/google-logo.png";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -50,11 +50,11 @@ const LoginAuthForm = () => {
 
   useEffect(() => {
     if (isSuccessLogin) {
+      setErrMsg("");
+      navigate("/");
       toast.success(
         username ? `Welcome back, ${username}!` : "Login successful!"
       );
-      setErrMsg("");
-      navigate("/");
     }
 
     if (isErrorLogin) {
@@ -181,13 +181,13 @@ const LoginAuthForm = () => {
         </form>
       </Form>
 
-      {/* <div className="pt-7 pb-2 after:border-lightGray relative text-center text-sm after:absolute after:insert-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+      <div className="pt-7 pb-2 after:border-lightGray relative text-center text-sm after:absolute after:insert-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
         <span className="text-lighterGray relative z-10 px-2">
           Or continue with
         </span>
-      </div> */}
+      </div>
 
-      {/* <Button
+       <Button
         asChild
         type="button"
         size="lg"
@@ -197,7 +197,7 @@ const LoginAuthForm = () => {
           <img src={googleLogo} alt="Google Logo" className="w-[24px] mr-1" />{" "}
           Google
         </a>
-      </Button> */}
+      </Button>
 
       <small className="text-lighterGray mt-5 font-normal text-sm tracking-[-0.2px] pt-3">
         No account yet?{" "}
