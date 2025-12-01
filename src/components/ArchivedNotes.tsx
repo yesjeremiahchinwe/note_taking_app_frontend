@@ -83,7 +83,7 @@ const ArchivedNotes = () => {
         {isLoading && (
           <LoadiingState
             message="Fetching archived notes"
-            className="h-[40px]"
+            className="h-[40px] mt-[120px]"
           />
         )}
 
