@@ -20,13 +20,13 @@ const SearchPage = () => {
         setSearchQuery={setSearchQuery}
       />
 
-      <section className="hidden lg:flex flex-col w-full bg-background rounded-t-md lg:rounded-t-none">
+      <section className="hidden lg:flex flex-col w-full h-screen bg-background rounded-t-md lg:rounded-t-none">
         <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-        <article className="flex rounded-t-[1.25rem] lg:rounded-t-none bg-background flex-col lg:flex-row min-h-screen items-start justify-between lg:pr-[2rem] lg:pl-6 w-full">
+        <article className="flex rounded-t-[1.25rem] lg:rounded-t-none bg-background flex-col lg:flex-row items-start justify-between lg:pr-[2rem] lg:pl-3 w-full max-h-screen overflow-hidden">
           <AllNotes searchQuery={searchQuery} />
 
-          <div className="basis-full w-full pb-5 lg:basis-[50%] lg:p-5">
+          <div className="basis-full max-h-screen w-full pb-5 lg:basis-[60%] lg:p-3 lg:pt-3.5">
             <Outlet />
           </div>
 
