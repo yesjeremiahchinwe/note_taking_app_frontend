@@ -89,21 +89,30 @@
   }
 }
 
+/* Chrome, Edge, Safari */
 body::-webkit-scrollbar {
   display: none;
 }
 
 ::-webkit-scrollbar {
-  display: none,
+  display: none;
 }
 
 .custom_scroll_bar::-webkit-scrollbar {
   display: none;
 }
 
-body::-webkit-scrollbar {
-  display: none
+/* Firefox */
+body {
+  scrollbar-width: none;       /* hides scrollbar */
+  -ms-overflow-style: none;    /* IE/Edge Legacy */
 }
+
+.custom_scroll_bar {
+  scrollbar-width: none;       /* hides scrollbar */
+  -ms-overflow-style: none;    /* IE/Edge Legacy */
+}
+
 
 @layer base {
   * {
