@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom"
 
 const ArchivedNotesPage = () => {
-  useTitle("Archive Notes")
+  useTitle("Archived Notes")
   
   const [searchQuery, setSearchQuery] = useState("")
 

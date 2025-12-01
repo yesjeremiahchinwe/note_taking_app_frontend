@@ -72,6 +72,7 @@ const Sidebar = () => {
                   className={`ml-auto ${
                     location.pathname.includes("/") &&
                     location.pathname !== "/archived" &&
+                    location.pathname !== "/settings" &&
                     tagQueryParam === null
                       ? "flex"
                       : "hidden"
