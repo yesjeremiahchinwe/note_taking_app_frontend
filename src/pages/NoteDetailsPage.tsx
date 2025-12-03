@@ -1,12 +1,7 @@
 import { Button } from "../components/ui/button";
 import { Note } from "@/lib/types";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
-import React, { FormEvent, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import React, { FormEvent, useEffect, useState } from "react";
 import DeleteModal from "@/components/modals/DeleteNoteModal";
 import ArchiveNoteModal from "@/components/modals/ArchiveNoteModal";
 import NoteForm from "@/components/forms/NoteForm";
@@ -25,6 +20,9 @@ import LoadiingState from "@/components/HomeLoader";
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "@/store/auth/authSlice";
 import useNotes from "@/hooks/useNotes";
+import useUnsavedChanges from "@/hooks/useUnSavedChanges";
+import UnsavedChangesModal from "@/components/modals/UnsavedChangesModal";
+import useFoundNote from "@/hooks/useFoundNote";
 
 interface NotesProp {
   notes?: Note[];
@@ -32,37 +30,55 @@ interface NotesProp {
 }
 
 const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const noteQueryParam = searchParams.get("note");
-  const tagQueryParam = searchParams.get("tag");
   const userId = useSelector(selectCurrentId);
-  const { title } = useParams();
 
-  const foundNote: Note = useMemo(() => {
-    return (
-      title
-        ? notes?.find(
-            (note: Note) =>
-              note.title.toLowerCase().split(" ").join("-") === title
-          )
-        : noteQueryParam
-        ? notes?.find(
-            (note: Note) =>
-              note.title.toLowerCase().split(" ").join("-") === noteQueryParam
-          )
-        : tagQueryParam
-        ? notes?.filter((note: Note) =>
-            note.tags.includes(tagQueryParam as string)
-          )[0]
-        : tagQueryParam && location.pathname.includes("archived")
-        ? notes?.filter((note: Note) =>
-            note.tags.includes(tagQueryParam as string)
-          )[0]
-        : notes?.length && notes[0]
-    ) as Note;
-  }, [notes, title, noteQueryParam, tagQueryParam, location.pathname]);
+  const { foundNote, tagQueryParam, noteQueryParam, isArchivedPage, pathname } =
+    useFoundNote(notes);
+
+  const [noteTitle, setNoteTitle] = useState(foundNote?.title || "");
+  const [noteTags, setNoteTags] = useState(foundNote?.tags || "");
+  const [noteContent, setNoteContent] = useState(foundNote?.content || "");
+
+  const {
+    isNewChangesAvaliable,
+    showModal,
+    setShowModal,
+    resetBaseline,
+    discardChanges,
+    safeNavigate,
+    proceed,
+  } = useUnsavedChanges({
+    title: noteTitle,
+    tags: noteTags,
+    content: noteContent,
+  });
+
+  useEffect(() => {
+    if (foundNote) {
+      const base = {
+        title: foundNote.title || "",
+        tags: foundNote.tags || "",
+        content: foundNote.content || "",
+      };
+
+      setNoteTitle(base.title);
+      setNoteTags(base.tags);
+      setNoteContent(base.content);
+
+      resetBaseline(base);
+    }
+
+    if (pathname === "/new") {
+      const empty = { title: "", tags: "", content: "" };
+
+      setNoteTitle("");
+      setNoteTags("");
+      setNoteContent("");
+
+      resetBaseline(empty);
+    }
+  }, [foundNote, pathname]);
 
   const {
     onArchiveNote,
@@ -74,11 +90,6 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
     isOpen,
     setIsOpen,
   } = useNotes(foundNote);
-
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
-  const [noteTitle, setNoteTitle] = useState(foundNote?.title || "");
-  const [noteTags, setNoteTags] = useState(foundNote?.tags || "");
-  const [noteContent, setNoteContent] = useState(foundNote?.content || "");
 
   const [
     addNewNote,
@@ -139,8 +150,6 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
     errorUpdateNote,
   ]);
 
-  const isArchivedPage = location.pathname.includes("/archived");
-
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -152,7 +161,7 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
         userId,
       };
 
-      if (!foundNote || location.pathname === "/new") {
+      if (!foundNote || pathname === "/new") {
         await addNewNote({ ...values });
       } else {
         await updateNote({ ...values, id: foundNote?._id });
@@ -176,37 +185,37 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
       <div
         className={`${
           foundNote &&
-          location.pathname === "/" &&
+          pathname === "/" &&
           tagQueryParam === null &&
           noteQueryParam === null
             ? "hidden lg:flex"
-            : !foundNote && location.pathname === "/"
+            : !foundNote && pathname === "/"
             ? "flex"
             : tagQueryParam && noteQueryParam
             ? "flex lg:hidden"
-            : tagQueryParam || location.pathname.includes("/tags")
+            : tagQueryParam || pathname.includes("/tags")
             ? "hidden lg:flex"
-            : location.pathname === "/archived"
+            : pathname === "/archived"
             ? "hidden lg:flex"
             : "flex"
         } lg:hidden items-center justify-between fixed top-0 bg-background z-20 w-full pt-4 pb-3 mt-[60px]`}
       >
         <Button
           disabled={isLoadingAddNote || isLoadingUpdate}
-          onClick={() => navigate(-1)}
+          onClick={() => safeNavigate(-1)}
           className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none text-skyBlue disabled:cursor-not-allowed dark:text-lighterGray"
         >
           <ChevronLeftIcon color="currentColor" />
-          <span className="text-lighterGray font-normal tracking-[-0.2px] text-sm">
+          <span className="text-lighterGray font-normal tracking-[-0.2px] text-xs">
             Go Back
           </span>
         </Button>
 
         <div className="flex items-center">
-          {location.pathname !== "/new" && (
+          {pathname !== "/new" && foundNote && (
             <Button
               size="icon"
-              className="bg-transparent dark:bg-transparent hover:bg-transparent text-primaryText dark:text-lighterGray shadow-none border-none mr-2"
+              className="bg-transparent dark:bg-transparent px-0 hover:bg-transparent text-primaryText dark:text-lighterGray shadow-none border-none"
               onClick={() =>
                 setIsOpen((prev) => ({ ...prev, deleteNote: !prev.deleteNote }))
               }
@@ -220,16 +229,16 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
               size="icon"
               onClick={() => onRestoreNote()}
               disabled={isLoadingRestoreNote}
-              className="bg-transparent dark:bg-transparent hover:bg-transparent text-lighterGray"
+              className="bg-transparent px-0 dark:bg-transparent hover:bg-transparent text-lighterGray"
             >
               <RefreshCcwIcon size={24} color="currentColor" />
             </Button>
           ) : (
             <>
-              {location.pathname !== "/new" && (
+              {pathname !== "/new" && foundNote && (
                 <Button
                   size="icon"
-                  className="bg-transparent dark:bg-transparent hover:bg-transparent text-primaryText dark:text-lighterGray shadow-none border-none"
+                  className="bg-transparent mr-1 px-0 dark:bg-transparent hover:bg-transparent text-primaryText dark:text-lighterGray shadow-none border-none"
                   onClick={() =>
                     setIsOpen((prev) => ({
                       ...prev,
@@ -243,6 +252,19 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
             </>
           )}
 
+          <Button
+            disabled={!isNewChangesAvaliable}
+            onClick={() => {
+              const original = discardChanges();
+              setNoteTitle(original.title);
+              setNoteTags(original.tags);
+              setNoteContent(original.content);
+            }}
+            className="bg-transparent px-0 dark:bg-transparent hover:bg-transparent shadow-none border-none text-skyBlue disabled:pointer-events-auto disabled:cursor-not-allowed dark:text-lighterGray"
+          >
+            Cancel
+          </Button>
+
           <form onSubmit={onSubmit}>
             <Button
               disabled={
@@ -253,7 +275,7 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
                 isLoadingUpdate
               }
               type="submit"
-              className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none text-skyBlue disabled:cursor-not-allowed dark:text-lighterGray"
+              className="bg-transparent dark:bg-transparent hover:bg-transparent shadow-none border-none text-skyBlue disabled:pointer-events-auto disabled:cursor-not-allowed dark:text-lighterGray"
             >
               {isLoadingAddNote || isLoadingUpdate ? "Saving..." : "Save Note"}
             </Button>
@@ -264,9 +286,9 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
       {/* -------------- Note Body ------------------ */}
       <section
         className={`mt-32 lg:mt-0 ${
-          foundNote && location.pathname === "/" && noteQueryParam === null
+          foundNote && pathname === "/" && noteQueryParam === null
             ? "hidden lg:block"
-            : location.pathname === "/archived"
+            : pathname === "/archived"
             ? "hidden lg:block"
             : !foundNote
             ? "block"
@@ -274,7 +296,7 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
         } pt-2 mx-[18px] lg:px-0 lg:mx-0 lg:pt-0 border-t-[1px] border-darkerGray lg:border-t-0`}
       >
         <NoteForm
-          isNewNote={location.pathname === "/new" || !foundNote}
+          isNewNote={pathname === "/new" || !foundNote}
           note={foundNote}
           noteTitle={noteTitle}
           setNoteTitle={setNoteTitle}
@@ -285,8 +307,13 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
           onSubmit={onSubmit}
           isLoadingAddNote={isLoadingAddNote}
           isLoadingUpdate={isLoadingUpdate}
-          isOpenAlert={isOpenAlert}
-          setIsOpenAlert={setIsOpenAlert}
+          onCancelChanges={() => {
+            const original = discardChanges();
+            setNoteTitle(original.title);
+            setNoteTags(original.tags);
+            setNoteContent(original.content);
+          }}
+          isNewChangesAvaliable={isNewChangesAvaliable}
         />
       </section>
 
@@ -302,6 +329,25 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
         onClose={() => setIsOpen((prev) => ({ ...prev, archiveNote: false }))}
         onConfirm={() => onArchiveNote()}
         loading={isLoadingArchiveNote}
+      />
+
+      <UnsavedChangesModal
+        isOpen={showModal}
+        isSaving={isLoadingAddNote || isLoadingUpdate}
+        onClose={() => setShowModal(false)}
+        onDiscard={() => {
+          const original = discardChanges();
+          setNoteTitle(original.title);
+          setNoteTags(original.tags);
+          setNoteContent(original.content);
+          proceed();
+          setShowModal(false);
+        }}
+        onProceed={() => {
+          onSubmit({ preventDefault: () => {} } as any);
+          proceed();
+          setShowModal(false);
+        }}
       />
     </div>
   );

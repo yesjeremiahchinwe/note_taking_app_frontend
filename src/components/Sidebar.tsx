@@ -25,7 +25,7 @@ const Sidebar = () => {
   // Fetch all tags (string), and
   // convert each tag in that string into array element - resulting to array of arrays
   const allTags: string[][] = notes?.map((note) =>
-    note.tags?.split(",")
+    note?.tags?.split(",").map((tag) => tag.trim()) || []
   ) as string[][];
 
   const listOfTags = flattenAndRemoveDuplicates(allTags);

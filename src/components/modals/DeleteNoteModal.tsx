@@ -31,7 +31,7 @@ const DeleteModal: React.FC<DeleteNoteModalProps> = ({
       description="Are you sure you want to permanently delete this note? This action cannot be undone."
       isOpen={isOpen}
       onClose={onClose}
-      isDeleteModal={true}
+      modalType="delete"
     >
       <div className="pt-6 space-x-2 flex items-center justify-end w-full">
         <Button

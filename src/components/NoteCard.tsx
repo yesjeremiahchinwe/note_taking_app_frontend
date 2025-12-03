@@ -1,5 +1,5 @@
 import { Note } from "@/lib/types";
-import { shortenText } from "@/lib/utils";
+import { flattenAndRemoveDuplicates, shortenText } from "@/lib/utils";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -12,10 +12,13 @@ interface NoteProps {
 }
 const NoteCard = React.memo(
   ({ note, index, isLastNote, noteQueryParam, tagQueryParam }: NoteProps) => {
-
     const formatedNoteTitle = note.title.toLowerCase().split(" ").join("-");
-    
+
     const { title } = useParams();
+
+    const noteTags: string[] = flattenAndRemoveDuplicates(
+      note?.tags?.split(",").map((tag) => tag.trim()) || []
+    ) as string[];
 
     return (
       <article
@@ -47,12 +50,14 @@ const NoteCard = React.memo(
               {note.title}
             </Link>
           ) : (
-            <Link to={`/${formatedNoteTitle}`}>{shortenText(note.title, 35)}</Link>
+            <Link to={`/${formatedNoteTitle}`}>
+              {shortenText(note.title, 35)}
+            </Link>
           )}
         </h2>
 
         <div className="flex flex-wrap items-center gap-[8px] mt-3">
-          {note?.tags?.split(",").map((tag) => (
+          {noteTags?.map((tag) => (
             <p
               key={tag}
               className="py-[2px] px-[6px] text-sm rounded-md bg-tagsBg"

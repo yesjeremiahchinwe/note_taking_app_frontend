@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Note } from "@/lib/types";
 import { useEffect, useState } from "react";
 
-const useNotes = (foundNote: Note) => {
+const useNotes = (foundNote: Note | undefined) => {
   const location = useLocation();
   const navigate = useNavigate();
 
