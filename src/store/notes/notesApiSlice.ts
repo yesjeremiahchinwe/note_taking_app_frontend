@@ -34,6 +34,18 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       },
     }),
 
+    callAI: builder.mutation({
+      query: (credentails: any) => ({
+        url: `/api/generate`,
+        body: { ...credentails },
+        method: "POST",
+        validateStatus: (response, result) =>
+          response.status >= 200 && response.status < 300 && !result?.isError,
+      }),
+
+      invalidatesTags: [{ type: "Note", id: "LIST" }],
+    }),
+
     getArchivedNotes: builder.query<Note[], string>({
       query: (userId) => ({
         url: `/notes/archived/${userId}`,
@@ -133,6 +145,7 @@ export const {
   useGetArchivedNotesQuery,
   useAddNewNoteMutation,
   useUpdateNoteMutation,
+  useCallAIMutation,
   useMarkNoteAsArchivedMutation,
   useRestoreArchivedNoteMutation,
   useDeleteNoteMutation,

@@ -7,6 +7,11 @@ interface Props {
   setNoteContent: (noteContent: string) => void;
 }
 
+// const aiText = await callAI({ action: "summarize", text: selectedText })
+// editor.insertContent(aiText)
+
+// improve, summarize, expand, rewrite, checklist
+
 const TextEditor = ({ noteContent, setNoteContent, height = 400 }: Props) => {
   return (
     <Editor
