@@ -31,7 +31,7 @@ const ArchiveNoteModal: React.FC<ArchiveNoteModalProps> = ({
       description="Are you sure you want to archive this note? You can find it in the Archived Notes section and restore it anytime."
       isOpen={isOpen}
       onClose={onClose}
-      isDeleteModal={false}
+      modalType="archive"
     >
       <div className="pt-6 space-x-2 flex items-center justify-end w-full">
         <Button

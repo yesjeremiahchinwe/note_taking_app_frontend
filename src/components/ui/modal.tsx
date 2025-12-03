@@ -6,11 +6,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { IconArchive, IconDelete } from "@/lib/icons";
+import { SaveIcon } from "lucide-react";
 
 interface ModalProps {
   title: string;
   description: string;
-  isDeleteModal: boolean;
+  modalType: string;
   isOpen: boolean;
   onClose: () => void;
   children?: React.ReactNode;
@@ -19,7 +20,7 @@ interface ModalProps {
 export const Modal: React.FC<ModalProps> = ({
   title,
   description,
-  isDeleteModal,
+  modalType,
   isOpen,
   // onClose,
   children,
@@ -35,10 +36,13 @@ export const Modal: React.FC<ModalProps> = ({
       <DialogContent>
         <div className="flex items-start gap-5 p-4 sm:p-6 pr-0 pb-0">
           <div className="min-w-[50px] bg-lightGray dark:bg-grayBorder h-[45px] flex justify-center items-center rounded-[8px]">
-            {isDeleteModal 
-            ? <IconDelete color="currentColor" /> 
-            : <IconArchive color="currentColor"  />
-            }
+            {modalType === "delete" ? (
+              <IconDelete color="currentColor" />
+            ) : modalType === "saveChanges" ? (
+              <SaveIcon color="currentColor" />
+            ) : (
+              <IconArchive color="currentColor" />
+            )}
           </div>
 
           <DialogHeader className="pb-2">
