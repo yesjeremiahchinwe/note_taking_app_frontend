@@ -82,7 +82,15 @@ const OpenAIDrawer = ({ open, onClose, editor }: OpenAIDrawerProps) => {
 
   return (
     <Sheet open={open} onOpenChange={onClose}>
-      <SheetContent className="w-[95%] sm:max-w-[480px] p-6 space-y-4">
+      <SheetContent
+        side="right"
+        className="w-[95%] sm:max-w-[480px] p-6 space-y-4 data-[state=open]:animate-in
+      data-[state=open]:slide-in-from-left
+      data-[state=open]:duration-1000
+      data-[state=closed]:animate-out
+      data-[state=closed]:slide-out-to-left
+      data-[state=closed]:duration-1000"
+      >
         <SheetHeader>
           <SheetTitle>AI Assistant ✨</SheetTitle>
         </SheetHeader>
@@ -93,21 +101,30 @@ const OpenAIDrawer = ({ open, onClose, editor }: OpenAIDrawerProps) => {
         </div>
 
         <ScrollArea className="h-20 rounded border p-2 bg-muted text-sm">
-          {selectedText ? selectedText : <p className="text-red-400">No text selected in editor. (Please select text from the editor to continue)</p>}
+          {selectedText ? (
+            selectedText
+          ) : (
+            <p className="text-red-400">
+              No text selected in editor. (Please select text from the editor to
+              continue)
+            </p>
+          )}
         </ScrollArea>
 
         {/* Action buttons */}
         <div className="flex gap-2 flex-wrap">
-          {["improve", "summarize", "expand", "rewrite", "checklist"].map((a) => (
-            <Button
-              key={a}
-              variant={action === a ? "default" : "outline"}
-              onClick={() => setAction(a)}
-              className="capitalize"
-            >
-              {a}
-            </Button>
-          ))}
+          {["improve", "summarize", "expand", "rewrite", "checklist"].map(
+            (a) => (
+              <Button
+                key={a}
+                variant={action === a ? "default" : "outline"}
+                onClick={() => setAction(a)}
+                className="capitalize"
+              >
+                {a}
+              </Button>
+            )
+          )}
         </div>
 
         {errorMessage && <p className="text-sm text-red-700">{errorMessage}</p>}

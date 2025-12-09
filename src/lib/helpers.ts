@@ -42,7 +42,7 @@ export const callAI = async ({
 export const aiSetupFunction = (editor: Editor) => {
   // 1) Add custom toolbar button (quick access)
   editor.ui.registry.addButton("aiButton", {
-    text: "✨ AI",
+    text: "✨ Ask AI",
     onAction: () => {
       removeFloatingBadge();
       openAIDrawerFunc(editor);
