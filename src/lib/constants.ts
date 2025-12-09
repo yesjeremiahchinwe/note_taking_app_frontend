@@ -66,7 +66,8 @@ export const editorPlugin = [
   "charmap",
   "preview",
   "emoticons",
+  "placeholder"
 ];
 
 export const toolBar =
-  "undo redo | blocks fontfamily fontsize | forecolor backcolor permanentpen formatpainter |   bold italic underline strikethrough |   link image media table mergetags |   align lineheight | numlist bullist checklist |   emoticons charmap |   addcomment showcomments |   spellcheckdialog a11ycheck typography | codesample code | removeformat";
+  "aiButton | undo redo | blocks fontfamily fontsize | forecolor backcolor permanentpen formatpainter |   bold italic underline strikethrough |   link image media table mergetags |   align lineheight | numlist bullist checklist |   emoticons charmap |   addcomment showcomments |   spellcheckdialog a11ycheck typography | codesample code | removeformat";

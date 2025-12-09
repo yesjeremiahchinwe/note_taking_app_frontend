@@ -55,6 +55,10 @@ const NoteDetailsPage = React.memo(({ notes, isLoading }: NotesProp) => {
   });
 
   useEffect(() => {
+    localStorage.setItem("userId", JSON.stringify(userId))
+  }, [])
+
+  useEffect(() => {
     if (foundNote) {
       const base = {
         title: foundNote.title || "",

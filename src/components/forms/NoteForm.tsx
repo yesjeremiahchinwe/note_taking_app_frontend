@@ -142,7 +142,7 @@ const NoteForm = React.memo(
         </article>
 
         <div className="flex flex-col justify-between h-full flex-grow pb-[3rem] mb-[3rem] overflow-y-auto custom_scroll_bar">
-          <div className="py-4 flex-1">
+          <div className="py-4 flex-1 relative">
             <label
               htmlFor="title"
               className="text-primaryText font-medium text-sm tracking-[-0.2px] sr-only"
@@ -150,10 +150,12 @@ const NoteForm = React.memo(
               Note Content
             </label>
 
-            <TextEditor
+            <div id="editor-container">
+              <TextEditor
               noteContent={noteContent}
               setNoteContent={setNoteContent}
             />
+            </div>
           </div>
 
           {!location.pathname.includes("archived") && (

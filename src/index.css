@@ -113,6 +113,28 @@ body {
   -ms-overflow-style: none;    /* IE/Edge Legacy */
 }
 
+#ai-improve,
+#ai-summarize,
+#ai-expand,
+#ai-checklist,
+#ai-rewrite {
+  border: none;
+  background-color: white;
+  outline: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: start;
+}
+
+#ai-improve:hover,
+#ai-summarize:hover,
+#ai-expand:hover,
+#ai-checklist:hover,
+#ai-rewrite:hover {
+  color: rgba(0, 0, 0, 0.7)
+}
+
 
 @layer base {
   * {
